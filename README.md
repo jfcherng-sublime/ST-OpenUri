@@ -30,7 +30,7 @@ git clone https://github.com/vicke4/open_in_browser
 
 ## Limitations
 - For now, this plugin works only for the 
-s/filepaths between quotes or whitespaces. In future, this will support all types of URLs & filepaths.
+URLs/filepaths between quotes or whitespaces. In future, this will support all types of URLs & filepaths.
 
 #### Example 1: 
 ```
@@ -48,4 +48,4 @@ http://facebook.com
 - On Mac OS Sierra, though the default browser may be Chrome or Safari, If Firefox is installed, it opens the URLs all the time. Haven't tested on other verions of Mac.
 
 ## Improvements
-- To get rid of the above mentioned issue, we can add a settings file to this package to define the desired browser to open files/URLs. That will be added in future.
+- To get rid of the above mentioned issue, we can add a settings file to this package to define the desired browser to open files/URLs. That will be added in future. Feel free to make Pull requests.

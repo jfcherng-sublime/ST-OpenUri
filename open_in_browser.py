@@ -2,54 +2,53 @@ import os, re, sublime, sublime_plugin, webbrowser
 from urllib.parse import urlparse
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):
-    def clickable_here(url):
-        print(url)
+    def open_browser(url):
         webbrowser.open(url)
-        pass
-        
+
+    def get_url_filepath(string, view):
+        urlparse_obj = urlparse(string)
+
+        if urlparse_obj.scheme and urlparse_obj.netloc:
+            return string
+
+        if os.path.isfile(string):
+            return 'file://' + string
+        else:
+            filename = view.file_name()
+            filepath = os.path.normpath(os.path.join(filename[0:filename.rfind('/')], string))
+            return 'file://' + filepath if os.path.isfile(filepath) else None
+
+        return None
+
     def on_hover(self, point, hover_zone):
         if hover_zone == sublime.HOVER_TEXT:
-            print("Id here ", self.view.id())
-            print("Point here ", point)
             inspect_reg = self.view.expand_by_class(point, sublime.CLASS_WORD_START | sublime.CLASS_WORD_END, ' ')
-
-            print("Expected piece of text - ", self.view.substr(inspect_reg))
             matched_reg = self.view.find(r"(?<=[\'\"]).+(?=[\'\"])", inspect_reg.begin())
-            print ("Matched region begins here ", matched_reg.begin())
             matched_str = self.view.substr(matched_reg)
-            print ("Matched String ", matched_str)
             matched_arr = re.split('[\'\"]', matched_str)
-            print("Matched array here ", matched_arr)
 
             temp_int = matched_reg.begin()
-            temp_str = url = ''
+            temp_str = ''
 
-            if temp_int > point:
-                return
+            if matched_reg.begin() < inspect_reg.end() and matched_reg.begin() != -1:
+                if temp_int > point:
+                    return
+                else:
+                    for word in matched_arr:
+                        temp_int += len(word)
+
+                        if temp_int >= point:
+                            temp_str = word
+                            break
             else:
-                for word in matched_arr:
-                    temp_int += len(word)
+                temp_str = self.view.substr(inspect_reg)
 
-                    if temp_int >= point:
-                        temp_str = word
-                        break
-
-            print("At last temp string ", temp_str)
-
-            urlparse_obj = urlparse(temp_str)
-
-            print("Os result ", os.path.isfile(temp_str))
-            if os.path.isfile(temp_str):
-                url = 'file://' + temp_str
-
-            if urlparse_obj.scheme and urlparse_obj.netloc:
-                url = temp_str
+            url = OpenInBrowser.get_url_filepath(temp_str, self.view)
 
             if not url:
                 return
 
-            print("Nah na na na Nah ", url)
-
             html_var = sublime.expand_variables("<a href='${url}'>Open in Browser</a>", {"url": url})
-            self.view.show_popup(html_var, sublime.HIDE_ON_MOUSE_MOVE_AWAY, point, on_navigate=OpenInBrowser.clickable_here)
-            print("Oh YEAH!!!")
+            self.view.show_popup(html_var, sublime.HIDE_ON_MOUSE_MOVE_AWAY, point, on_navigate=OpenInBrowser.open_browser)
+
+            return

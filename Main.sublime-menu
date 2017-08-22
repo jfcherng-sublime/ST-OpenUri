@@ -1,0 +1,29 @@
+[
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "Open in Browser",
+                        "children":
+                        [
+                            {
+                                "caption": "Settings",
+                                "command": "open_file",
+                                "args": {"file": "${packages}/open_in_browser/OpenInBrowser.sublime-settings"}
+                            },
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

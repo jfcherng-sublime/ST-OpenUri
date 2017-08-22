@@ -27,7 +27,7 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
                 except:
                     status = 99
             elif platform == 'windows':
-                status = os.system("start " + browser + url)
+                status = os.system("start " + browser + " " + url)
 
         elif not is_url and open_with_app:
             if platform == 'osx':

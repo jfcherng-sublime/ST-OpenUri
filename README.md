@@ -1,8 +1,8 @@
 # open_in_browser
 
-[Sublime Text 3](http://www.sublimetext.com/3) plugin to display popup with a link when you hover over a hyperlink or filepath. On click of the link your default browser will open the link or file.
+[Sublime Text 3](http://www.sublimetext.com/3) plugin to display a link when you hover over a hyperlink or filepath. On click of the link your default browser will open the link or default application for that file extension will open the file.
 
-![open-in-browser-sublime3-plugin](http://i.imgur.com/jyn2ELA.gif)
+![open-in-browser-sublime3-plugin](http://i.imgur.com/QZfWsee.gif)
 
 ## Installation
 
@@ -44,8 +44,39 @@ http://facebook.com
 ~/Desktop/test_image.jpg
 ```
 
+## Customization
+So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings`. You'll see a similar JSON file.
+
+```
+{
+	"enable": true,  	       //Set enable to false to disable this plugin
+	"custom_browser": "", 	       //Custom browser setting can be used to set a default browser to open links
+	"open_with_default_app": true  //To open files with the system default applications set this to true
+}
+```
+You can disable the plugin by setting `enable` to `false`.
+
+You can set default browser by setting value to `custom_browser`.
+
+If `open_with_default_app` is `false`, browser will open the file.
+
+#### Mac
+Enter the browser's name as you'd see in Applications window.
+
+Eg: `Google Chrome`, `Firefox`
+
+#### Linux
+Here, you've to provide executable name. Mostly, you'll be able to find it in `/usr/bin`
+
+Eg: `google-chrome`, `firefox`
+
+#### Windows
+The name with .exe extension. You can find in `C:\Program Files\<app name>\*.exe`
+
+Eg: `chrome`, `firefox`
+
 ## Known Issues
-- On Mac OS Sierra, though the default browser may be Chrome or Safari, If Firefox is installed, it opens the URLs all the time. Haven't tested on other verions of Mac.
+- On Mac OS Sierra, though the default browser may be Chrome or Safari, If Firefox is installed, it opens the URLs all the time. We can change this behaviour (Read customization section above).
 
 ## Improvements
-- To get rid of the above mentioned issue, we can add a settings file to this package to define the desired browser to open files/URLs. That will be added in future. Feel free to make Pull requests.
+- More Regex can be added to detect links & file paths. Feel free to make Pull requests.

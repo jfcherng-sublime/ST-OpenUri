@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2017-07-26
+### Added
+- Command option to open settings.
+### Fixed
+- Fix for URLs with special characters.
+
 ## [1.1.0] - 2017-07-23
 ### Added
 - Provision to specify custom browser to open links.

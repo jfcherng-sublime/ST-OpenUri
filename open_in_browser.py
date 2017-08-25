@@ -19,7 +19,7 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
 
         if not browser == "" and (is_url or not open_with_app):
             if platform == 'osx':
-                status = os.system("open -a '" + browser + "' " + url)
+                status = os.system("open -a '{browser}' '{url}'".format(browser=browser, url=url))
             elif platform == 'linux':
                 try:
                     status = 0
@@ -27,15 +27,15 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
                 except:
                     status = 99
             elif platform == 'windows':
-                status = os.system("start " + browser + " " + url)
+                status = os.system("start '{browser}' '{url}'".format(browser=browser, url=url))
 
         elif not is_url and open_with_app:
             if platform == 'osx':
-                status = os.system("open " + url)
+                status = os.system("open '{url}'".format(url=url))
             elif platform == 'linux':
-                status = os.system("xdg-open " + url)
+                status = os.system("xdg-open '{url}'".format(url=url))
             elif platform == 'windows':
-                status = os.system("start " + url)
+                status = os.system("start '{url}'".format(url=url))
 
         if status > 0:
             webbrowser.open(url)

@@ -1,0 +1,7 @@
+[
+    {
+        "caption": "Preferences: Open in Browser Settings",
+        "command": "open_file",
+        "args": {"file": "${packages}/open_in_browser/OpenInBrowser.sublime-settings"}
+    }
+]

@@ -5,27 +5,7 @@
 
 ## Installation
 
-This plugin is not yet available on [Package Control](https://packagecontrol.io). Once it's available, I'll update this README file. So, we've to install it manually from git.
-
-### Steps
-
-#### Mac
-```
-cd ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/
-git clone https://github.com/vicke4/open_in_browser
-```
-
-#### Linux
-```
-cd ~/.config/sublime-text-3/Packages
-git clone https://github.com/vicke4/open_in_browser
-```
-
-#### Windows
-```
-cd "%APPDATA%\Sublime Text 3\Packages"
-git clone https://github.com/vicke4/open_in_browser
-```
+You can download this plugin from [Package Control](https://packagecontrol.io). Inside Sublime press `ctrl + shift + p` (Mac users press `cmd + shift + p`). Type install package and press `enter`. Then type `open in browser`. Select the one with spaces. Press `enter`. That's it.
 
 ## Customization
 So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings`. You'll see a JSON file like the one below.

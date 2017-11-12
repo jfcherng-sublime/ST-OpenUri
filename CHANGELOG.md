@@ -6,15 +6,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.2.2] - 2017-11-13
 ### Added
-- Image on README.md.
+- Add image to README.md.
 ### Changed
 - Fix settings file.
-- Updated README.md.
+- Update README.md.
 
 ## [1.2.1] - 2017-11-13
 ### Changed
-- Removed firefox as default browser.
-- Updated README.md.
+- Remove firefox as default browser.
+- Update README.md.
 
 ## [1.2.0] - 2017-11-12
 ### Added
@@ -40,4 +40,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [1.0.0] - 2017-07-16
 ### Added
 - "Open in Browser" popup while hovering over links or filepaths surrounded by quotes or whitespaces.
-

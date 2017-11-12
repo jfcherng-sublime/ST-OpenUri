@@ -1,8 +1,7 @@
 # open_in_browser
 
-[Sublime Text 3](http://www.sublimetext.com/3) plugin to display a link when you hover over a hyperlink or filepath. On click of the link your default browser will open the link or default application for that file extension will open the file.
-
-![open-in-browser-sublime3-plugin](http://i.imgur.com/QZfWsee.gif)
+[Sublime Text 3](http://www.sublimetext.com/3) plugin to display a link when you hover over a hyperlink. On click of the link your default browser will open the link (Of course you can customise the behaviour
+).
 
 ## Installation
 
@@ -28,37 +27,21 @@ cd "%APPDATA%\Sublime Text 3\Packages"
 git clone https://github.com/vicke4/open_in_browser
 ```
 
-## Limitations
-- For now, this plugin works only for the 
-URLs/filepaths between quotes or whitespaces. In future, this will support all types of URLs & filepaths.
-
-#### Example 1: 
-```
-<a href='http://github.com'></a>
-<img src='http://i.imgur.com/uBzlF64.gif'/>
-```
-
-#### Example 2:
-```
-http://facebook.com
-~/Desktop/test_image.jpg
-```
-
 ## Customization
-So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings`. You'll see a similar JSON file.
+So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings`. You'll see a JSON file like the one below.
 
 ```
 {
-	"enable": true,  	       //Set enable to false to disable this plugin
-	"custom_browser": "", 	       //Custom browser setting can be used to set a default browser to open links
-	"open_with_default_app": true  //To open files with the system default applications set this to true
+    "enable": true,         // Set enable to false to disable this plugin
+    "custom_browser": "",   // Set a default browser to open links
+    "only_on_hover": false  // Make this true to get links beside URLs only on hover
 }
 ```
 You can disable the plugin by setting `enable` to `false`.
 
-You can set default browser by setting value to `custom_browser`.
+You can set the default browser to open links by setting value to `custom_browser` (Refer below).
 
-If `open_with_default_app` is `false`, browser will open the file.
+If `only_on_hover` is `true`, links will be displayed only when you hover over it.
 
 #### Mac
 Enter the browser's name as you'd see in Applications window.

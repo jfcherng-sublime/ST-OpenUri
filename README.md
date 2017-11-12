@@ -3,6 +3,8 @@
 [Sublime Text 3](http://www.sublimetext.com/3) plugin to display a link when you hover over a hyperlink. On click of the link your default browser will open the link (Of course you can customise the behaviour
 ).
 
+![open-in-browser-sublime3-plugin](https://i.imgur.com/IObNAWB.png)
+
 ## Installation
 
 You can download this plugin from [Package Control](https://packagecontrol.io). Inside Sublime press `ctrl + shift + p` (Mac users press `cmd + shift + p`). Type install package and press `enter`. Then type `open in browser`. Select the one with spaces. Press `enter`. That's it.

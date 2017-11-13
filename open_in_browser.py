@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 from .settings import get_setting
 
 image_path = os.path.join(os.path.dirname(__file__), 'open-in-browser.png')
-ENCODED_IMG = base64.b64encode(open(image_path, 'rb').read()).decode()
+ENCODED_IMG = base64.b64encode(sublime.load_binary_resource("Packages/Open In Browser/open-in-browser.png")).decode()
 REGEX = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):
@@ -36,8 +36,6 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
 
             if not get_setting('only_on_hover'):
                 pid = self.view.add_phantom('open_link_phantom', sublime.Region(point, point), self.get_url_link(detected_url), sublime.LAYOUT_INLINE, on_navigate=self.open_app)
-                print('phantom id here')
-                print(pid)
 
     def open_app(self, url):
         is_url = url.startswith('http://') or url.startswith('https://') or url.startswith('ftp://')

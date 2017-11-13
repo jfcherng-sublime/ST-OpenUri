@@ -17,10 +17,8 @@
                         [
                             {
                                 "caption": "Settings",
-                                "command": "open_in_browser_edit_settings",
-                                "args": {
-                                    "base_file": "${packages}/open_in_browser/OpenInBrowser.sublime-settings"
-                                }
+                                "command": "open_file",
+                                "args": {"file": "${packages}/Open In Browser/OpenInBrowser.sublime-settings"}
                             },
                         ]
                     }

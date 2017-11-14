@@ -2,8 +2,11 @@ import base64, os, re, sublime, sublime_plugin, subprocess, webbrowser
 from urllib.parse import urlparse
 from .settings import get_setting
 
-image_path = os.path.join(os.path.dirname(__file__), 'open-in-browser.png')
-ENCODED_IMG = base64.b64encode(sublime.load_binary_resource("Packages/Open In Browser/open-in-browser.png")).decode()
+import os
+
+PLUGIN_PATH = os.path.dirname(os.path.realpath(__file__))
+PLUGIN_NAME = os.path.basename(PLUGIN_PATH).replace(".sublime-package", "")
+ENCODED_IMG = base64.b64encode(sublime.load_binary_resource("Packages/" + PLUGIN_NAME +"/open-in-browser.png")).decode()
 REGEX = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):

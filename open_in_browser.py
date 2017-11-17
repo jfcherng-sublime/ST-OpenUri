@@ -1,13 +1,9 @@
 import base64, os, re, sublime, sublime_plugin, subprocess, webbrowser
 from urllib.parse import urlparse
-from .settings import get_setting
+from .settings import get_setting, get_image
 
-import os
-
-PLUGIN_PATH = os.path.dirname(os.path.realpath(__file__))
-PLUGIN_NAME = os.path.basename(PLUGIN_PATH).replace(".sublime-package", "")
-ENCODED_IMG = base64.b64encode(sublime.load_binary_resource("Packages/" + PLUGIN_NAME +"/open-in-browser.png")).decode()
 REGEX = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
+
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view):
@@ -20,7 +16,7 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         self.view.erase_phantoms('open_link_phantom')
 
     def get_url_link(self, url):
-        return sublime.expand_variables("<a href='${url}'><img width='${font_size}', height='${font_size}' src='data:image/png;base64,${encoded_img}' /></a>", {"url": url, "encoded_img": ENCODED_IMG, 'font_size': str(self.font_size)})
+        return sublime.expand_variables("<a href='${url}'><img width='${font_size}', height='${font_size}' src='data:image/png;base64,${encoded_img}' /></a>", {"url": url, "encoded_img": get_image(), 'font_size': str(self.font_size)})
 
     def on_activated_async(self):
         if get_setting('enable'):

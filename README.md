@@ -10,7 +10,7 @@
 You can download this plugin from [Package Control](https://packagecontrol.io). Inside Sublime press `ctrl + shift + p` (Mac users press `cmd + shift + p`). Type install package and press `enter`. Then type `open in browser`. Select the one with spaces. Press `enter`. That's it.
 
 ## Customization
-So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings`. You'll see a JSON file like the one below.
+So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings` or press `ctrl + shift + p` (Mac users press `cmd + shift + p`) and select `Preferences: Open in Browser Settings`. You'll see two JSON files. One on the left is Default settings and the other is User settings. Default settings will be like the one below.
 
 ```
 {
@@ -19,9 +19,9 @@ So, this plugin opens the default browser while you click on links. Yet, We can 
     "only_on_hover": false  // Make this true to get links beside URLs only on hover
 }
 ```
-You can disable the plugin by setting `enable` to `false`.
+You can disable the plugin by adding `"enable": false` on User settings.
 
-You can set the default browser to open links by setting value to `custom_browser` (Refer below).
+You can set the default browser to open links by adding `custom_browser` as key and corresponding browser as value (Refer below).
 
 If `only_on_hover` is `true`, links will be displayed only when you hover over it.
 

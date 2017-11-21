@@ -1,3 +1,5 @@
+// Default settings of Open In Browser
+
 {
     // Set enable to false to disable this plugin
     "enable": true,

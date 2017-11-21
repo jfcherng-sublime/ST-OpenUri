@@ -17,9 +17,18 @@
                         [
                             {
                                 "caption": "Settings",
-                                "command": "open_file",
-                                "args": {"file": "${packages}/Open In Browser/OpenInBrowser.sublime-settings"}
+                                "command": "edit_settings",
+                                "args":
+                                {
+                                    "base_file": "${packages}/Open In Browser/OpenInBrowser.sublime-settings",
+                                    "default": "// Open In Browser Settings - User\n{\n\t$0\n}\n"
+                                }
                             },
+                            {
+                                "caption": "Guide",
+                                "command": "open_file",
+                                "args": {"file": "${packages}/Open In Browser/README.md"}
+                            }
                         ]
                     }
                 ]

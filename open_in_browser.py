@@ -1,85 +1,87 @@
-import base64, os, re, sublime, sublime_plugin, subprocess, webbrowser
-from urllib.parse import urlparse
-from .settings import get_setting, get_image
+import bisect
+import re
+import sublime
+import sublime_plugin
+from .functions import get_setting, get_image_path, open_browser, view_find_all_fast
 
-REGEX = "(http|ftp|https)://([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?"
+# our goal is to find URLs ASAP rather than validate them
+URL_REGEX = r"(?:https?|ftps?)://[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"
+URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
 
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view):
         self.view = view
-        self.platform = sublime.platform()
-        self.font_size = view.settings().get('font_size', 15) + 3
-        self.detected_url_regions = None
+        self.phantom_set = sublime.PhantomSet(view)
+        self.url_regions = []
 
-    def erase_phantom(self):
-        self.view.erase_phantoms('open_link_phantom')
+        # the width/height of the phantom image
+        self.phantom_img_wh = {
+            "w": view.settings().get("font_size", 15) + 2,
+            "h": view.settings().get("font_size", 15) + 2,
+        }
 
-    def get_url_link(self, url):
-        return sublime.expand_variables("<a href='${url}'><img width='${font_size}', height='${font_size}' src='data:image/png;base64,${encoded_img}' /></a>", {"url": url, "encoded_img": get_image(), 'font_size': str(self.font_size)})
+    def on_load_async(self):
+        if get_setting("enable"):
+            self._detect_urls()
 
     def on_activated_async(self):
-        if get_setting('enable'):
-            self.detect_urls()
+        if get_setting("enable"):
+            self._detect_urls()
 
-    def on_deactivated_async(self):
-        self.erase_phantom()
-
-    def detect_urls(self):
-        url_regions = self.view.find_all(REGEX)
-        self.detected_url_regions = url_regions
-
-        for region in url_regions:
-            point = region.end()
-            detected_url = self.view.substr(region)
-
-            if not get_setting('only_on_hover'):
-                pid = self.view.add_phantom('open_link_phantom', sublime.Region(point, point), self.get_url_link(detected_url), sublime.LAYOUT_INLINE, on_navigate=self.open_app)
-
-    def open_app(self, url):
-        is_url = url.startswith('http://') or url.startswith('https://') or url.startswith('ftp://')
-        browser = get_setting('custom_browser')
-        platform = self.platform
-        status = 99
-
-        if not browser == "":
-            if platform == 'osx':
-                status = os.system("open -a '{browser}' '{url}'".format(browser=browser, url=url))
-            elif platform == 'linux':
-                try:
-                    status = 0
-                    subprocess.Popen([browser, url])
-                except:
-                    status = 99
-            elif platform == 'windows':
-                status = os.system("start '{browser}' '{url}'".format(browser=browser, url=url))
-        else:
-            if platform == 'osx':
-                status = os.system("open '{url}'".format(url=url))
-            elif platform == 'linux':
-                status = os.system("xdg-open '{url}'".format(url=url))
-            elif platform == 'windows':
-                status = os.system("start '{url}'".format(url=url))
-
-        if status > 0:
-            webbrowser.open(url)
+    def on_modified_async(self):
+        if get_setting("enable"):
+            self._detect_urls()
 
     def on_hover(self, point, hover_zone):
-        if get_setting('only_on_hover') and get_setting('enable'):
-            for region in self.detected_url_regions:
-                if region.contains(point):
-                    url_end_point = region.end()
-                    detected_url = self.view.substr(region)
+        if not self.url_regions or not get_setting("only_on_hover") or not get_setting("enable"):
+            return
 
-                    self.erase_phantom()
-                    pid = self.view.add_phantom('open_link_phantom', sublime.Region(url_end_point, url_end_point), self.get_url_link(detected_url), sublime.LAYOUT_INLINE, on_navigate=self.open_app)
+        # since "url_regions" is auto sorted, we could perform a binary searching
+        insert_idx = bisect.bisect_right(
+            self.url_regions,
+            sublime.Region(
+                point,
+                # this ending point is a trick for binary searching
+                self.url_regions[-1].end() + 1,
+            ),
+        )
 
-                    break
-                else:
-                    self.erase_phantom()
+        # this is the only region which can possibly contain the hovered point
+        region_check = self.url_regions[insert_idx - 1]
 
-class SaveHelper(sublime_plugin.EventListener):
-    def on_post_save_async(self, view):
-        view.erase_phantoms('open_link_phantom')
-        oib = OpenInBrowser(view)
-        oib.detect_urls();
+        self._update_phantom([region_check] if region_check.contains(point) else [])
+
+    def _detect_urls(self):
+        self.url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ)
+
+        if get_setting("only_on_hover"):
+            return
+
+        self._update_phantom(self.url_regions)
+
+    def _generate_phantom_html(self, url):
+        return '<a href="{url}"><img width="{w}" height="{h}" src="res://{src}"></a>'.format(
+            url=url, src=get_image_path(), **self.phantom_img_wh
+        )
+
+    def _new_url_phantom(self, url_region):
+        # if the "url_region" is tuple, list or ...
+        if not isinstance(url_region, sublime.Region):
+            url_region = sublime.Region(*(url_region[0:2]))
+
+        return sublime.Phantom(
+            sublime.Region(url_region.end()),
+            self._generate_phantom_html(self.view.substr(url_region)),
+            sublime.LAYOUT_INLINE,
+            on_navigate=open_browser,
+        )
+
+    def _new_url_phantoms(self, url_regions):
+        return [self._new_url_phantom(r) for r in url_regions]
+
+    def _erase_phantom(self):
+        self.phantom_set.update([])
+
+    def _update_phantom(self, url_regions):
+        self.phantom_set.update(self._new_url_phantoms(url_regions))

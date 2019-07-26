@@ -15,12 +15,6 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         self.phantom_set = sublime.PhantomSet(view)
         self.url_regions = []
 
-        # the width/height of the phantom image
-        self.phantom_img_wh = {
-            "w": view.settings().get("font_size", 15) + 2,
-            "h": view.settings().get("font_size", 15) + 2,
-        }
-
     def on_load_async(self):
         self._detect_urls()
 
@@ -58,8 +52,10 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         self._update_phantom(self.url_regions)
 
     def _generate_phantom_html(self, url):
+        view_font_size = self.view.settings().get("font_size")
+
         return '<a href="{url}"><img width="{w}" height="{h}" src="res://{src}"></a>'.format(
-            url=url, src=get_image_path(), **self.phantom_img_wh
+            url=url, src=get_image_path(), w=view_font_size + 2, h=view_font_size + 2
         )
 
     def _new_url_phantom(self, url_region):

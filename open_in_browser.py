@@ -2,18 +2,45 @@ import bisect
 import re
 import sublime
 import sublime_plugin
-from .functions import get_setting, get_image_path, open_browser, view_find_all_fast
+from .functions import (
+    find_url_region_by_point,
+    get_image_path,
+    get_setting,
+    open_browser,
+    view_find_all_fast,
+    view_url_regions_val,
+)
 
 # our goal is to find URLs ASAP rather than validate them
 URL_REGEX = r"(?:https?|ftps?)://[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"
 URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
 
 
+class OpenInBrowserFromCursorCommand(sublime_plugin.TextCommand):
+    def run(self, edit, args={}):
+        sels = list(filter(lambda sel: sel.begin() == sel.end(), self.view.sel()))
+
+        if not any(True for _ in sels):
+            return
+
+        pts = list(map(lambda sel: sel.begin(), sels))
+        url_regions = view_url_regions_val(self.view)
+        browser = args.get("browser", None)
+
+        for pt in pts:
+            url_region = find_url_region_by_point(url_regions, pt)
+
+            if not url_region:
+                continue
+
+            open_browser(self.view.substr(sublime.Region(*url_region)), browser)
+
+
 class OpenInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view):
         self.view = view
         self.phantom_set = sublime.PhantomSet(view)
-        self.url_regions = []
+        view_url_regions_val(self.view, [])
 
     def on_load_async(self):
         self._detect_urls()
@@ -25,31 +52,24 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         self._detect_urls()
 
     def on_hover(self, point, hover_zone):
-        if not self.url_regions or not get_setting("only_on_hover"):
+        url_regions = view_url_regions_val(self.view)
+
+        if not url_regions or not get_setting("only_on_hover"):
             return
 
-        # since "url_regions" is auto sorted, we could perform a binary searching
-        insert_idx = bisect.bisect_right(
-            self.url_regions,
-            sublime.Region(
-                point,
-                # this ending point is a trick for binary searching
-                self.url_regions[-1].end() + 1,
-            ),
-        )
+        region = find_url_region_by_point(url_regions, point)
 
-        # this is the only region which can possibly contain the hovered point
-        region_check = self.url_regions[insert_idx - 1]
-
-        self._update_phantom([region_check] if region_check.contains(point) else [])
+        self._update_phantom([region] if region else [])
 
     def _detect_urls(self):
-        self.url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ)
+        url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ)
+
+        view_url_regions_val(self.view, url_regions)
 
         if get_setting("only_on_hover"):
             return
 
-        self._update_phantom(self.url_regions)
+        self._update_phantom(url_regions)
 
     def _generate_phantom_html(self, url):
         view_font_size = self.view.settings().get("font_size")
@@ -64,7 +84,7 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         if not isinstance(url_region, sublime.Region):
             url_region = sublime.Region(*(url_region[0:2]))
 
-        # calulate the point to insert the phantom usually it's exact at the end of URL, but if
+        # calculate the point to insert the phantom usually it's exact at the end of URL, but if
         # the next char is a quotation mark, there could be a problem on break  "scope brackets"
         # highlighting in BracketHilighter. In that case, we shift the position until the next char
         # is not a quotation mark.

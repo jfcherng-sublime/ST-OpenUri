@@ -66,12 +66,21 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         )
 
     def _new_url_phantom(self, url_region):
-        # if the "url_region" is tuple, list or ...
+        # if the "url_region" is tuple, list or...
+        # always make "url_region" a sublime.Region object
         if not isinstance(url_region, sublime.Region):
             url_region = sublime.Region(*(url_region[0:2]))
 
+        # calulate the point to insert the phantom usually it's exact at the end of URL, but if
+        # the next char is a quotation mark, there could be a problem on break  "scope brackets"
+        # highlighting in BracketHilighter. In that case, we shift the position until the next char
+        # is not a quotation mark.
+        phantom_point = url_region.end()
+        while self.view.substr(phantom_point) in "'\"":
+            phantom_point += 1
+
         return sublime.Phantom(
-            sublime.Region(url_region.end()),
+            sublime.Region(phantom_point),
             self._generate_phantom_html(self.view.substr(url_region)),
             sublime.LAYOUT_INLINE,
             on_navigate=open_browser,

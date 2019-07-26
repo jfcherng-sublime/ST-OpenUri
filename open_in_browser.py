@@ -1,9 +1,9 @@
-import bisect
 import re
 import sublime
 import sublime_plugin
 from .functions import (
-    find_url_region_by_point,
+    find_url_regions_by_region,
+    find_url_regions_by_regions,
     get_image_path,
     get_setting,
     open_browser,
@@ -18,22 +18,13 @@ URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
 
 class OpenInBrowserFromCursorCommand(sublime_plugin.TextCommand):
     def run(self, edit, args={}):
-        sels = list(filter(lambda sel: sel.begin() == sel.end(), self.view.sel()))
+        urls = map(
+            lambda region: self.view.substr(sublime.Region(*region)),
+            find_url_regions_by_regions(self.view, self.view.sel()),
+        )
 
-        if not any(True for _ in sels):
-            return
-
-        pts = list(map(lambda sel: sel.begin(), sels))
-        url_regions = view_url_regions_val(self.view)
-        browser = args.get("browser", None)
-
-        for pt in pts:
-            url_region = find_url_region_by_point(url_regions, pt)
-
-            if not url_region:
-                continue
-
-            open_browser(self.view.substr(sublime.Region(*url_region)), browser)
+        for url in set(urls):
+            open_browser(url, args.get("browser", None))
 
 
 class OpenInBrowser(sublime_plugin.ViewEventListener):
@@ -52,18 +43,15 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         self._detect_urls()
 
     def on_hover(self, point, hover_zone):
-        url_regions = view_url_regions_val(self.view)
-
-        if not url_regions or not get_setting("only_on_hover"):
+        if not get_setting("only_on_hover"):
             return
 
-        region = find_url_region_by_point(url_regions, point)
-
-        self._update_phantom([region] if region else [])
+        self._update_phantom(find_url_regions_by_region(self.view, point))
 
     def _detect_urls(self):
         url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ)
 
+        # update found URL regions
         view_url_regions_val(self.view, url_regions)
 
         if get_setting("only_on_hover"):

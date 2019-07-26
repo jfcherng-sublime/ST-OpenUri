@@ -14,14 +14,13 @@ So, this plugin opens the default browser while you click on links. Yet, We can 
 
 ```
 {
-    "enable": true,         // Set enable to false to disable this plugin
-    "custom_browser": "",   // Set a default browser to open links
+    "browser": "",          // Set a browser to open links
     "only_on_hover": false  // Make this true to get links beside URLs only on hover
 }
 ```
 You can disable the plugin by adding `"enable": false` on User settings.
 
-You can set the default browser to open links by adding `custom_browser` as key and corresponding browser as value (Refer below).
+You can set the default browser to open links by adding `browser` as key and corresponding browser as value (Refer below).
 
 If `only_on_hover` is `true`, links will be displayed only when you hover over it.
 

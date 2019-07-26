@@ -22,19 +22,16 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
         }
 
     def on_load_async(self):
-        if get_setting("enable"):
-            self._detect_urls()
+        self._detect_urls()
 
     def on_activated_async(self):
-        if get_setting("enable"):
-            self._detect_urls()
+        self._detect_urls()
 
     def on_modified_async(self):
-        if get_setting("enable"):
-            self._detect_urls()
+        self._detect_urls()
 
     def on_hover(self, point, hover_zone):
-        if not self.url_regions or not get_setting("only_on_hover") or not get_setting("enable"):
+        if not self.url_regions or not get_setting("only_on_hover"):
             return
 
         # since "url_regions" is auto sorted, we could perform a binary searching

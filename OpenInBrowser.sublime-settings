@@ -1,10 +1,12 @@
-// Default settings of Open In Browser
-
 {
     // Set enable to false to disable this plugin
     "enable": true,
     // Custom browser setting can be used to set a default browser to open links
     "custom_browser": "",
     // Make this true to get links beside URLs only on hover
-    "only_on_hover": false
+    "only_on_hover": false,
+    // the image used for "open a new window"
+    // there are several colors which you may use with changing the filename
+    // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"
+    "image_new_window": "images/new-window-blue.png",
 }

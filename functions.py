@@ -16,7 +16,7 @@ def get_setting(key, default=None):
 
 
 def get_image_path():
-    return get_package_path() + "/phantom.png"
+    return get_package_path() + "/" + get_setting("image_new_window")
 
 
 def open_browser(url):

@@ -1,7 +1,7 @@
 OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » Changelog
 
-## [2.0.3] - 2019-07-27
+## [2.0.4] - 2019-07-27
 
 ### Added
 - Allow multiple cursors to open multiple URLs at once via a command (`open_url_in_browser_from_cursor`).

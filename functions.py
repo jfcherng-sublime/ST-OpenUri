@@ -95,19 +95,24 @@ def find_url_regions_by_regions(view, regions):
     ]
 
 
-def view_find_all_fast(view, regex_obj):
+def view_find_all_fast(view, regex_obj, return_st_region=True):
     """
     @brief A faster/simpler implementation of View.find_all().
 
-    @param view      the View object
-    @param regex_obj the compiled regex object
+    @param view             the View object
+    @param regex_obj        the compiled regex object
+    @param return_st_region return region in sublime.Region type
 
-    @return sublime.Region[]
+    @return sublime.Region[]|list[]
     """
 
     iterator = regex_obj.finditer(view.substr(sublime.Region(0, view.size())))
+    regions = [m.span() for m in iterator] if iterator else []
 
-    return [sublime.Region(*(m.span())) for m in iterator] if iterator else []
+    if return_st_region:
+        regions = [sublime.Region(*r) for r in regions]
+
+    return regions
 
 
 def view_url_regions_val(view, url_regions=None):

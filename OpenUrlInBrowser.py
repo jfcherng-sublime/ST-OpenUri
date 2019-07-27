@@ -48,7 +48,7 @@ class OpenUrlInBrowser(sublime_plugin.ViewEventListener):
         self._update_phantom(find_url_regions_by_region(self.view, point))
 
     def _detect_urls(self):
-        url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ)
+        url_regions = view_find_all_fast(self.view, URL_REGEX_OBJ, False)
 
         # update found URL regions
         view_url_regions_val(self.view, url_regions)

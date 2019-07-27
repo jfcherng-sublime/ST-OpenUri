@@ -6,17 +6,17 @@ from .functions import (
     find_url_regions_by_regions,
     get_image_path,
     get_setting,
-    open_browser,
+    open_url_from_browser,
     view_find_all_fast,
     view_url_regions_val,
 )
 
 # our goal is to find URLs ASAP rather than validate them
-URL_REGEX = r"(?:https?|ftps?)://[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"
+URL_REGEX = r"\b(?:https?|ftps?)://[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"
 URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
 
 
-class OpenInBrowserFromCursorCommand(sublime_plugin.TextCommand):
+class OpenUrlInBrowserFromCursorCommand(sublime_plugin.TextCommand):
     def run(self, edit, args={}):
         urls = map(
             lambda region: self.view.substr(sublime.Region(*region)),
@@ -24,10 +24,10 @@ class OpenInBrowserFromCursorCommand(sublime_plugin.TextCommand):
         )
 
         for url in set(urls):
-            open_browser(url, args.get("browser", None))
+            open_url_from_browser(url, args.get("browser", None))
 
 
-class OpenInBrowser(sublime_plugin.ViewEventListener):
+class OpenUrlInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view):
         self.view = view
         self.phantom_set = sublime.PhantomSet(view)
@@ -84,7 +84,7 @@ class OpenInBrowser(sublime_plugin.ViewEventListener):
             sublime.Region(phantom_point),
             self._generate_phantom_html(self.view.substr(url_region)),
             sublime.LAYOUT_INLINE,
-            on_navigate=open_browser,
+            on_navigate=open_url_from_browser,
         )
 
     def _new_url_phantoms(self, url_regions):

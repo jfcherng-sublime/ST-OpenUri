@@ -1,6 +1,7 @@
 {
-    // custom browser setting can be used to set a default browser to open links
-    "custom_browser": "",
+    // browser used to open a URL
+    // leave this empty to use a default browser
+    "browser": "",
     // make this true to get links beside URLs only on hover
     "only_on_hover": false,
     // the image used for "open a new window"

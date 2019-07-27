@@ -12,7 +12,7 @@ def get_package_path():
 
 
 def get_setting(key, default=None):
-    settings = sublime.load_settings("OpenInBrowser.sublime-settings")
+    settings = sublime.load_settings(get_package_name() + ".sublime-settings")
     return settings.get(key, default)
 
 
@@ -20,7 +20,7 @@ def get_image_path():
     return get_package_path() + "/" + get_setting("image_new_window")
 
 
-def open_browser(url, browser=None):
+def open_url_from_browser(url, browser=None):
     """
     @brief Open the URL with the browser.
 
@@ -137,14 +137,14 @@ def view_url_regions_val(view, url_regions=None):
     """
 
     if url_regions is None:
-        return view.settings().get("OIB_url_regions", [])
+        return view.settings().get("OUIB_url_regions", [])
 
     # always convert sublime.Region into a list
     for idx, region in enumerate(url_regions):
         if isinstance(region, sublime.Region):
             url_regions[idx] = [region.begin(), region.end()]
 
-    view.settings().set("OIB_url_regions", url_regions)
+    view.settings().set("OUIB_url_regions", url_regions)
 
 
 def is_intersected(region_1, region_2, allow_pointy_boundary=False):

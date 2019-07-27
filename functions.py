@@ -12,12 +12,18 @@ def get_package_path():
 
 
 def get_setting(key, default=None):
-    settings = sublime.load_settings(get_package_name() + ".sublime-settings")
-    return settings.get(key, default)
+    return sublime.load_settings(get_package_name() + ".sublime-settings").get(key, default)
 
 
 def get_image_path():
-    return get_package_path() + "/" + get_setting("image_new_window")
+    image_new_window = sublime.expand_variables(
+        get_setting("image_new_window"), {"package": get_package_name()}
+    )
+
+    if image_new_window.startswith("Packages/"):
+        return image_new_window
+
+    return get_package_path() + "/" + image_new_window
 
 
 def open_url_from_browser(url, browser=None):

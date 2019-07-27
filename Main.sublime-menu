@@ -22,7 +22,7 @@
                     "file": "${packages}/OpenUrlInBrowser/README.md",
                 },
             }, {
-                "caption": "Changelog",
+                "caption": "CHANGELOG",
                 "command": "open_file",
                 "args": {
                     "file": "${packages}/OpenUrlInBrowser/CHANGELOG.md",

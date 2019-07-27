@@ -23,11 +23,11 @@ URI_REGEX_OBJ = None
 
 def plugin_loaded():
     settings_obj = get_settings_object()
-    settings_obj.add_on_change("protocols", setting_protocols_refreshed)
-    setting_protocols_refreshed()
+    settings_obj.add_on_change("detect_schemes", setting_detect_schemes_refreshed)
+    setting_detect_schemes_refreshed()
 
 
-def setting_protocols_refreshed():
+def setting_detect_schemes_refreshed():
     global URI_REGEX, URI_REGEX_OBJ
 
     URI_REGEX = get_uri_regex_by_schemes()

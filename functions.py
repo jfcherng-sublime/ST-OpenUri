@@ -1,38 +1,7 @@
 import bisect
 import sublime
 import webbrowser
-
-
-def get_package_name():
-    return __package__
-
-
-def get_base_package_name():
-    """
-    hard-coded workaround for different package name
-    due to installation via Package Control: Add Repository
-    """
-    return "OpenUrlInBrowser"
-
-
-def get_package_path():
-    return "Packages/" + get_package_name()
-
-
-def get_setting(key, default=None):
-    return sublime.load_settings(get_base_package_name() + ".sublime-settings").get(key, default)
-
-
-def get_image_path():
-    return sublime.expand_variables(
-        get_setting("image_new_window"),
-        {
-            # fmt: off
-            "package": get_package_name(),
-            "package_path": get_package_path(),
-            # fmt: on
-        },
-    )
+from .settings import get_setting
 
 
 def open_url_from_browser(url, browser=None):

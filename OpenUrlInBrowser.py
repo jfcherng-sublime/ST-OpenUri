@@ -1,11 +1,10 @@
 import re
 import sublime
 import sublime_plugin
+from .settings import get_image_path, get_setting
 from .functions import (
     find_url_regions_by_region,
     find_url_regions_by_regions,
-    get_image_path,
-    get_setting,
     open_url_from_browser,
     view_find_all_fast,
     view_url_regions_val,

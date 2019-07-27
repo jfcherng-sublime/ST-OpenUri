@@ -1,0 +1,11 @@
+{
+    // browser used to open a URL
+    // leave this empty to use a default browser
+    "browser": "",
+    // make this true to get links beside URLs only on hover
+    "only_on_hover": false,
+    // the image used for "open a new window"
+    // there are several colors which you may use with changing the filename
+    // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"
+    "image_new_window": "images/new-window-blue.png",
+}

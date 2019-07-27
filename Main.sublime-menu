@@ -1,38 +1,35 @@
-[
-    {
-        "caption": "Preferences",
-        "mnemonic": "n",
-        "id": "preferences",
-        "children":
-        [
-            {
-                "caption": "Package Settings",
-                "mnemonic": "P",
-                "id": "package-settings",
-                "children":
-                [
-                    {
-                        "caption": "Open in Browser",
-                        "children":
-                        [
-                            {
-                                "caption": "Settings",
-                                "command": "edit_settings",
-                                "args":
-                                {
-                                    "base_file": "${packages}/Open In Browser/OpenInBrowser.sublime-settings",
-                                    "default": "// Open In Browser Settings - User\n{\n\t$0\n}\n"
-                                }
-                            },
-                            {
-                                "caption": "Guide",
-                                "command": "open_file",
-                                "args": {"file": "${packages}/Open In Browser/README.md"}
-                            }
-                        ]
-                    }
-                ]
-            }
-        ]
-    }
-]
+[{
+    "id": "preferences",
+    "children": [{
+        "id": "package-settings",
+        "children": [{
+            "caption": "OpenUrlInBrowser",
+            "children": [{
+                "caption": "-",
+            }, {
+                "caption": "Settings",
+                "command": "edit_settings",
+                "args": {
+                    "base_file": "${packages}/OpenUrlInBrowser/OpenUrlInBrowser.sublime-settings",
+                    "default": "{\n\t$0\n}\n",
+                },
+            }, {
+                "caption": "-",
+            }, {
+                "caption": "README",
+                "command": "open_file",
+                "args": {
+                    "file": "${packages}/OpenUrlInBrowser/README.md",
+                },
+            }, {
+                "caption": "Changelog",
+                "command": "open_file",
+                "args": {
+                    "file": "${packages}/OpenUrlInBrowser/CHANGELOG.md",
+                },
+            }, {
+                "caption": "-",
+            }]
+        }]
+    }]
+}]

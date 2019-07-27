@@ -33,8 +33,6 @@ def setting_protocols_refreshed():
     URI_REGEX = get_uri_regex_by_schemes()
     URI_REGEX_OBJ = re.compile(URI_REGEX, re.IGNORECASE)
 
-    print(URI_REGEX)
-
 
 class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
     def run(self, edit, browser=""):

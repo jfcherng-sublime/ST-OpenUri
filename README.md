@@ -15,7 +15,7 @@ Currently, this plugin is not on Package Control yet. To install this, you can
 
   1. `Menu > Preferences > Package Control > Add Repository`:
      https://github.com/jfcherng/Sublime-OpenUrlInBrowser
-  1. `Menu > Preferences > Package Control > Add Repository`: 
+  1. `Menu > Preferences > Package Control > Install Package`: 
      Find `OpenUrlInBrowser` and install
 
 
@@ -39,8 +39,8 @@ Currently, this plugin is not on Package Control yet. To install this, you can
 
 ## Commands (Keybindings)
 
-There is no default keybindings, but you can define one for open URLs at
-the current (multiple) cursors. For example, I am using the following one.
+There is no default keybindings, but you can define one for opening URLs at
+the current cursor(s). For example, I am using the following one.
 
 ```javascript
 { 

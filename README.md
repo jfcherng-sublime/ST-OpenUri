@@ -1,46 +1,24 @@
-# open_in_browser
+## Sublime-OpenUrlInBrowser
 
-[Sublime Text 3](http://www.sublimetext.com/3) plugin to display a link when you hover over a hyperlink. On click of the link your default browser will open the link (Of course you can customise the behaviour
-).
+`OpenUrlInBrowser` is a Sublime Text 3 plugin that adds a button (inline phantom in ST's term)
+beside a URL. Users can click on the button to open the URL from a browser.
 
-![open-in-browser-sublime3-plugin](https://i.imgur.com/IObNAWB.png)
+
+
 
 ## Installation
 
-You can download this plugin from [Package Control](https://packagecontrol.io). Inside Sublime press `ctrl + shift + p` (Mac users press `cmd + shift + p`). Type install package and press `enter`. Then type `open in browser`. Select the one with spaces. Press `enter`. That's it.
+Currently, this plugin is not on Package Control yet. To install this, you can
 
-## Customization
-So, this plugin opens the default browser while you click on links. Yet, We can specify which browser must be used to open links. Navigate to `Preferences -> Package Settings -> Open in Browser -> Settings` or press `ctrl + shift + p` (Mac users press `cmd + shift + p`) and select `Preferences: Open in Browser Settings`. You'll see two JSON files. One on the left is Default settings and the other is User settings. Default settings will be like the one below.
+- Download from GitHub and put this in `Packages/`.
+- Add custom Package Control repository (recommended).
 
-```
-{
-    "browser": "",          // Set a browser to open links
-    "only_on_hover": false  // Make this true to get links beside URLs only on hover
-}
-```
-You can disable the plugin by adding `"enable": false` on User settings.
+  1. `Menu > Preferences > Package Control > Add Repository`:
+     https://github.com/jfcherng/Sublime-OpenUrlInBrowser
+  1. `Menu > Preferences > Package Control > Add Repository`: 
+     Find `OpenUrlInBrowser` and install
 
-You can set the default browser to open links by adding `browser` as key and corresponding browser as value (Refer below).
 
-If `only_on_hover` is `true`, links will be displayed only when you hover over it.
+## Acknowledgment
 
-#### Mac
-Enter the browser's name as you'd see in Applications window.
-
-Eg: `Google Chrome`, `Firefox`
-
-#### Linux
-Here, you've to provide executable name. Mostly, you'll be able to find it in `/usr/bin`
-
-Eg: `google-chrome`, `firefox`
-
-#### Windows
-The name with .exe extension. You can find in `C:\Program Files\<app name>\*.exe`
-
-Eg: `chrome`, `firefox`
-
-## Known Issues
-- On Mac OS Sierra, though the default browser may be Chrome or Safari, If Firefox is installed, it opens the URLs all the time. We can change this behaviour (Read customization section above).
-
-## Improvements
-- More Regex can be added to detect links & file paths. Feel free to make Pull requests.
+This plugin is initially modified from https://packagecontrol.io/packages/Open%20In%20Browser.

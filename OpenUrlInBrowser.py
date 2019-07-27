@@ -1,7 +1,6 @@
 import re
 import sublime
 import sublime_plugin
-from .settings import get_image_path, get_setting
 from .functions import (
     find_url_regions_by_region,
     find_url_regions_by_regions,
@@ -9,10 +8,32 @@ from .functions import (
     view_find_all_fast,
     view_url_regions_val,
 )
+from .settings import (
+    # fmt: off
+    get_image_path,
+    get_setting,
+    get_settings_object,
+    get_url_regex_by_schemes,
+    # fmt: on
+)
 
-# our goal is to find URLs ASAP rather than validate them
-URL_REGEX = r"\b(?:https?|ftps?)://[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"
-URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
+URL_REGEX = ""
+URL_REGEX_OBJ = None
+
+
+def plugin_loaded():
+    settings_obj = get_settings_object()
+    settings_obj.add_on_change("protocols", setting_protocols_refreshed)
+    setting_protocols_refreshed()
+
+
+def setting_protocols_refreshed():
+    global URL_REGEX, URL_REGEX_OBJ
+
+    URL_REGEX = get_url_regex_by_schemes()
+    URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
+
+    print(URL_REGEX)
 
 
 class OpenUrlInBrowserFromCursorCommand(sublime_plugin.TextCommand):

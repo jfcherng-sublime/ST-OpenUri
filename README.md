@@ -33,6 +33,38 @@ Currently, this plugin is not on Package Control yet. To install this, you can
     // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"
     // if you don't like them, you can even define your own image path.
     "image_new_window": "Packages/${package}/images/new-window-blue.png",
+    // defined schemes (case-insensitive) that wants to be detected
+    // the protocols and their delimiters are all in regex
+    "detect_schemes": {
+        "://": [
+            "ed2k",
+            "file",
+            "freenet",
+            "ftps?",
+            "git",
+            "hg", // Mercurial
+            "https?",
+            "irc",
+            "ldap",
+            "line", // Line
+            "mailto",
+            "news",
+            "ssh",
+            "svn",
+            "tcp",
+            "telnets?",
+            "tencent", // Tencent QQ
+            "tg", // Telegram
+            "tls",
+            "udp",
+            "wss?", // Websocket
+        ],
+        ":\\?": [
+            "magnet", // Torrent
+        ],
+        ":": [
+            "skype",
+        ],
 }
 ```
 

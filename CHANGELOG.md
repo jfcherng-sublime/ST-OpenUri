@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [3.0.0] - 2019-07-28
+
+### Changed
+- Plugin name has been changed to `OpenUriInBrowser`.
+- Command `open_url_in_browser_from_cursor` has been changed to `open_uri_in_browser_from_cursor`.
+- All other `URL`-related things have been renamed to `URI` if not mentioned here.
+
+
 ## [2.0.4] - 2019-07-27
 
 ### Added

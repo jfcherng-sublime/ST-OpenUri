@@ -1,9 +1,9 @@
-## Sublime-OpenUrlInBrowser
+## Sublime-OpenUriInBrowser
 
-`OpenUrlInBrowser` is a Sublime Text 3 plugin that adds a button (inline phantom in ST's term)
-beside a URL. Users can click on the button to open the URL from a browser.
+`OpenUriInBrowser` is a Sublime Text 3 plugin that adds a button (inline phantom in ST's term)
+beside a URI. Users can click on the button to open the URI from a browser.
 
-![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUrlInBrowser/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/screenshot.png)
 
 
 ## Installation
@@ -14,19 +14,19 @@ Currently, this plugin is not on Package Control yet. To install this, you can
 - Or add a custom Package Control repository (recommended).
 
   1. `Menu > Preferences > Package Control > Add Repository`:
-     https://github.com/jfcherng/Sublime-OpenUrlInBrowser
+     https://github.com/jfcherng/Sublime-OpenUriInBrowser
   1. `Menu > Preferences > Package Control > Install Package`: 
-     Find `OpenUrlInBrowser` and install
+     Find `OpenUriInBrowser` and install
 
 
 ## Settings
 
 ```javascript
 {
-    // browser used to open a URL. leave this empty to use a default browser.
+    // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
     "browser": "",
-    // get a button beside a URL only on hover?
+    // get a button beside a URI only on hover?
     "only_on_hover": false,
     // the image used for "open a new window"
     // there are several colors which you may use it by changing the color in the filename
@@ -71,13 +71,13 @@ Currently, this plugin is not on Package Control yet. To install this, you can
 
 ## Commands (Keybindings)
 
-There is no default keybindings, but you can define one for opening URLs at
+There is no default keybindings, but you can define one for opening URIs at
 the current cursor(s). For example, I am using the following one.
 
 ```javascript
 { 
     "keys": ["alt+o", "alt+i", "alt+b"],
-    "command": "open_url_in_browser_from_cursor",
+    "command": "open_uri_in_browser_from_cursor",
     // "args": {"browser": ""}, // if you want to force using a specific browser
 },
 ```
@@ -93,7 +93,7 @@ This plugin is initially modified from [Open In Browser](https://packagecontrol.
 ### Improvements
 
 - Technically a total rewrite.
-- Simplified URL-finding REGEX.
+- Simplified URI-finding REGEX. Allow detecting custom schemes.
 - Self-managed phantom set. Do not clear phantoms when a view is deactivated.
-- Use binary searching to find URLs which should be opened.
-- Allow multiple cursors to open multiple URLs at once via a command (`open_url_in_browser_from_cursor`).
+- Use binary searching to find URIs which should be opened.
+- Allow multiple cursors to open multiple URIs at once via a command (`open_uri_in_browser_from_cursor`).

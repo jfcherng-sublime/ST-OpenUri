@@ -1,8 +1,8 @@
 {
-    // browser used to open a URL. leave this empty to use a default browser.
+    // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
     "browser": "",
-    // get a button beside a URL only on hover?
+    // get a button beside a URI only on hover?
     "only_on_hover": false,
     // the image used for "open a new window"
     // there are several colors which you may use it by changing the color in the filename

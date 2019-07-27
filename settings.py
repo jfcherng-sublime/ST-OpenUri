@@ -27,7 +27,7 @@ def get_settings_file():
     due to installation via Package Control: Add Repository
     """
 
-    return "OpenUrlInBrowser.sublime-settings"
+    return "OpenUriInBrowser.sublime-settings"
 
 
 def get_settings_object():
@@ -38,7 +38,7 @@ def get_setting(key, default=None):
     return get_settings_object().get(key, default)
 
 
-def get_url_regex_by_schemes(schemes=None):
+def get_uri_regex_by_schemes(schemes=None):
     if schemes is None:
         schemes = get_setting("detect_schemes")
 
@@ -49,5 +49,5 @@ def get_url_regex_by_schemes(schemes=None):
 
     scheme_regex = "(?:{regex})".format(regex="|".join(scheme_regexes))
 
-    # our goal is to find URLs ASAP rather than validate them
+    # our goal is to find URIs ASAP rather than validate them
     return r"\b" + scheme_regex + r"[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"

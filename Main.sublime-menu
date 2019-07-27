@@ -3,14 +3,14 @@
     "children": [{
         "id": "package-settings",
         "children": [{
-            "caption": "OpenUrlInBrowser",
+            "caption": "OpenUriInBrowser",
             "children": [{
                 "caption": "-",
             }, {
                 "caption": "Settings",
                 "command": "edit_settings",
                 "args": {
-                    "base_file": "${packages}/OpenUrlInBrowser/OpenUrlInBrowser.sublime-settings",
+                    "base_file": "${packages}/OpenUriInBrowser/OpenUriInBrowser.sublime-settings",
                     "default": "{\n\t$0\n}\n",
                 },
             }, {
@@ -19,13 +19,13 @@
                 "caption": "README",
                 "command": "open_file",
                 "args": {
-                    "file": "${packages}/OpenUrlInBrowser/README.md",
+                    "file": "${packages}/OpenUriInBrowser/README.md",
                 },
             }, {
                 "caption": "CHANGELOG",
                 "command": "open_file",
                 "args": {
-                    "file": "${packages}/OpenUrlInBrowser/CHANGELOG.md",
+                    "file": "${packages}/OpenUriInBrowser/CHANGELOG.md",
                 },
             }, {
                 "caption": "-",

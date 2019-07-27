@@ -4,11 +4,11 @@ import webbrowser
 from .settings import get_setting
 
 
-def open_url_from_browser(url, browser=None):
+def open_uri_from_browser(uri, browser=None):
     """
-    @brief Open the URL with the browser.
+    @brief Open the URI with the browser.
 
-    @param url     The url
+    @param uri     The uri
     @param browser The browser (None = default settings = system's default)
     """
 
@@ -20,26 +20,26 @@ def open_url_from_browser(url, browser=None):
 
     try:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
-        webbrowser.get(browser).open(url, autoraise=True)
+        webbrowser.get(browser).open(uri, autoraise=True)
     except (webbrowser.Error):
         sublime.error_message(
-            'Failed to open browser "{browser}" for "{url}".'.format(browser=browser, url=url)
+            'Failed to open browser "{browser}" for "{uri}".'.format(browser=browser, uri=uri)
         )
 
 
-def find_url_regions_by_region(view, region):
+def find_uri_regions_by_region(view, region):
     """
-    @brief Found intersected URL regions from view by region
+    @brief Found intersected URI regions from view by region
 
     @param view   The view
     @param region The region
 
-    @return list[] Found URL regions
+    @return list[] Found URI regions
     """
 
-    view_url_regions = view_url_regions_val(view)
+    view_uri_regions = view_uri_regions_val(view)
 
-    if not view_url_regions:
+    if not view_uri_regions:
         return []
 
     if isinstance(region, sublime.Region):
@@ -51,44 +51,44 @@ def find_url_regions_by_region(view, region):
 
     assert isinstance(region, list)
 
-    # since "view_url_regions" is auto sorted, we could perform a binary searching
-    insert_idx = bisect.bisect_left(view_url_regions, region)
+    # since "view_uri_regions" is auto sorted, we could perform a binary searching
+    insert_idx = bisect.bisect_left(view_uri_regions, region)
 
-    # at most, there are 3 URL regions that are possibly intersected with "region"
+    # at most, there are 3 URI regions that are possibly intersected with "region"
     possible_idxs = filter(
         # fmt: off
-        lambda idx: 0 <= idx < len(view_url_regions),
+        lambda idx: 0 <= idx < len(view_uri_regions),
         [insert_idx - 1, insert_idx, insert_idx + 1]
         # fmt: on
     )
 
     return [
-        view_url_regions[idx]
+        view_uri_regions[idx]
         for idx in possible_idxs
-        if is_intersected(view_url_regions[idx], region, True)
+        if is_intersected(view_uri_regions[idx], region, True)
     ]
 
 
-def find_url_regions_by_regions(view, regions):
+def find_uri_regions_by_regions(view, regions):
     """
-    @brief Found intersected URL regions from view by regions
+    @brief Found intersected URI regions from view by regions
 
     @param view    The view
     @param regions The regions
 
-    @return list[] Found URL regions
+    @return list[] Found URI regions
     """
 
-    url_regions = []
+    uri_regions = []
     for region in regions:
-        url_regions.extend(find_url_regions_by_region(view, region))
-    url_regions.sort()
+        uri_regions.extend(find_uri_regions_by_region(view, region))
+    uri_regions.sort()
 
     # remove duplicated regions
     return [
-        url_regions[idx]
-        for idx in range(len(url_regions))
-        if idx == 0 or url_regions[idx] != url_regions[idx - 1]
+        uri_regions[idx]
+        for idx in range(len(uri_regions))
+        if idx == 0 or uri_regions[idx] != uri_regions[idx - 1]
     ]
 
 
@@ -112,25 +112,25 @@ def view_find_all_fast(view, regex_obj, return_st_region=True):
     return regions
 
 
-def view_url_regions_val(view, url_regions=None):
+def view_uri_regions_val(view, uri_regions=None):
     """
-    @brief Set/Get the URL regions (in list of lists) of the current view
+    @brief Set/Get the URI regions (in list of lists) of the current view
 
     @param view        The view
-    @param url_regions The URL regions (None = get mode, otherwise = set mode)
+    @param uri_regions The URI regions (None = get mode, otherwise = set mode)
 
-    @return None|list[] None if the set mode, otherwise the URL regions
+    @return None|list[] None if the set mode, otherwise the URI regions
     """
 
-    if url_regions is None:
-        return view.settings().get("OUIB_url_regions", [])
+    if uri_regions is None:
+        return view.settings().get("OUIB_uri_regions", [])
 
     # always convert sublime.Region into a list
-    for idx, region in enumerate(url_regions):
+    for idx, region in enumerate(uri_regions):
         if isinstance(region, sublime.Region):
-            url_regions[idx] = [region.begin(), region.end()]
+            uri_regions[idx] = [region.begin(), region.end()]
 
-    view.settings().set("OUIB_url_regions", url_regions)
+    view.settings().set("OUIB_uri_regions", uri_regions)
 
 
 def is_intersected(region_1, region_2, allow_pointy_boundary=False):

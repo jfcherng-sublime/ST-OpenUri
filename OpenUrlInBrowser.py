@@ -17,14 +17,14 @@ URL_REGEX_OBJ = re.compile(URL_REGEX, re.IGNORECASE)
 
 
 class OpenUrlInBrowserFromCursorCommand(sublime_plugin.TextCommand):
-    def run(self, edit, args={}):
+    def run(self, edit, browser=""):
         urls = map(
             lambda region: self.view.substr(sublime.Region(*region)),
             find_url_regions_by_regions(self.view, self.view.sel()),
         )
 
         for url in set(urls):
-            open_url_from_browser(url, args.get("browser", None))
+            open_url_from_browser(url, browser)
 
 
 class OpenUrlInBrowser(sublime_plugin.ViewEventListener):

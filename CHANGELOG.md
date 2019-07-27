@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [2.0.2] - 2019-07-27
+## [2.0.3] - 2019-07-27
 
 ### Added
 - Allow multiple cursors to open multiple URLs at once via a command (`open_url_in_browser_from_cursor`).

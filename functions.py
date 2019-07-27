@@ -62,14 +62,11 @@ def find_url_regions_by_region(view, region):
         # fmt: on
     )
 
-    url_regions = []
-    for idx in possible_idxs:
-        region_check = view_url_regions[idx]
-
-        if is_intersected(region_check, region, True):
-            url_regions.append(region_check)
-
-    return url_regions
+    return [
+        view_url_regions[idx]
+        for idx in possible_idxs
+        if is_intersected(view_url_regions[idx], region, True)
+    ]
 
 
 def find_url_regions_by_regions(view, regions):

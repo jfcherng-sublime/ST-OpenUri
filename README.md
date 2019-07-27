@@ -37,34 +37,35 @@ Currently, this plugin is not on Package Control yet. To install this, you can
     // the protocols and their delimiters are all in regex
     "detect_schemes": {
         "://": [
-            "ed2k",
-            "file",
-            "freenet",
+            // browser viewable
             "ftps?",
-            "git",
-            "hg", // Mercurial
             "https?",
+            // messengers
             "irc",
-            "ldap",
-            "line", // Line
-            "mailto",
-            "news",
-            "ssh",
-            "svn",
-            "tcp",
-            "telnets?",
+            "line",
             "tencent", // Tencent QQ
             "tg", // Telegram
-            "tls",
-            "udp",
+            // version control systems
+            "git",
+            "hg", // Mercurial
+            "svn",
+            // P2P file sharing
+            "ed2k",
+            "freenet",
+            // others
+            "file",
+            "mailto",
+            "ssh",
+            "telnets?",
             "wss?", // Websocket
         ],
         ":\\?": [
-            "magnet", // Torrent
+            "magnet", // https://en.wikipedia.org/wiki/Magnet_URI_scheme
         ],
         ":": [
             "skype",
         ],
+    },
 }
 ```
 

@@ -3,12 +3,12 @@ import sublime
 import sublime_plugin
 from .functions import (
     find_uri_regions_by_region,
-    find_uri_regions_by_regions,
     open_uri_from_browser,
     view_typing_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
 )
+from .Globals import Globals
 from .settings import (
     get_image_path,
     get_setting,
@@ -17,55 +17,14 @@ from .settings import (
     get_uri_regex_by_schemes,
 )
 
-URI_REGEX = ""
-URI_REGEX_OBJ = None
-
 
 def plugin_loaded():
+    def setting_detect_schemes_refreshed():
+        Globals.uri_regex_obj = re.compile(get_uri_regex_by_schemes(), re.IGNORECASE)
+
     settings_obj = get_settings_object()
     settings_obj.add_on_change("detect_schemes", setting_detect_schemes_refreshed)
     setting_detect_schemes_refreshed()
-
-
-def setting_detect_schemes_refreshed():
-    global URI_REGEX, URI_REGEX_OBJ
-
-    URI_REGEX = get_uri_regex_by_schemes()
-    URI_REGEX_OBJ = re.compile(URI_REGEX, re.IGNORECASE)
-
-
-class SelectUriCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        sel = self.view.sel()
-
-        uri_regions = view_update_uri_regions(self.view, URI_REGEX_OBJ)
-
-        if uri_regions:
-            sel.clear()
-            sel.add_all([sublime.Region(*r) for r in uri_regions])
-
-
-class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
-        sel = self.view.sel()
-
-        view_update_uri_regions(self.view, URI_REGEX_OBJ)
-        uri_regions = find_uri_regions_by_regions(self.view, sel)
-
-        if uri_regions:
-            sel.clear()
-            sel.add_all([sublime.Region(*r) for r in uri_regions])
-
-
-class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
-    def run(self, edit, browser=""):
-        uris = map(
-            lambda region: self.view.substr(sublime.Region(*region)),
-            find_uri_regions_by_regions(self.view, self.view.sel()),
-        )
-
-        for uri in set(uris):
-            open_uri_from_browser(uri, browser)
 
 
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
@@ -106,7 +65,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._update_phantom(find_uri_regions_by_region(self.view, point))
 
     def _detect_uris(self):
-        uri_regions = view_update_uri_regions(self.view, URI_REGEX_OBJ)
+        uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
 
         if get_setting("only_on_hover"):
             return

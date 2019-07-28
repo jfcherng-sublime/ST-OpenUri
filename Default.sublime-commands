@@ -1,0 +1,10 @@
+[{
+    "caption": "OpenUriInBrowser: Select URIs from View",
+    "command": "select_uri",
+}, {
+    "caption": "OpenUriInBrowser: Select URIs from Cursors",
+    "command": "select_uri_from_cursor",
+}, {
+    "caption": "OpenUriInBrowser: Open URIs in Browser from Cursors",
+    "command": "open_uri_in_browser_from_cursor",
+}]

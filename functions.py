@@ -113,9 +113,17 @@ def view_find_all_fast(view, regex_obj, return_st_region=True):
 
 
 def view_update_uri_regions(view, URI_REGEX_OBJ):
+    """
+    @brief Update view's "uri_regions" variable
+
+    @param view          The view
+    @param URI_REGEX_OBJ The URI regex obj
+
+    @return the new "uri_regions" in the view
+    """
+
     uri_regions = view_find_all_fast(view, URI_REGEX_OBJ, False)
 
-    # update found URI regions
     view_uri_regions_val(view, uri_regions)
 
     return uri_regions

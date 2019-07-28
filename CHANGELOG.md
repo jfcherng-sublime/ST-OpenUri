@@ -5,10 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [3.2.0] - 2019-07-28
+
+### Added
+- Add commands: `select_uri` and `select_uri_from_cursor`.
+- Add some menus.
+
+
 ## [3.1.0] - 2019-07-28
 
 ### Added
--  Add config: `on_modified_typing_period`.
+- Add config: `on_modified_typing_period`.
 
 
 ## [3.0.3] - 2019-07-28

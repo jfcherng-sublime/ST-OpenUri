@@ -85,7 +85,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def _detect_uris(self):
         uri_regions = view_find_all_fast(self.view, URI_REGEX_OBJ, False)
 
-        # update found URi regions
+        # update found URI regions
         view_uri_regions_val(self.view, uri_regions)
 
         if get_setting("only_on_hover"):
@@ -107,7 +107,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
         # Calculate the point to insert the phantom.
         #
-        # Usually it's exact at the end of URi, but if the next char is a quotation mark,
+        # Usually it's exact at the end of URI, but if the next char is a quotation mark,
         # there could be a problem on break "scope brackets" highlighting in BracketHilighter.
         # In that case, we shift the position until the next char is not a quotation mark.
         phantom_point = uri_region.end()

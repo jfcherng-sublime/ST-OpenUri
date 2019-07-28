@@ -76,6 +76,10 @@ Currently, this plugin is not on Package Control yet. To install this, you can
 
 ## Commands (Keybindings)
 
+- `open_uri_in_browser_from_cursor`: Open URIs in browser from cursors
+- `select_uri`: Select URIs from view
+- `select_uri_from_cursor`: Select URIs from cursors
+
 There is no default keybindings, but you can define one for opening URIs at
 the current cursor(s). For example, I am using the following one.
 

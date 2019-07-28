@@ -101,15 +101,15 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         )
 
     def _new_uri_phantom(self, uri_region):
-        # if the "uri_region" is tuple, list or...
         # always make "uri_region" a sublime.Region object
         if not isinstance(uri_region, sublime.Region):
             uri_region = sublime.Region(*(uri_region[0:2]))
 
-        # calculate the point to insert the phantom usually it's exact at the end of URi, but if
-        # the next char is a quotation mark, there could be a problem on break  "scope brackets"
-        # highlighting in BracketHilighter. In that case, we shift the position until the next char
-        # is not a quotation mark.
+        # Calculate the point to insert the phantom.
+        #
+        # Usually it's exact at the end of URi, but if the next char is a quotation mark,
+        # there could be a problem on break "scope brackets" highlighting in BracketHilighter.
+        # In that case, we shift the position until the next char is not a quotation mark.
         phantom_point = uri_region.end()
         while self.view.substr(phantom_point) in "'\"":
             phantom_point += 1

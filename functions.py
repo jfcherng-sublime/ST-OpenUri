@@ -112,6 +112,15 @@ def view_find_all_fast(view, regex_obj, return_st_region=True):
     return regions
 
 
+def view_update_uri_regions(view, URI_REGEX_OBJ):
+    uri_regions = view_find_all_fast(view, URI_REGEX_OBJ, False)
+
+    # update found URI regions
+    view_uri_regions_val(view, uri_regions)
+
+    return uri_regions
+
+
 def view_uri_regions_val(view, uri_regions=None):
     """
     @brief Set/Get the URI regions (in list of lists) of the current view

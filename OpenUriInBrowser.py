@@ -5,8 +5,8 @@ from .functions import (
     find_uri_regions_by_region,
     find_uri_regions_by_regions,
     open_uri_from_browser,
-    view_find_all_fast,
     view_typing_timestamp_val,
+    view_update_uri_regions,
     view_uri_regions_val,
 )
 from .settings import (
@@ -32,6 +32,29 @@ def setting_detect_schemes_refreshed():
 
     URI_REGEX = get_uri_regex_by_schemes()
     URI_REGEX_OBJ = re.compile(URI_REGEX, re.IGNORECASE)
+
+
+class SelectUriCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        sel = self.view.sel()
+
+        uri_regions = view_update_uri_regions(self.view, URI_REGEX_OBJ)
+
+        if uri_regions:
+            sel.clear()
+            sel.add_all([sublime.Region(*r) for r in uri_regions])
+
+
+class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
+    def run(self, edit):
+        sel = self.view.sel()
+
+        view_update_uri_regions(self.view, URI_REGEX_OBJ)
+        uri_regions = find_uri_regions_by_regions(self.view, sel)
+
+        if uri_regions:
+            sel.clear()
+            sel.add_all([sublime.Region(*r) for r in uri_regions])
 
 
 class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
@@ -83,10 +106,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._update_phantom(find_uri_regions_by_region(self.view, point))
 
     def _detect_uris(self):
-        uri_regions = view_find_all_fast(self.view, URI_REGEX_OBJ, False)
-
-        # update found URI regions
-        view_uri_regions_val(self.view, uri_regions)
+        uri_regions = view_update_uri_regions(self.view, URI_REGEX_OBJ)
 
         if get_setting("only_on_hover"):
             return

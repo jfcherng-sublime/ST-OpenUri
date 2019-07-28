@@ -6,15 +6,15 @@ from .functions import (
     find_uri_regions_by_regions,
     open_uri_from_browser,
     view_find_all_fast,
+    view_typing_timestamp_val,
     view_uri_regions_val,
 )
 from .settings import (
-    # fmt: off
     get_image_path,
     get_setting,
     get_settings_object,
+    get_timestamp,
     get_uri_regex_by_schemes,
-    # fmt: on
 )
 
 URI_REGEX = ""
@@ -48,7 +48,8 @@ class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view):
         self.view = view
-        self.phantom_set = sublime.PhantomSet(view)
+        self.phantom_set = sublime.PhantomSet(self.view)
+        view_typing_timestamp_val(self.view, 0)
         view_uri_regions_val(self.view, [])
 
     def on_load_async(self):
@@ -58,7 +59,22 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._detect_uris()
 
     def on_modified_async(self):
-        self._detect_uris()
+        view_typing_timestamp_val(self.view, get_timestamp())
+
+        sublime.set_timeout_async(
+            # fmt: off
+            self.on_modified_async_callback,
+            get_setting("on_modified_typing_period")
+            # fmt: on
+        )
+
+    def on_modified_async_callback(self):
+        now_s = get_timestamp()
+        pass_ms = (now_s - view_typing_timestamp_val(self.view)) * 1000
+
+        if pass_ms >= get_setting("on_modified_typing_period"):
+            view_typing_timestamp_val(self.view, now_s)
+            self._detect_uris()
 
     def on_hover(self, point, hover_zone):
         if not get_setting("only_on_hover"):

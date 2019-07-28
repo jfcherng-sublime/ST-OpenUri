@@ -4,6 +4,10 @@
     "browser": "",
     // get a button beside a URI only on hover?
     "only_on_hover": false,
+    // the period (in milisecond) that consecutive modifications are treated as typing
+    // phantoms will be updated only when the user is not considered typing
+    // you can make this value larger if you feel ST gets stucked while typing
+    "on_modified_typing_period": 0,
     // the image used for "open a new window"
     // there are several colors which you may use it by changing the color in the filename
     // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"

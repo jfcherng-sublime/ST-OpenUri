@@ -133,6 +133,22 @@ def view_uri_regions_val(view, uri_regions=None):
     view.settings().set("OUIB_uri_regions", uri_regions)
 
 
+def view_typing_timestamp_val(view, timestamp_s=None):
+    """
+    @brief Set/Get the URI regions (in list of lists) of the current view
+
+    @param view        The view
+    @param timestamp_s The last timestamp (in sec) when the user is typing
+
+    @return None|float None if the set mode, otherwise the value
+    """
+
+    if timestamp_s is None:
+        return view.settings().get("OUIB_typing_timestamp", False)
+
+    view.settings().set("OUIB_typing_timestamp", timestamp_s)
+
+
 def is_intersected(region_1, region_2, allow_pointy_boundary=False):
     """
     @brief Check whether two regions are intersected.

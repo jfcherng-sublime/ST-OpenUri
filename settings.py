@@ -1,4 +1,5 @@
 import sublime
+import time
 
 
 def get_package_name():
@@ -36,6 +37,10 @@ def get_settings_object():
 
 def get_setting(key, default=None):
     return get_settings_object().get(key, default)
+
+
+def get_timestamp():
+    return time.time()
 
 
 def get_uri_regex_by_schemes(schemes=None):

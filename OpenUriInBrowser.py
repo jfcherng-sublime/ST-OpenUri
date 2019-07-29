@@ -68,18 +68,14 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._detect_uris()
 
     def on_hover(self, point: int, hover_zone: int) -> None:
-        if not get_setting("only_on_hover"):
-            return
-
-        self._update_phantom(find_uri_regions_by_region(self.view, point))
+        if get_setting("show_open_button") == "hover":
+            self._update_phantom(find_uri_regions_by_region(self.view, point))
 
     def _detect_uris(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
 
-        if get_setting("only_on_hover"):
-            return
-
-        self._update_phantom(uri_regions)
+        if get_setting("show_open_button") == "always":
+            self._update_phantom(uri_regions)
 
     def _generate_phantom_html(self, uri: str) -> None:
         view_font_size = self.view.settings().get("font_size")

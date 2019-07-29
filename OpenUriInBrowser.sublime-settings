@@ -2,8 +2,9 @@
     // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
     "browser": "",
-    // get a button beside a URI only on hover?
-    "only_on_hover": false,
+    // when to show a phantom button beside a URI?
+    // can be "always" (always show buttons) or "hover" (only when the URI is hovered)
+    "show_open_button": "always",
     // the period (in milisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing

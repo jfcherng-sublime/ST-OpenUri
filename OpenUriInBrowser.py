@@ -27,12 +27,20 @@ def plugin_loaded() -> None:
     setting_detect_schemes_refreshed()
 
 
+def plugin_unloaded() -> None:
+    settings_obj = get_settings_object()
+    settings_obj.clear_on_change("detect_schemes")
+
+
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         self.view = view
         self.phantom_set = sublime.PhantomSet(self.view)
         view_typing_timestamp_val(self.view, 0)
         view_uri_regions_val(self.view, [])
+
+    def __del__(self) -> None:
+        self._erase_phantom()
 
     def on_load_async(self) -> None:
         self._detect_uris()

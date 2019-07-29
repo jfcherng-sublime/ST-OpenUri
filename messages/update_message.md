@@ -1,9 +1,8 @@
 OpenUrlInBrowser has been updated. To see the changelog, visit
-Preferences » Package Settings » OpenUrlInBrowser » Changelog
+Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [3.2.2] - 2019-07-29
+## [3.2.3] - 2019-07-30
 
-### Added
-- Add commands: `select_uri` and `select_uri_from_cursor`.
-- Add some menus.
+### Fixed
+- Fixed old phantoms are not removed after reloading plugin.

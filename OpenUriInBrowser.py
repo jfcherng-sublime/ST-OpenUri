@@ -11,6 +11,7 @@ from .functions import (
 from .Globals import Globals
 from .settings import (
     get_image_path,
+    get_package_name,
     get_setting,
     get_settings_object,
     get_timestamp,
@@ -35,7 +36,7 @@ def plugin_unloaded() -> None:
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         self.view = view
-        self.phantom_set = sublime.PhantomSet(self.view)
+        self.phantom_set = sublime.PhantomSet(self.view, get_package_name())
         view_typing_timestamp_val(self.view, 0)
         view_uri_regions_val(self.view, [])
 

@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [4.0.0] - 2019-07-30
+
+### Changed
+- Setting `on_hover` is now changed to `show_open_button`.
+  `"on_hover": true` is the same with `"show_open_button": "hover"`.
+  `"on_hover": false` is the same with `"show_open_button": "always"`.
+
+
 ## [3.2.3] - 2019-07-30
 
 ### Fixed

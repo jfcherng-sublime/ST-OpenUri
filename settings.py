@@ -2,15 +2,15 @@ import sublime
 import time
 
 
-def get_package_name():
+def get_package_name() -> str:
     return __package__
 
 
-def get_package_path():
+def get_package_path() -> str:
     return "Packages/" + get_package_name()
 
 
-def get_image_path():
+def get_image_path() -> str:
     return sublime.expand_variables(
         get_setting("image_new_window"),
         {
@@ -22,7 +22,7 @@ def get_image_path():
     )
 
 
-def get_settings_file():
+def get_settings_file() -> str:
     """
     hard-coded workaround for different package name
     due to installation via Package Control: Add Repository
@@ -31,19 +31,19 @@ def get_settings_file():
     return "OpenUriInBrowser.sublime-settings"
 
 
-def get_settings_object():
+def get_settings_object() -> sublime.Settings:
     return sublime.load_settings(get_settings_file())
 
 
-def get_setting(key, default=None):
+def get_setting(key: str, default=None):
     return get_settings_object().get(key, default)
 
 
-def get_timestamp():
+def get_timestamp() -> float:
     return time.time()
 
 
-def get_uri_regex_by_schemes(schemes=None):
+def get_uri_regex_by_schemes(schemes=None) -> str:
     if schemes is None:
         schemes = get_setting("detect_schemes")
 

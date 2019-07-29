@@ -4,7 +4,7 @@ import webbrowser
 from .settings import get_setting
 
 
-def open_uri_from_browser(uri, browser=None):
+def open_uri_from_browser(uri: str, browser=None) -> None:
     """
     @brief Open the URI with the browser.
 
@@ -27,7 +27,7 @@ def open_uri_from_browser(uri, browser=None):
         )
 
 
-def find_uri_regions_by_region(view, region):
+def find_uri_regions_by_region(view: sublime.View, region) -> list:
     """
     @brief Found intersected URI regions from view by region
 
@@ -42,14 +42,7 @@ def find_uri_regions_by_region(view, region):
     if not view_uri_regions:
         return []
 
-    if isinstance(region, sublime.Region):
-        region = [region.begin(), region.end()]
-    elif isinstance(region, int):
-        region = [region, region]
-    elif isinstance(region, tuple):
-        region = list(tuple)
-
-    assert isinstance(region, list)
+    region = region_into_list_form(region, True)
 
     # since "view_uri_regions" is auto sorted, we could perform a binary searching
     insert_idx = bisect.bisect_left(view_uri_regions, region)
@@ -69,7 +62,7 @@ def find_uri_regions_by_region(view, region):
     ]
 
 
-def find_uri_regions_by_regions(view, regions):
+def find_uri_regions_by_regions(view: sublime.View, regions: list) -> list:
     """
     @brief Found intersected URI regions from view by regions
 
@@ -92,7 +85,7 @@ def find_uri_regions_by_regions(view, regions):
     ]
 
 
-def view_find_all_fast(view, regex_obj, return_st_region=True):
+def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:
     """
     @brief A faster/simpler implementation of View.find_all().
 
@@ -112,7 +105,7 @@ def view_find_all_fast(view, regex_obj, return_st_region=True):
     return regions
 
 
-def view_update_uri_regions(view, uri_regex_obj):
+def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> list:
     """
     @brief Update view's "uri_regions" variable
 
@@ -129,7 +122,7 @@ def view_update_uri_regions(view, uri_regex_obj):
     return uri_regions
 
 
-def view_uri_regions_val(view, uri_regions=None):
+def view_uri_regions_val(view: sublime.View, uri_regions=None):
     """
     @brief Set/Get the URI regions (in list of lists) of the current view
 
@@ -142,15 +135,12 @@ def view_uri_regions_val(view, uri_regions=None):
     if uri_regions is None:
         return view.settings().get("OUIB_uri_regions", [])
 
-    # always convert sublime.Region into a list
-    for idx, region in enumerate(uri_regions):
-        if isinstance(region, sublime.Region):
-            uri_regions[idx] = [region.begin(), region.end()]
+    uri_regions = [region_into_list_form(r, True) for r in uri_regions]
 
     view.settings().set("OUIB_uri_regions", uri_regions)
 
 
-def view_typing_timestamp_val(view, timestamp_s=None):
+def view_typing_timestamp_val(view: sublime.View, timestamp_s=None):
     """
     @brief Set/Get the URI regions (in list of lists) of the current view
 
@@ -166,7 +156,37 @@ def view_typing_timestamp_val(view, timestamp_s=None):
     view.settings().set("OUIB_typing_timestamp", timestamp_s)
 
 
-def is_intersected(region_1, region_2, allow_pointy_boundary=False):
+def region_into_list_form(region, sort_result: bool = False) -> list:
+    """
+    @brief Convert the "region" into list form
+
+    @param region      The region
+    @param sort_result Sort the region
+
+    @return list the "region" into list form
+    """
+
+    if isinstance(region, sublime.Region):
+        region = [region.a, region.b]
+    elif isinstance(region, int) or isinstance(region, float):
+        region = [int(region)] * 2
+    elif hasattr(region, "__iter__") and not isinstance(region, list):
+        region = list(region)
+
+    assert isinstance(region, list)
+
+    if not region:
+        raise ValueError
+
+    if len(region) == 1:
+        region *= 2
+    elif len(region) > 2:
+        region = region[0:2]
+
+    return sorted(region) if sort_result else region
+
+
+def is_intersected(region_1, region_2, allow_pointy_boundary: bool = False) -> bool:
     """
     @brief Check whether two regions are intersected.
 
@@ -177,10 +197,9 @@ def is_intersected(region_1, region_2, allow_pointy_boundary=False):
     @return True if intersected, False otherwise.
     """
 
-    lb = region_1.begin() if isinstance(region_1, sublime.Region) else min(region_1)
-    le = region_1.end() if isinstance(region_1, sublime.Region) else max(region_1)
-    rb = region_2.begin() if isinstance(region_2, sublime.Region) else min(region_2)
-    re = region_2.end() if isinstance(region_2, sublime.Region) else max(region_2)
+    # left/right begin/end = l/r b/e
+    lb, le = region_into_list_form(region_1, True)
+    rb, re = region_into_list_form(region_2, True)
 
     # one of the region is actually a point and it's on the other region's boundary
     if allow_pointy_boundary and (

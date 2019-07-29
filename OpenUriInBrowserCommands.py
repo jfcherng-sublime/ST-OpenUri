@@ -5,7 +5,7 @@ from .functions import find_uri_regions_by_regions, open_uri_from_browser, view_
 
 
 class SelectUriCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit: sublime.Edit) -> None:
         sel = self.view.sel()
 
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -16,7 +16,7 @@ class SelectUriCommand(sublime_plugin.TextCommand):
 
 
 class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
-    def run(self, edit):
+    def run(self, edit: sublime.Edit) -> None:
         sel = self.view.sel()
 
         view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -28,7 +28,7 @@ class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
 
 
 class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
-    def run(self, edit, browser=""):
+    def run(self, edit: sublime.Edit, browser="") -> None:
         uris = map(
             lambda region: self.view.substr(sublime.Region(*region)),
             find_uri_regions_by_regions(self.view, self.view.sel()),

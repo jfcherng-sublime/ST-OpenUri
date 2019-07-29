@@ -1,4 +1,4 @@
-## Sublime-OpenUriInBrowser
+# Sublime-OpenUriInBrowser
 
 `OpenUriInBrowser` is a Sublime Text 3 plugin that adds a button (inline phantom in ST's term)
 beside a URI. Users can click on the button to open the URI from a browser.
@@ -106,3 +106,9 @@ This plugin is initially modified from [Open In Browser](https://packagecontrol.
 - Self-managed phantom set. Do not clear phantoms when a view is deactivated.
 - Use binary searching to find URIs which should be opened.
 - Allow multiple cursors to open multiple URIs at once via a command (`open_uri_in_browser_from_cursor`).
+
+
+Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>
+----------
+
+Thank you guys for sending me some cups of coffee.

@@ -176,7 +176,7 @@ def region_into_list_form(region, sort_result: bool = False) -> list:
     assert isinstance(region, list)
 
     if not region:
-        raise ValueError
+        raise ValueError("region must not be empty.")
 
     if len(region) == 1:
         region *= 2

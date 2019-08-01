@@ -2,7 +2,7 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [4.0.0] - 2019-07-30
+## [4.0.1] - 2019-08-01
 
 ### Changed
 - Setting `on_hover` is now changed to `show_open_button`.

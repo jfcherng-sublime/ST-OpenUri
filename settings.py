@@ -1,8 +1,9 @@
+import base64
 import mimetypes
 import os
 import sublime
 import time
-from .functions import bytes_to_base64_str, msg
+from .log import msg
 
 
 def get_package_name() -> str:
@@ -34,7 +35,7 @@ def get_image_info(img_name: str) -> dict:
     img_ext = os.path.splitext(img_path)[1]
 
     try:
-        img_base64 = bytes_to_base64_str(sublime.load_binary_resource(img_path))
+        img_base64 = base64.b64encode(sublime.load_binary_resource(img_path)).decode()
     except IOError:
         img_base64 = ""
         print(msg("Resource not found: " + img_path))

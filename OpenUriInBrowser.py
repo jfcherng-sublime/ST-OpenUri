@@ -10,7 +10,7 @@ from .functions import (
 )
 from .Globals import Globals
 from .settings import (
-    get_image_path,
+    get_image_info,
     get_package_name,
     get_setting,
     get_settings_object,
@@ -20,17 +20,25 @@ from .settings import (
 
 
 def plugin_loaded() -> None:
+    settings_obj = get_settings_object()
+
     def setting_detect_schemes_refreshed() -> None:
         Globals.uri_regex_obj = re.compile(get_uri_regex_by_schemes(), re.IGNORECASE)
 
-    settings_obj = get_settings_object()
     settings_obj.add_on_change("detect_schemes", setting_detect_schemes_refreshed)
     setting_detect_schemes_refreshed()
+
+    def setting_image_new_window_refreshed() -> None:
+        Globals.image_new_window = get_image_info("new_window")
+
+    settings_obj.add_on_change("image_new_window", setting_image_new_window_refreshed)
+    setting_image_new_window_refreshed()
 
 
 def plugin_unloaded() -> None:
     settings_obj = get_settings_object()
     settings_obj.clear_on_change("detect_schemes")
+    settings_obj.clear_on_change("image_new_window")
 
 
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
@@ -80,8 +88,12 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def _generate_phantom_html(self, uri: str) -> None:
         view_font_size = self.view.settings().get("font_size")
 
-        return '<a href="{uri}"><img width="{w}" height="{h}" src="res://{src}"></a>'.format(
-            uri=uri, src=get_image_path(), w=view_font_size + 2, h=view_font_size + 2
+        return '<a href="{uri}"><img width="{w}" height="{h}" src="data:{img_mime};base64,{img_base64}"></a>'.format(
+            uri=uri,
+            w=view_font_size + 2,
+            h=view_font_size + 2,
+            img_base64=Globals.image_new_window["base64"],
+            img_mime=Globals.image_new_window["mime"],
         )
 
     def _new_uri_phantom(self, uri_region) -> sublime.Phantom:

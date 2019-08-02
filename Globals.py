@@ -4,3 +4,5 @@ class Globals(object):
     """
 
     uri_regex_obj = None
+
+    image_new_window = {"base64": "", "mime": "", "path": ""}

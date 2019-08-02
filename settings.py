@@ -1,5 +1,8 @@
+import mimetypes
+import os
 import sublime
 import time
+from .functions import bytes_to_base64_str, msg
 
 
 def get_package_name() -> str:
@@ -10,9 +13,13 @@ def get_package_path() -> str:
     return "Packages/" + get_package_name()
 
 
-def get_image_path() -> str:
+def get_image_path(img_name: str) -> str:
+    img_path = get_setting("image_" + img_name)
+
+    assert isinstance(img_path, str)
+
     return sublime.expand_variables(
-        get_setting("image_new_window"),
+        img_path,
         {
             # fmt: off
             "package": get_package_name(),
@@ -20,6 +27,24 @@ def get_image_path() -> str:
             # fmt: on
         },
     )
+
+
+def get_image_info(img_name: str) -> dict:
+    img_path = get_image_path(img_name)
+    img_ext = os.path.splitext(img_path)[1]
+
+    try:
+        img_base64 = bytes_to_base64_str(sublime.load_binary_resource(img_path))
+    except IOError:
+        img_base64 = ""
+        print(msg("Resource not found: " + img_path))
+
+    img_mime = mimetypes.types_map.get(img_ext, "")
+
+    if not img_mime:
+        print(msg("Cannot determine MIME type: " + img_path))
+
+    return {"base64": img_base64, "mime": img_mime, "path": img_path}
 
 
 def get_settings_file() -> str:

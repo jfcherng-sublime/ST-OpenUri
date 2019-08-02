@@ -1,7 +1,20 @@
+import base64
 import bisect
 import sublime
 import webbrowser
-from .settings import get_setting
+from .settings import get_package_name, get_setting
+
+
+def msg(message: str) -> str:
+    """
+    @brief Generate plugin message.
+
+    @param message The message
+
+    @return The plugin message.
+    """
+
+    return "[{plugin}] {message}".format(plugin=get_package_name(), message=message)
 
 
 def open_uri_from_browser(uri: str, browser=None) -> None:
@@ -214,3 +227,15 @@ def is_intersected(region_1, region_2, allow_pointy_boundary: bool = False) -> b
         or (lb > rb and lb < re)
         or (le > rb and le < re)
     )
+
+
+def bytes_to_base64_str(b: bytes) -> str:
+    """
+    @brief Convert bytes into base64 encoded string
+
+    @param b The bytes
+
+    @return The base64 encoded string
+    """
+
+    return base64.b64encode(b).decode()

@@ -18,6 +18,23 @@ from .settings import (
     get_uri_regex_by_schemes,
 )
 
+PHANTOM_TEMPLATE = """
+    <body id="open-uri-box">
+        <style>
+            a {{
+                line-height: 0;
+            }}
+            img {{
+                width: 0.9em;
+                height: 0.9em;
+            }}
+        </style>
+        <a href="{uri}">
+            <img src="data:{mime};base64,{base64}">
+        </a>
+    </body>
+"""
+
 
 def plugin_loaded() -> None:
     settings_obj = get_settings_object()
@@ -86,15 +103,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._update_phantom(uri_regions)
 
     def _generate_phantom_html(self, uri: str) -> None:
-        view_font_size = self.view.settings().get("font_size")
-
-        return '<a href="{uri}"><img width="{w}" height="{h}" src="data:{img_mime};base64,{img_base64}"></a>'.format(
-            uri=uri,
-            w=view_font_size + 2,
-            h=view_font_size + 2,
-            img_base64=Globals.image_new_window["base64"],
-            img_mime=Globals.image_new_window["mime"],
-        )
+        return PHANTOM_TEMPLATE.format(uri=uri, **Globals.image_new_window)
 
     def _new_uri_phantom(self, uri_region) -> sublime.Phantom:
         # always make "uri_region" a sublime.Region object

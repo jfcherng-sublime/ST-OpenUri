@@ -25,13 +25,11 @@ PHANTOM_TEMPLATE = """
                 line-height: 0;
             }}
             img {{
-                width: 0.9em;
-                height: 0.9em;
+                width: 1em;
+                height: 1em;
             }}
         </style>
-        <a href="{uri}">
-            <img src="data:{mime};base64,{base64}">
-        </a>
+        <a href="{uri}"><img src="{data_uri}"></a>
     </body>
 """
 

@@ -45,7 +45,16 @@ def get_image_info(img_name: str) -> dict:
     if not img_mime:
         print(msg("Cannot determine MIME type: " + img_path))
 
-    return {"base64": img_base64, "mime": img_mime, "path": img_path}
+    img_data_uri = "data:{mime};base64,{base64}".format(mime=img_mime, base64=img_base64)
+
+    # fmt: off
+    return {
+        "base64": img_base64,
+        "data_uri": img_data_uri,
+        "mime": img_mime,
+        "path": img_path,
+    }
+    # fmt: on
 
 
 def get_settings_file() -> str:

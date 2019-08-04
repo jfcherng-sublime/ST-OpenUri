@@ -5,6 +5,7 @@ target-version = ['py33']
 # regex
 exclude = '''
 /(
-  \.git
+  \.git |
+  libs
 )/
 '''

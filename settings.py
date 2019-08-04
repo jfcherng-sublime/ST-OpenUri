@@ -76,18 +76,3 @@ def get_setting(key: str, default=None):
 
 def get_timestamp() -> float:
     return time.time()
-
-
-def get_uri_regex_by_schemes(schemes=None) -> str:
-    if schemes is None:
-        schemes = get_setting("detect_schemes")
-
-    scheme_regexes = [
-        "(?:{protocols}){delimiter}".format(protocols="|".join(set(protocols)), delimiter=delimiter)
-        for delimiter, protocols in schemes.items()
-    ]
-
-    scheme_regex = "(?:{regex})".format(regex="|".join(scheme_regexes))
-
-    # our goal is to find URIs ASAP rather than validate them
-    return r"\b" + scheme_regex + r"[A-Za-z0-9@~_+\-*/&=#%|:.,?]+(?<=[A-Za-z0-9@~_+\-*/&=#%|])"

@@ -54,37 +54,36 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
         "flags": 802,
     },
     // defined schemes (case-insensitive) that wants to be detected
-    // the protocols and their delimiters are all in regex
+    // key / value = scheme / enabled
     "detect_schemes": {
-        "://": [
-            // browser viewable
-            "ftps?",
-            "https?",
-            // messengers
-            "irc",
-            "line",
-            "tencent", // Tencent QQ
-            "tg", // Telegram
-            // version control systems
-            "git",
-            "hg", // Mercurial
-            "svn",
-            // P2P file sharing
-            "ed2k",
-            "freenet",
-            // others
-            "file",
-            "mailto",
-            "ssh",
-            "telnets?",
-            "wss?", // Websocket
-        ],
-        ":\\?": [
-            "magnet", // https://en.wikipedia.org/wiki/Magnet_URI_scheme
-        ],
-        ":": [
-            "skype",
-        ],
+        // basic
+        "file://": false,
+        "ftp://": true,
+        "ftps://": true,
+        "http://": true,
+        "https://": true,
+        "mailto://": false,
+        // server
+        "ssh://": false,
+        "telnet://": false,
+        "telnets://": false,
+        // VCS
+        "git://": false,
+        "hg://": false,
+        "svn://": false,
+        // P2P
+        "ed2k://": false,
+        "freenet://": false,
+        "magnet:?": false,
+        // messenger
+        "irc://": false,
+        "line://": false,
+        "skype:": false,
+        "tencent://": false,
+        "tg://": false,
+        // streaming
+        "rtmp://": false,
+        "rtmps://": false,
     },
 }
 ```

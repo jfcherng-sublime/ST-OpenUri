@@ -1,6 +1,8 @@
 import bisect
+import re
 import sublime
 import webbrowser
+from .libs import triegex
 from .settings import get_setting
 
 
@@ -25,6 +27,26 @@ def open_uri_from_browser(uri: str, browser=None) -> None:
         sublime.error_message(
             'Failed to open browser "{browser}" for "{uri}".'.format(browser=browser, uri=uri)
         )
+
+
+def generate_uri_regex_by_schemes(schemes: list) -> str:
+    """
+    @brief Generate a regex for matching URIs by given schemes.
+
+    @param schemes The schemes
+
+    @return The generated regex string
+    """
+
+    scheme_matcher = (
+        triegex.Triegex(*map(re.escape, set(schemes)))
+        .to_regex()
+        .replace(r"\b", "")
+        .replace(r"|~^(?#match nothing)", "")
+    )
+
+    # our goal is to find URIs ASAP rather than validate them
+    return r"\b" + scheme_matcher + r"\b[a-z0-9@~_+\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\-*/&=#%|])"
 
 
 def find_uri_regions_by_region(view: sublime.View, region) -> list:
@@ -198,19 +220,19 @@ def is_intersected(region_1, region_2, allow_pointy_boundary: bool = False) -> b
     """
 
     # left/right begin/end = l/r b/e
-    lb, le = region_into_list_form(region_1, True)
-    rb, re = region_into_list_form(region_2, True)
+    lb_, le_ = region_into_list_form(region_1, True)
+    rb_, re_ = region_into_list_form(region_2, True)
 
     # one of the region is actually a point and it's on the other region's boundary
     if allow_pointy_boundary and (
-        lb == rb == re or le == rb == re or rb == lb == le or re == lb == le
+        lb_ == rb_ == re_ or le_ == rb_ == re_ or rb_ == lb_ == le_ or re_ == lb_ == le_
     ):
         return True
 
     return (
-        (lb == rb and le == re)
-        or (rb > lb and rb < le)
-        or (re > lb and re < le)
-        or (lb > rb and lb < re)
-        or (le > rb and le < re)
+        (lb_ == rb_ and le_ == re_)
+        or (rb_ > lb_ and rb_ < le_)
+        or (re_ > lb_ and re_ < le_)
+        or (lb_ > rb_ and lb_ < re_)
+        or (le_ > rb_ and le_ < re_)
     )

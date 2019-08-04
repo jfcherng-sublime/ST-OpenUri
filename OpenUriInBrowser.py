@@ -3,6 +3,7 @@ import sublime
 import sublime_plugin
 from .functions import (
     find_uri_regions_by_region,
+    generate_uri_regex_by_schemes,
     open_uri_from_browser,
     view_typing_timestamp_val,
     view_update_uri_regions,
@@ -15,7 +16,6 @@ from .settings import (
     get_setting,
     get_settings_object,
     get_timestamp,
-    get_uri_regex_by_schemes,
 )
 
 PHANTOM_TEMPLATE = """
@@ -38,7 +38,8 @@ def plugin_loaded() -> None:
     settings_obj = get_settings_object()
 
     def setting_detect_schemes_refreshed() -> None:
-        Globals.uri_regex_obj = re.compile(get_uri_regex_by_schemes(), re.IGNORECASE)
+        schemes = [scheme for scheme, enabled in get_setting("detect_schemes").items() if enabled]
+        Globals.uri_regex_obj = re.compile(generate_uri_regex_by_schemes(schemes), re.IGNORECASE)
 
     settings_obj.add_on_change("detect_schemes", setting_detect_schemes_refreshed)
     setting_detect_schemes_refreshed()

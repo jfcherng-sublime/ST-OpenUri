@@ -8,15 +8,8 @@ beside a URI. Users can click on the button to open the URI from a browser.
 
 ## Installation
 
-Currently, this plugin is not on Package Control yet. To install this, you can
-
-- Download the tarball from GitHub and decompress it to `Packages/`.
-- Or add a custom Package Control repository (recommended).
-
-  1. `Menu > Preferences > Package Control > Add Repository`:
-     https://github.com/jfcherng/Sublime-OpenUriInBrowser
-  1. `Menu > Preferences > Package Control > Install Package`: 
-     Find `OpenUriInBrowser` and install
+Install using Package Control (recommended), 
+or by downloading the tarball from GitHub and decompress it to `Packages/`.
 
 
 ## Settings
@@ -120,15 +113,7 @@ the current cursor(s). For example, I am using the following one.
 ## Acknowledgment
 
 This plugin is initially modified from [Open In Browser](https://packagecontrol.io/packages/Open%20In%20Browser).
-
-
-### Improvements
-
-- Technically a total rewrite.
-- Simplified URI-finding REGEX. Allow detecting custom schemes.
-- Self-managed phantom set. Do not clear phantoms when a view is deactivated.
-- Use binary searching to find URIs which should be opened.
-- Allow multiple cursors to open multiple URIs at once via a command (`open_uri_in_browser_from_cursor`).
+But it has been fully rewritten now.
 
 
 Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>

@@ -65,6 +65,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def __del__(self) -> None:
         self._erase_phantom()
+        self._erase_uri_regions()
 
     def on_load_async(self) -> None:
         self._detect_uris()
@@ -100,6 +101,11 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         if get_setting("show_open_button") == "always":
             self._update_phantom(uri_regions)
 
+        if get_setting("draw_uri_regions").get("enabled"):
+            self._draw_uri_regions(uri_regions)
+        else:
+            self._erase_uri_regions()
+
     def _generate_phantom_html(self, uri: str) -> None:
         return PHANTOM_TEMPLATE.format(uri=uri, **Globals.image_new_window)
 
@@ -132,3 +138,17 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def _update_phantom(self, uri_regions: list) -> None:
         self.phantom_set.update(self._new_uri_phantoms(uri_regions))
+
+    def _erase_uri_regions(self) -> None:
+        self.view.erase_regions("OUIB_uri_regions")
+
+    def _draw_uri_regions(self, uri_regions: list) -> None:
+        settings = get_setting("draw_uri_regions")
+
+        self.view.add_regions(
+            "OUIB_uri_regions",
+            [sublime.Region(*r) for r in uri_regions],
+            scope=settings.get("scope"),
+            icon=settings.get("icon"),
+            flags=settings.get("flags"),
+        )

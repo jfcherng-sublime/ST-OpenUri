@@ -14,6 +14,28 @@
     // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"
     // if you don't like them, you can even define your own image path.
     "image_new_window": "Packages/${package}/images/new-window-blue.png",
+    // draw URI regions?
+    "draw_uri_regions": {
+        "enabled": false,
+        // the scope used to highlight URI regions (you may customize it with your theme)
+        "scope": "string",
+        // icon in the gutter: "dot", "circle", "bookmark" or empty string for nothing
+        "icon": "",
+        // @see https://www.sublimetext.com/docs/3/api_reference.html
+        //
+        // sublime.DRAW_EMPTY = 1
+        // sublime.HIDE_ON_MINIMAP = 2
+        // sublime.DRAW_EMPTY_AS_OVERWRITE = 4
+        // sublime.DRAW_NO_FILL = 32
+        // sublime.HIDDEN = 128
+        // sublime.DRAW_NO_OUTLINE = 256
+        // sublime.DRAW_SOLID_UNDERLINE = 512
+        // sublime.DRAW_STIPPLED_UNDERLINE = 1024
+        // sublime.DRAW_SQUIGGLY_UNDERLINE = 2048
+        //
+        // 802 = HIDE_ON_MINIMAP | DRAW_SOLID_UNDERLINE | DRAW_NO_FILL | DRAW_NO_OUTLINE
+        "flags": 802,
+    },
     // defined schemes (case-insensitive) that wants to be detected
     // the protocols and their delimiters are all in regex
     "detect_schemes": {

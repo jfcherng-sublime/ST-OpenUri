@@ -2,10 +2,8 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [4.1.0] - 2019-08-04
-
-### Added
-- Add the ability to highlight URI regions. (see `draw_uri_regions`)
+## [5.0.0] - 2019-08-04
 
 ### Changed
-- Remove detection for websocket scheme.
+- The settings of `detect_schemes` is now plain text rather than regex.
+  This allows the generated regex to be further optimized.

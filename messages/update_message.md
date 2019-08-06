@@ -2,8 +2,8 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [5.0.0] - 2019-08-04
+## [5.1.0] - 2019-08-07
 
-### Changed
-- The settings of `detect_schemes` is now plain text rather than regex.
-  This allows the generated regex to be further optimized.
+### Added
+- Add config the regex to match URI's path part. (`uri_path_regex`)
+- Add new schemes: `mms://` and `sftp://`.

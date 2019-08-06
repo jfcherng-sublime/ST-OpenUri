@@ -3,6 +3,7 @@ import re
 import sublime
 import webbrowser
 from .libs import triegex
+from .log import msg
 from .settings import get_setting
 
 
@@ -29,24 +30,42 @@ def open_uri_from_browser(uri: str, browser=None) -> None:
         )
 
 
-def generate_uri_regex_by_schemes(schemes: list) -> str:
+def get_uri_regex_object():
     """
-    @brief Generate a regex for matching URIs by given schemes.
+    @brief Get the compiled regex object for matching URIs.
 
-    @param schemes The schemes
-
-    @return The generated regex string
+    @return The compiled regex object
     """
+
+    # fmt: off
+    schemes = {
+        scheme
+        for scheme, enabled in get_setting("detect_schemes").items()
+        if enabled
+    }
+    # fmt: on
 
     scheme_matcher = (
-        triegex.Triegex(*map(re.escape, set(schemes)))
+        triegex.Triegex(*map(re.escape, schemes))
         .to_regex()
         .replace(r"\b", "")
         .replace(r"|~^(?#match nothing)", "")
     )
 
+    path_matcher = get_setting("uri_path_regex").lstrip("^").rstrip("$")
+
     # our goal is to find URIs ASAP rather than validate them
-    return r"\b" + scheme_matcher + r"\b[a-z0-9@~_+\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\-*/&=#%|])"
+    regex = r"\b{scheme}\b{path}".format(scheme=scheme_matcher, path=path_matcher)
+
+    try:
+        return re.compile(regex, re.IGNORECASE)
+    except Exception as e:
+        sublime.error_message(
+            msg(
+                "Cannot compile regex `{regex}` because `{reason}`. "
+                'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
+            )
+        )
 
 
 def find_uri_regions_by_region(view: sublime.View, region) -> list:

@@ -85,6 +85,8 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
         "rtmp://": false,
         "rtmps://": false,
     },
+    // the regex (case-insensitive) used to match a URI's path part
+    "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
 }
 ```
 

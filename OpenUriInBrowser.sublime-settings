@@ -47,6 +47,7 @@
         "https://": true,
         "mailto://": true,
         // server
+        "sftp://": false,
         "ssh://": false,
         "telnet://": false,
         "telnets://": false,
@@ -67,6 +68,7 @@
         "tencent://": false,
         "tg://": false,
         // streaming
+        "mms://": false,
         "rtmp://": false,
         "rtmps://": false,
     },

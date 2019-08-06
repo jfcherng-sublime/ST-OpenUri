@@ -82,6 +82,7 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
         "tencent://": false,
         "tg://": false,
         // streaming
+        "mms://": false,
         "rtmp://": false,
         "rtmps://": false,
     },

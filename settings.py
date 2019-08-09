@@ -7,14 +7,34 @@ from .log import msg
 
 
 def get_package_name() -> str:
+    """
+    @brief Getsthe package name.
+
+    @return The package name.
+    """
+
     return __package__
 
 
 def get_package_path() -> str:
+    """
+    @brief Gets the package path.
+
+    @return The package path.
+    """
+
     return "Packages/" + get_package_name()
 
 
 def get_image_path(img_name: str) -> str:
+    """
+    @brief Get the image resource path from plugin settings.
+
+    @param img_name The image name
+
+    @return The image resource path.
+    """
+
     img_path = get_setting("image_" + img_name)
 
     assert isinstance(img_path, str)
@@ -31,6 +51,14 @@ def get_image_path(img_name: str) -> str:
 
 
 def get_image_info(img_name: str) -> dict:
+    """
+    @brief Get image informations of an image from plugin settings.
+
+    @param img_name The image name
+
+    @return The image information.
+    """
+
     img_path = get_image_path(img_name)
     img_ext = os.path.splitext(img_path)[1]
 
@@ -51,6 +79,7 @@ def get_image_info(img_name: str) -> dict:
     return {
         "base64": img_base64,
         "data_uri": img_data_uri,
+        "ext": img_ext,
         "mime": img_mime,
         "path": img_path,
     }
@@ -59,20 +88,42 @@ def get_image_info(img_name: str) -> dict:
 
 def get_settings_file() -> str:
     """
-    hard-coded workaround for different package name
-    due to installation via Package Control: Add Repository
+    @brief Get the settings file name.
+
+    @return The settings file name.
     """
 
     return "OpenUriInBrowser.sublime-settings"
 
 
 def get_settings_object() -> sublime.Settings:
+    """
+    @brief Get the plugin settings object.
+
+    @return The settings object.
+    """
+
     return sublime.load_settings(get_settings_file())
 
 
 def get_setting(key: str, default=None):
+    """
+    @brief Get the plugin setting with the key.
+
+    @param key     The key
+    @param default The default value if the key doesn't exist
+
+    @return The setting's value.
+    """
+
     return get_settings_object().get(key, default)
 
 
 def get_timestamp() -> float:
+    """
+    @brief Get the current timestamp (in second).
+
+    @return The timestamp.
+    """
+
     return time.time()

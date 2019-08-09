@@ -9,6 +9,7 @@ class Globals(object):
     image_new_window = {
         "base64": "",
         "data_uri": "",
+        "ext": "",
         "mime": "",
         "path": "",
     }

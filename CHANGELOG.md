@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [5.1.2] - 2019-08-10
+
+### Fixed
+- Fix that I misunderstand how `sublime.Settings.add_on_change()` works.
+
+
 ## [5.1.1] - 2019-08-09
 
 nits

@@ -1,6 +1,3 @@
-PLUGIN_NAME = __package__
-
-
 def msg(message: str) -> str:
     """
     @brief Generate plugin message.
@@ -10,4 +7,6 @@ def msg(message: str) -> str:
     @return The plugin message.
     """
 
-    return "[{plugin}] {message}".format(plugin=PLUGIN_NAME, message=message)
+    from .settings import get_package_name
+
+    return "[{plugin}] {message}".format(plugin=get_package_name(), message=message)

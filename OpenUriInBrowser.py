@@ -34,32 +34,16 @@ PHANTOM_TEMPLATE = """
 
 
 def plugin_loaded() -> None:
-    settings_obj = get_settings_object()
-
-    def setting_detect_schemes_refreshed() -> None:
+    def plugin_settings_listener() -> None:
         Globals.uri_regex_obj = get_uri_regex_object()
-
-    settings_obj.add_on_change("detect_schemes", setting_detect_schemes_refreshed)
-    setting_detect_schemes_refreshed()
-
-    def setting_image_new_window_refreshed() -> None:
         Globals.image_new_window = get_image_info("new_window")
 
-    settings_obj.add_on_change("image_new_window", setting_image_new_window_refreshed)
-    setting_image_new_window_refreshed()
-
-    def setting_uri_path_regex_refreshed() -> None:
-        Globals.uri_regex_obj = get_uri_regex_object()
-
-    settings_obj.add_on_change("uri_path_regex", setting_uri_path_regex_refreshed)
-    setting_uri_path_regex_refreshed()
+    get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
+    plugin_settings_listener()
 
 
 def plugin_unloaded() -> None:
-    settings_obj = get_settings_object()
-    settings_obj.clear_on_change("detect_schemes")
-    settings_obj.clear_on_change("image_new_window")
-    settings_obj.clear_on_change("uri_path_regex")
+    get_settings_object().clear_on_change(get_package_name())
 
 
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):

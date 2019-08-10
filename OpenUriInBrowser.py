@@ -1,9 +1,10 @@
 import sublime
 import sublime_plugin
 from .functions import (
-    find_uri_region_by_point,
+    find_uri_regions_by_region,
     get_uri_regex_object,
     open_uri_from_browser,
+    region_into_st_region_form,
     view_typing_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
@@ -92,8 +93,9 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if get_setting("show_open_button") == "hover":
-            uri_region = find_uri_region_by_point(self.view, point)
-            self._update_phantom([uri_region] if uri_region else [])
+            self._update_phantom(
+                find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
+            )
 
     def _detect_uris(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -110,9 +112,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         return PHANTOM_TEMPLATE.format(uri=uri, **Globals.image_new_window)
 
     def _new_uri_phantom(self, uri_region) -> sublime.Phantom:
-        # always make "uri_region" a sublime.Region object
-        if not isinstance(uri_region, sublime.Region):
-            uri_region = sublime.Region(*(uri_region[0:2]))
+        uri_region = region_into_st_region_form(uri_region)
 
         # Calculate the point to insert the phantom.
         #

@@ -91,6 +91,8 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     },
     // the regex (case-insensitive) used to match a URI's path part
     "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
+    // how many neighbor chars will be used to find URIs around regions
+    "uri_search_radius": 200,
 }
 ```
 

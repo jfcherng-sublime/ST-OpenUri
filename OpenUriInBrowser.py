@@ -201,4 +201,4 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         if view_size == 0:
             return True
 
-        return view_size > get_setting("disable_if_file_size_greater_than")
+        return view_size > get_setting("use_show_open_button_fallback_if_file_larger_than")

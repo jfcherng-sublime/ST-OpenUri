@@ -25,12 +25,12 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     //     "hover" (only when the URI is hovered)
     //     "select" (only when the URI is selected)
     "show_open_button": "always",
-    // only used if "show_open_button" is "always" and the file is too large
-    // this setting will be treated as the fallback setting of "show_open_button"
+    // only useful if "show_open_button" is "always" and the file is too large
+    // this setting will be used as the fallback setting of "show_open_button"
     "show_open_button_fallback": "hover",
-    // disable this plugin if the file content length is greater than the given one
-    // "on_hover" and "on_selection" will not be disabled because they usually won't cause a heavy performance penalty
-    "disable_if_file_size_greater_than": 800000, // 800K
+    // if the file size is larger than the given one and "show_open_button" is "always"
+    // use "show_open_button_fallback" as the fallback
+    "use_show_open_button_fallback_if_file_larger_than": 800000, // 800K
     // the period (in milisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing

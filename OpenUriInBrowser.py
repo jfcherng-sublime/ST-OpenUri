@@ -92,7 +92,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._detect_uris()
 
     def on_hover(self, point: int, hover_zone: int) -> None:
-        if get_setting("show_open_button") == "hover":
+        if self._get_setting_show_open_button() == "hover":
             self._update_phantom(
                 find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
             )
@@ -100,7 +100,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def _detect_uris(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
 
-        if get_setting("show_open_button") == "always":
+        if self._get_setting_show_open_button() == "always":
             self._update_phantom(uri_regions)
 
         if get_setting("draw_uri_regions").get("enabled"):
@@ -151,6 +151,11 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             scope=settings.get("scope"),
             icon=settings.get("icon"),
             flags=settings.get("flags"),
+        )
+
+    def _get_setting_show_open_button(self) -> str:
+        return get_setting(
+            "show_open_button_fallback" if self._is_file_too_large() else "show_open_button"
         )
 
     def _clean_up_if_file_too_large(self) -> bool:

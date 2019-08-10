@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 from .functions import (
     find_uri_regions_by_region,
+    find_uri_regions_by_regions,
     get_uri_regex_object,
     open_uri_from_browser,
     region_into_st_region_form,
@@ -90,6 +91,29 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         if pass_ms >= get_setting("on_modified_typing_period"):
             view_typing_timestamp_val(self.view, now_s)
             self._detect_uris()
+
+    def on_selection_modified_async(self) -> None:
+        if self._get_setting_show_open_button() == "select":
+            view_typing_timestamp_val(self.view, get_timestamp())
+
+            sublime.set_timeout_async(
+                # fmt: off
+                self.on_selection_modified_async_callback,
+                get_setting("on_modified_typing_period")
+                # fmt: on
+            )
+
+    def on_selection_modified_async_callback(self) -> None:
+        now_s = get_timestamp()
+        pass_ms = (now_s - view_typing_timestamp_val(self.view)) * 1000
+
+        if pass_ms >= get_setting("on_modified_typing_period"):
+            view_typing_timestamp_val(self.view, now_s)
+            self._update_phantom(
+                find_uri_regions_by_regions(
+                    self.view, self.view.sel(), get_setting("uri_search_radius")
+                )
+            )
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if self._get_setting_show_open_button() == "hover":

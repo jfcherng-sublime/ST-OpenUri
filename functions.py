@@ -128,6 +128,28 @@ def find_uri_regions_by_regions(view: sublime.View, regions: list) -> list:
     ]
 
 
+def find_uri_region_by_point(view: sublime.View, point: int):
+    search_radius = 300  # not important, the searching will finish in a blink of eyes
+
+    search_begin = point - search_radius
+    search_end = point + search_radius
+    coordinate_bias = max(0, search_begin)
+
+    content = view.substr(sublime.Region(search_begin, search_end))
+
+    for m in get_uri_regex_object().finditer(content):
+        region_begin, region_end = m.span()
+
+        # convert "finditer()" coordinate into ST's coordinate
+        region_begin += coordinate_bias
+        region_end += coordinate_bias
+
+        if region_begin <= point <= region_end:
+            return [region_begin, region_end]
+
+    return None
+
+
 def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:
     """
     @brief A faster/simpler implementation of View.find_all().

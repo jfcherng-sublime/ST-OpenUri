@@ -1,7 +1,7 @@
 import sublime
 import sublime_plugin
 from .functions import (
-    find_uri_regions_by_region,
+    find_uri_region_by_point,
     get_uri_regex_object,
     open_uri_from_browser,
     view_typing_timestamp_val,
@@ -58,12 +58,21 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._erase_uri_regions()
 
     def on_load_async(self) -> None:
+        if self._clean_up_if_file_too_large():
+            return
+
         self._detect_uris()
 
     def on_activated_async(self) -> None:
+        if self._clean_up_if_file_too_large():
+            return
+
         self._detect_uris()
 
     def on_modified_async(self) -> None:
+        if self._clean_up_if_file_too_large():
+            return
+
         view_typing_timestamp_val(self.view, get_timestamp())
 
         sublime.set_timeout_async(
@@ -83,7 +92,8 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if get_setting("show_open_button") == "hover":
-            self._update_phantom(find_uri_regions_by_region(self.view, point))
+            uri_region = find_uri_region_by_point(self.view, point)
+            self._update_phantom([uri_region] if uri_region else [])
 
     def _detect_uris(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -142,3 +152,16 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             icon=settings.get("icon"),
             flags=settings.get("flags"),
         )
+
+    def _clean_up_if_file_too_large(self) -> bool:
+        is_file_too_large = self._is_file_too_large()
+
+        if is_file_too_large:
+            view_uri_regions_val(self.view, [])
+            self._erase_phantom()
+            self._erase_uri_regions()
+
+        return is_file_too_large
+
+    def _is_file_too_large(self) -> bool:
+        return self.view.size() > get_setting("disable_if_file_size_greater_than")

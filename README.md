@@ -22,6 +22,9 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     // when to show a phantom button beside a URI?
     // can be "always" (always show buttons) or "hover" (only when the URI is hovered)
     "show_open_button": "always",
+    // disable this plugin if the file content length is greater than the given one
+    // "on_hover" will not be disabled because it won't cause a performance penalty
+    "disable_if_file_size_greater_than": 800000, // 800K
     // the period (in milisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing

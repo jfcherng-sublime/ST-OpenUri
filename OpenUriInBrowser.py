@@ -62,13 +62,13 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
-        self._detect_uris()
+        self._detect_uris_globally()
 
     def on_activated_async(self) -> None:
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
-        self._detect_uris()
+        self._detect_uris_globally()
 
     def on_modified_async(self) -> None:
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
@@ -89,7 +89,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
         if pass_ms >= get_setting("on_modified_typing_period"):
             view_last_update_timestamp_val(self.view, now_s)
-            self._detect_uris()
+            self._detect_uris_globally()
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if self._get_setting_show_open_button() == "hover":
@@ -97,7 +97,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
                 find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
             )
 
-    def _detect_uris(self) -> None:
+    def _detect_uris_globally(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
 
         if self._get_setting_show_open_button() == "always":

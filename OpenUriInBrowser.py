@@ -60,19 +60,19 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._erase_uri_regions()
 
     def on_load_async(self) -> None:
-        if self._clean_up_if_file_too_large():
+        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
         self._detect_uris()
 
     def on_activated_async(self) -> None:
-        if self._clean_up_if_file_too_large():
+        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
         self._detect_uris()
 
     def on_modified_async(self) -> None:
-        if self._clean_up_if_file_too_large():
+        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
         view_last_update_timestamp_val(self.view, get_timestamp())

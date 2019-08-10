@@ -24,6 +24,7 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     //     "always" (always show buttons)
     //     "hover" (only when the URI is hovered)
     //     "select" (only when the URI is selected)
+    //     "never" (never show buttons)
     "show_open_button": "always",
     // only useful if "show_open_button" is "always" and the file is too large
     // this setting will be used as the fallback setting of "show_open_button"

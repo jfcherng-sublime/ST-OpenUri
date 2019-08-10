@@ -108,7 +108,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         else:
             self._erase_uri_regions()
 
-    def _generate_phantom_html(self, uri: str) -> None:
+    def _generate_phantom_html(self, uri: str) -> str:
         return PHANTOM_TEMPLATE.format(uri=uri, **Globals.image_new_window)
 
     def _new_uri_phantom(self, uri_region) -> sublime.Phantom:

@@ -164,4 +164,12 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         return is_file_too_large
 
     def _is_file_too_large(self) -> bool:
-        return self.view.size() > get_setting("disable_if_file_size_greater_than")
+        view_size = self.view.size()
+
+        # somehow ST sometimes return size == 0 when reloading a file...
+        # it looks like ST thinks the file content is empty during reloading
+        # and triggered "on_modified_async()"
+        if view_size == 0:
+            return True
+
+        return view_size > get_setting("disable_if_file_size_greater_than")

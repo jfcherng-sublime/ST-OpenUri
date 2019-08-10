@@ -179,20 +179,20 @@ def view_uri_regions_val(view: sublime.View, uri_regions=...):
     view.settings().set("OUIB_uri_regions", uri_regions)
 
 
-def view_typing_timestamp_val(view: sublime.View, timestamp_s=...):
+def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
     """
-    @brief Set/Get the URI regions (in list of lists) of the current view
+    @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
 
     @param view        The view
-    @param timestamp_s The last timestamp (in sec) when the user is typing
+    @param timestamp_s The last timestamp (in sec)
 
     @return None|float None if the set mode, otherwise the value
     """
 
     if timestamp_s is ...:
-        return view.settings().get("OUIB_typing_timestamp", False)
+        return view.settings().get("OUIB_last_update_timestamp", False)
 
-    view.settings().set("OUIB_typing_timestamp", timestamp_s)
+    view.settings().set("OUIB_last_update_timestamp", timestamp_s)
 
 
 def region_shift(region, shift: int):

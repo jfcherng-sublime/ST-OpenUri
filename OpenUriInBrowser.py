@@ -6,7 +6,7 @@ from .functions import (
     get_uri_regex_object,
     open_uri_from_browser,
     region_into_st_region_form,
-    view_typing_timestamp_val,
+    view_last_update_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
 )
@@ -52,7 +52,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         self.view = view
         self.phantom_set = sublime.PhantomSet(self.view, get_package_name())
-        view_typing_timestamp_val(self.view, 0)
+        view_last_update_timestamp_val(self.view, 0)
         view_uri_regions_val(self.view, [])
 
     def __del__(self) -> None:
@@ -75,7 +75,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         if self._clean_up_if_file_too_large():
             return
 
-        view_typing_timestamp_val(self.view, get_timestamp())
+        view_last_update_timestamp_val(self.view, get_timestamp())
 
         sublime.set_timeout_async(
             # fmt: off
@@ -86,15 +86,15 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def on_modified_async_callback(self) -> None:
         now_s = get_timestamp()
-        pass_ms = (now_s - view_typing_timestamp_val(self.view)) * 1000
+        pass_ms = (now_s - view_last_update_timestamp_val(self.view)) * 1000
 
         if pass_ms >= get_setting("on_modified_typing_period"):
-            view_typing_timestamp_val(self.view, now_s)
+            view_last_update_timestamp_val(self.view, now_s)
             self._detect_uris()
 
     def on_selection_modified_async(self) -> None:
         if self._get_setting_show_open_button() == "select":
-            view_typing_timestamp_val(self.view, get_timestamp())
+            view_last_update_timestamp_val(self.view, get_timestamp())
 
             sublime.set_timeout_async(
                 # fmt: off
@@ -105,10 +105,10 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def on_selection_modified_async_callback(self) -> None:
         now_s = get_timestamp()
-        pass_ms = (now_s - view_typing_timestamp_val(self.view)) * 1000
+        pass_ms = (now_s - view_last_update_timestamp_val(self.view)) * 1000
 
         if pass_ms >= get_setting("on_modified_typing_period"):
-            view_typing_timestamp_val(self.view, now_s)
+            view_last_update_timestamp_val(self.view, now_s)
             self._update_phantom(
                 find_uri_regions_by_regions(
                     self.view, self.view.sel(), get_setting("uri_search_radius")

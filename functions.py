@@ -7,7 +7,7 @@ from .log import msg
 from .settings import get_setting
 
 
-def open_uri_from_browser(uri: str, browser=None) -> None:
+def open_uri_from_browser(uri: str, browser=...) -> None:
     """
     @brief Open the URI with the browser.
 
@@ -24,9 +24,11 @@ def open_uri_from_browser(uri: str, browser=None) -> None:
     try:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
         webbrowser.get(browser).open(uri, autoraise=True)
-    except (webbrowser.Error):
+    except Exception as e:
         sublime.error_message(
-            'Failed to open browser "{browser}" for "{uri}".'.format(browser=browser, uri=uri)
+            'Failed to open browser "{browser}" to "{uri}" because {reason}'.format(
+                browser=browser, uri=uri, reason=e
+            )
         )
 
 
@@ -118,7 +120,7 @@ def find_uri_regions_by_regions(view: sublime.View, regions: list) -> list:
         uri_regions.extend(find_uri_regions_by_region(view, region))
     uri_regions.sort()
 
-    # remove duplicated regions
+    # remove duplicated regions from SORTED regions
     return [
         uri_regions[idx]
         for idx in range(len(uri_regions))
@@ -163,17 +165,17 @@ def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> list:
     return uri_regions
 
 
-def view_uri_regions_val(view: sublime.View, uri_regions=None):
+def view_uri_regions_val(view: sublime.View, uri_regions=...):
     """
     @brief Set/Get the URI regions (in list of lists) of the current view
 
     @param view        The view
-    @param uri_regions The URI regions (None = get mode, otherwise = set mode)
+    @param uri_regions The URI regions (... = get mode, otherwise = set mode)
 
     @return None|list[] None if the set mode, otherwise the URI regions
     """
 
-    if uri_regions is None:
+    if uri_regions is ...:
         return view.settings().get("OUIB_uri_regions", [])
 
     uri_regions = [region_into_list_form(r, True) for r in uri_regions]
@@ -181,7 +183,7 @@ def view_uri_regions_val(view: sublime.View, uri_regions=None):
     view.settings().set("OUIB_uri_regions", uri_regions)
 
 
-def view_typing_timestamp_val(view: sublime.View, timestamp_s=None):
+def view_typing_timestamp_val(view: sublime.View, timestamp_s=...):
     """
     @brief Set/Get the URI regions (in list of lists) of the current view
 
@@ -191,7 +193,7 @@ def view_typing_timestamp_val(view: sublime.View, timestamp_s=None):
     @return None|float None if the set mode, otherwise the value
     """
 
-    if timestamp_s is None:
+    if timestamp_s is ...:
         return view.settings().get("OUIB_typing_timestamp", False)
 
     view.settings().set("OUIB_typing_timestamp", timestamp_s)

@@ -56,7 +56,7 @@ def get_image_info(img_name: str) -> dict:
 
     @param img_name The image name
 
-    @return The image information.
+    @return Dict[str, Any] The image information.
     """
 
     img_path = get_image_path(img_name)
@@ -113,7 +113,7 @@ def get_setting(key: str, default=None):
     @param key     The key
     @param default The default value if the key doesn't exist
 
-    @return The setting's value.
+    @return Optional[Any] The setting's value.
     """
 
     return get_settings_object().get(key, default)

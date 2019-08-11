@@ -142,7 +142,7 @@ def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = T
     @param regex_obj        the compiled regex object
     @param return_st_region return region in sublime.Region type
 
-    @return sublime.Region[]|list[]
+    @return list[Union[sublime.Region, list[int]]]
     """
 
     regions = [m.span() for m in regex_obj.finditer(view.substr(sublime.Region(0, view.size())))]
@@ -160,7 +160,7 @@ def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> list:
     @param view          The view
     @param uri_regex_obj The URI regex obj
 
-    @return the new "uri_regions" in the view
+    @return list[list[int]] the new "uri_regions" in the view
     """
 
     uri_regions = view_find_all_fast(view, uri_regex_obj, False)
@@ -177,7 +177,7 @@ def view_uri_regions_val(view: sublime.View, uri_regions=...):
     @param view        The view
     @param uri_regions The URI regions (... = get mode, otherwise = set mode)
 
-    @return None|list[] None if the set mode, otherwise the URI regions
+    @return Optional[list[list[int]]] None if the set mode, otherwise the URI regions
     """
 
     if uri_regions is ...:
@@ -195,7 +195,7 @@ def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
     @param view        The view
     @param timestamp_s The last timestamp (in sec)
 
-    @return None|float None if the set mode, otherwise the value
+    @return Optional[float] None if the set mode, otherwise the value
     """
 
     if timestamp_s is ...:
@@ -205,6 +205,15 @@ def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
 
 
 def region_shift(region, shift: int):
+    """
+    @brief Shift the region by given amount.
+
+    @param region The region
+    @param shift  The shift
+
+    @return the shifted region
+    """
+
     if isinstance(region, int) or isinstance(region, float):
         return region + shift
 
@@ -221,7 +230,7 @@ def region_into_list_form(region, sort_result: bool = False) -> list:
     @param region      The region
     @param sort_result Sort the region
 
-    @return list the "region" in list form
+    @return list[int] the "region" in list form
     """
 
     if isinstance(region, sublime.Region):
@@ -249,7 +258,7 @@ def region_into_st_region_form(region, sort_result: bool = False) -> list:
     @param region      The region
     @param sort_result Sort the region
 
-    @return list the "region" in ST's region form
+    @return list[sublime.Region] the "region" in ST's region form
     """
 
     if isinstance(region, int) or isinstance(region, float):

@@ -103,13 +103,17 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
 ```
 
 
-## Commands (Keybindings)
+## Commands (Key Bindings)
 
-- `open_uri_in_browser_from_cursor`: Open URIs in browser from cursors
-- `select_uri`: Select URIs from view
-- `select_uri_from_cursor`: Select URIs from cursors
+These commands are always available no matter what `show_open_button` is set to.
 
-There is no default keybindings, but you can define one for opening URIs at
+| Commands | Functionality |
+|---|---|
+| open_uri_in_browser_from_cursor | Open URIs in browser from cursors |
+| select_uri | Select URIs from view |
+| select_uri_from_cursor | Select URIs from cursors |
+
+There is no default key binding, but you can define one for opening URIs at
 the current cursor(s). For example, I am using the following one.
 
 ```javascript
@@ -120,7 +124,7 @@ the current cursor(s). For example, I am using the following one.
 },
 ```
 
-`o, i, b` stands for `Open, In, Browser` so I can remember it easily.
+`o, i, b` is mnemonic for `Open, In, Browser`.
 
 
 ## Acknowledgment

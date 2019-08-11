@@ -113,14 +113,25 @@ def find_uri_regions_by_regions(
             for m in uri_regex_obj.finditer(view.substr(region))
         )
 
-    # remove "uri_region"s that are not intersected with "regions"
+    # only pick up "uri_region"s that are intersected with "regions"
     # note that both "regions" and "uri_regions" are guaranteed sorted here
-    # todo: we can use binary searching for "any(is_regions_intersected())"
-    return [
-        uri_region
-        for uri_region in uri_regions
-        if any(is_regions_intersected(uri_region, region, True) for region in regions)
-    ]
+    regions_idx = 0
+    uri_regions_intersected = []
+
+    for uri_region in uri_regions:
+        for idx in range(regions_idx, len(regions)):
+            region = regions[idx]
+
+            # later "uri_region" is always even larger so this "idx" is useless since now
+            if uri_region.begin() > region.end():
+                regions_idx = idx + 1
+
+            if is_regions_intersected(uri_region, region, True):
+                uri_regions_intersected.append(uri_region)
+
+                break
+
+    return uri_regions_intersected
 
 
 def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:

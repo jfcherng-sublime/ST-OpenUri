@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+from collections.abc import Iterable
 from .functions import (
     find_uri_regions_by_region,
     get_uri_regex_object,
@@ -137,19 +138,19 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             on_navigate=open_uri_from_browser,
         )
 
-    def _new_uri_phantoms(self, uri_regions: list) -> list:
+    def _new_uri_phantoms(self, uri_regions: Iterable) -> list:
         return [self._new_uri_phantom(r) for r in uri_regions]
 
     def _erase_phantom(self) -> None:
         self.phantom_set.update([])
 
-    def _update_phantom(self, uri_regions: list) -> None:
+    def _update_phantom(self, uri_regions: Iterable) -> None:
         self.phantom_set.update(self._new_uri_phantoms(uri_regions))
 
     def _erase_uri_regions(self) -> None:
         self.view.erase_regions("OUIB_uri_regions")
 
-    def _draw_uri_regions(self, uri_regions: list) -> None:
+    def _draw_uri_regions(self, uri_regions: Iterable) -> None:
         settings = get_setting("draw_uri_regions")
 
         self.view.add_regions(

@@ -1,10 +1,10 @@
 import re
 import sublime
 import webbrowser
+from collections.abc import Iterable
 from .libs import triegex
 from .log import msg
 from .settings import get_setting
-from collections.abc import Iterable
 
 
 def open_uri_from_browser(uri: str, browser=...) -> None:
@@ -84,7 +84,7 @@ def find_uri_regions_by_region(view: sublime.View, region, search_radius: int = 
 
 
 def find_uri_regions_by_regions(
-    view: sublime.View, regions: list, search_radius: int = 200
+    view: sublime.View, regions: Iterable, search_radius: int = 200
 ) -> list:
     """
     @brief Found intersected URI regions from view by regions
@@ -95,12 +95,10 @@ def find_uri_regions_by_regions(
     @return list[sublime.Region] Found URI regions
     """
 
-    regions = list(map(region_into_st_region_form, regions))
+    regions = sorted(map(region_into_st_region_form, regions))
     search_regions = simplify_intersected_regions(
-        [
-            sublime.Region(region.begin() - search_radius, region.end() + search_radius)
-            for region in regions
-        ]
+        sublime.Region(region.begin() - search_radius, region.end() + search_radius)
+        for region in regions
     )
 
     uri_regex_obj = get_uri_regex_object()
@@ -108,16 +106,16 @@ def find_uri_regions_by_regions(
 
     for region in search_regions:
         coordinate_bias = max(0, region.begin())
-        content = view.substr(region)
 
-        for m in uri_regex_obj.finditer(content):
-            uri_regions.append(
-                # convert "finditer()" coordinate into ST's coordinate
-                sublime.Region(*region_shift(m.span(), coordinate_bias))
-            )
+        uri_regions.extend(
+            # convert "finditer()" coordinate into ST's coordinate
+            sublime.Region(*region_shift(m.span(), coordinate_bias))
+            for m in uri_regex_obj.finditer(view.substr(region))
+        )
 
     # remove "uri_region"s that are not intersected with "regions"
-    # todo: we can sort "regions" and use binary searching for "any(is_regions_intersected())"
+    # note that both "regions" and "uri_regions" are guaranteed sorted here
+    # todo: we can use binary searching for "any(is_regions_intersected())"
     return [
         uri_region
         for uri_region in uri_regions
@@ -257,11 +255,11 @@ def region_into_st_region_form(region, sort_result: bool = False) -> list:
     return sublime.Region(region.begin(), region.end()) if sort_result else region
 
 
-def simplify_intersected_regions(regions: list) -> list:
+def simplify_intersected_regions(regions: Iterable) -> list:
     """
     @brief Simplify intersected regions by merging them into one region.
 
-    @param regions list[sublime.Region] The regions
+    @param regions Iterable[sublime.Region] The regions
 
     @return list[sublime.Region] Simplified regions
     """
@@ -296,12 +294,13 @@ def is_regions_intersected(
     @return True if intersected, False otherwise.
     """
 
-    # left/right begin/end = l/r b/e
-    lb_, le_ = region_1.begin(), region_1.end()
-    rb_, re_ = region_2.begin(), region_2.end()
-
     # treat boundary contact as intersected
-    if allow_boundary and (lb_ == rb_ or lb_ == re_ or le_ == rb_ or le_ == re_):
-        return True
+    if allow_boundary:
+        # left/right begin/end = l/r b/e
+        lb_, le_ = region_1.begin(), region_1.end()
+        rb_, re_ = region_2.begin(), region_2.end()
+
+        if lb_ == rb_ or lb_ == re_ or le_ == rb_ or le_ == re_:
+            return True
 
     return region_1.intersects(region_2)

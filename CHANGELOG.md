@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
-## [5.2.0] - 2019-08-11
+## [5.2.1] - 2019-08-11
 
 ### Added
 - Add setting `use_show_open_button_fallback_if_file_larger_than`.

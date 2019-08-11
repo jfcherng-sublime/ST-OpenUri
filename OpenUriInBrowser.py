@@ -93,9 +93,16 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if self._get_setting_show_open_button() == "hover":
-            self._update_phantom(
-                find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
+            uri_regions = find_uri_regions_by_region(
+                self.view, point, get_setting("uri_search_radius")
             )
+
+            self._update_phantom(uri_regions)
+
+            if get_setting("draw_uri_regions").get("enabled"):
+                self._draw_uri_regions(uri_regions)
+            else:
+                self._erase_uri_regions()
 
     def _detect_uris_globally(self) -> None:
         uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -147,7 +154,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
         self.view.add_regions(
             "OUIB_uri_regions",
-            [sublime.Region(*r) for r in uri_regions],
+            [region_into_st_region_form(r) for r in uri_regions],
             scope=settings.get("scope"),
             icon=settings.get("icon"),
             flags=settings.get("flags"),

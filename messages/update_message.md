@@ -2,12 +2,17 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [5.2.1] - 2019-08-11
+## [5.3.0] - 2019-08-13
 
 ### Added
-- Add setting `use_show_open_button_fallback_if_file_larger_than`.
-- Add setting `show_open_button_fallback`.
-- Add new `show_open_button` values: `never`.
+- Colored phantom PNG images are now generated in-memory.
+  So you are able to use any color for those images.
+  See setting `image_new_window_color`.
+
+### Changed
+- Use icons from FontAwesome.
+- Default `uri_path_regex` now matches Unicode URIs.
 
 ### Fixed
-- `on_hover` now draws URI regions if `draw_uri_regions` is enabled.
+- Fix phantom may break "scope brackets" `` ` `` for BracketHilighter.
+- Fix scaling ratio when using non-square images in phantoms.

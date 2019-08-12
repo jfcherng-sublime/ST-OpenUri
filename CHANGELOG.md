@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [5.3.0] - 2019-08-13
+
+### Added
+- Colored phantom PNG images are now generated in-memory.
+  So you are able to use any color for those images.
+  See setting `image_new_window_color`.
+
+### Changed
+- Use icons from FontAwesome.
+- Default `uri_path_regex` now matches Unicode URIs.
+
+### Fixed
+- Fix phantom may break "scope brackets" `` ` `` for BracketHilighter.
+- Fix scaling ratio when using non-square images in phantoms.
+
+
 ## [5.2.1] - 2019-08-11
 
 ### Added

@@ -1,9 +1,11 @@
 import base64
-import mimetypes
 import os
+import re
 import sublime
 import time
 from .log import msg
+
+HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
 
 
 def get_package_name() -> str:
@@ -50,6 +52,42 @@ def get_image_path(img_name: str) -> str:
     )
 
 
+def get_image_color_code(img_name: str) -> str:
+    """
+    @brief Get the preprocessed image color code from plugin settings.
+
+    @param img_name The image name
+
+    @return The preprocessed image color code.
+    """
+
+    color_code = get_setting("image_{name}_color".format(name=img_name))
+
+    if not color_code:
+        return ""
+
+    if color_code.startswith("#"):
+        c = color_code[1:]  # strip "#"
+
+        # must be RGB, RRGGBB, RRGGBBAA
+        if not (len(c) in [3, 6, 8] and re.match(r"[0-9a-f]+$", c, re.IGNORECASE)):
+            color_code = ""
+
+        # RGB to RRGGBB
+        if len(c) == 3:
+            color_code = "#" + c[0] * 2 + c[1] * 2 + c[2] * 2
+    # "color_code" is a scope?
+    elif HAS_API_VIEW_STYLE_FOR_SCOPE:
+        # get the real color code of the scope
+        color_code = (
+            sublime.active_window().active_view().style_for_scope(color_code).get("foreground", "")
+        )
+    else:
+        color_code = ""
+
+    return color_code
+
+
 def get_image_info(img_name: str) -> dict:
     """
     @brief Get image informations of an image from plugin settings.
@@ -59,20 +97,21 @@ def get_image_info(img_name: str) -> dict:
     @return Dict[str, Any] The image information.
     """
 
+    from .functions import change_png_bytes_color
+
     img_path = get_image_path(img_name)
     img_ext = os.path.splitext(img_path)[1]
+    img_mime = "image/png"
+
+    assert img_ext.lower() == ".png"
 
     try:
-        img_base64 = base64.b64encode(sublime.load_binary_resource(img_path)).decode()
+        img_bytes = sublime.load_binary_resource(img_path)
     except IOError:
-        img_base64 = ""
         print(msg("Resource not found: " + img_path))
 
-    img_mime = mimetypes.types_map.get(img_ext, "")
-
-    if not img_mime:
-        print(msg("Cannot determine MIME type: " + img_path))
-
+    img_bytes = change_png_bytes_color(img_bytes, get_image_color_code(img_name))
+    img_base64 = base64.b64encode(img_bytes).decode()
     img_data_uri = "data:{mime};base64,{base64}".format(mime=img_mime, base64=img_base64)
 
     # fmt: off

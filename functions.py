@@ -1,8 +1,9 @@
+import io
 import re
 import sublime
 import webbrowser
 from collections.abc import Iterable
-from .libs import triegex
+from .libs import png, triegex
 from .log import msg
 from .settings import get_setting
 
@@ -324,3 +325,42 @@ def is_regions_intersected(
             return True
 
     return region_1.intersects(region_2)
+
+
+def change_png_bytes_color(img_bytes: bytes, color_code: str) -> bytes:
+    """
+    @brief Change all colors in the PNG bytes to the new color.
+
+    @param img_bytes  The PNG image bytes
+    @param color_code The color code
+
+    @return Color-changed PNG image bytes.
+    """
+
+    IMG_RGBA_CHANNELS = 4
+
+    if not color_code:
+        return img_bytes
+
+    if not re.match(r"#(?:[0-9a-f]{6}|[0-9a-f]{8})$", color_code, re.IGNORECASE):
+        raise ValueError("Invalid color code: " + color_code)
+
+    color_code = color_code.lstrip("#")
+
+    if len(color_code) == 6:
+        color_code += "ff"  # default opaque
+
+    r, g, b, a = [int(color_code[i : i + 2], 16) for i in range(0, 8, 2)]
+    w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
+
+    rows_dst = []
+    for row_src in rows_src:
+        row_dst = []
+        for i in range(0, len(row_src), IMG_RGBA_CHANNELS):
+            row_dst.extend([r, g, b, int(row_src[i + 3] * a / 0xFF)])
+        rows_dst.append(row_dst)
+
+    buf = io.BytesIO()
+    png.from_array(rows_dst, "RGBA").write(buf)
+
+    return buf.getvalue()

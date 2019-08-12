@@ -8,8 +8,9 @@ beside a URI. Users can click on the button to open the URI from a browser.
 
 ## Installation
 
-Install using Package Control (recommended), 
-or by downloading the tarball from GitHub and decompress it to `Packages/`.
+This plugin is available on Package Control by the name of [Open URI in Browser](https://packagecontrol.io/packages/Open%20URI%20in%20Browser).
+
+Note that this plugin only supports ST >= 3118 because of Phantom API.
 
 
 ## Settings
@@ -21,9 +22,9 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     "browser": "",
     // when to show a phantom button beside a URI?
     // values can be
-    //     "always" (always show buttons)
-    //     "hover" (only when the URI is hovered)
-    //     "never" (never show buttons)
+    //     - "always" (always show buttons)
+    //     - "hover" (only when the URI is hovered)
+    //     - "never" (never show buttons)
     "show_open_button": "always",
     // only useful if "show_open_button" is "always" and the file is too large
     // this setting will be used as the fallback setting of "show_open_button"
@@ -35,11 +36,15 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing
     "on_modified_typing_period": 150,
-    // the image used for "open a new window"
-    // there are several colors which you may use it by changing the color in the filename
-    // "black", "blue", "green", "grey", "orange", "purple", "red", "white", "yellow"
+    // the image used for "open a new window" (only supports PNG format)
     // if you don't like them, you can even define your own image path.
-    "image_new_window": "Packages/${package}/images/new-window-blue.png",
+    "image_new_window": "Packages/${package}/images/new-window.png",
+    // the color which used to color the whole image
+    // values can be
+    //     - empty string (use the original color of the image)
+    //     - ST's scope (use the scope color, require ST >= 3170)
+    //     - color code in the form of "#RRGGBBAA" (the "AA" part can be omitted)
+    "image_new_window_color": "#1976d2",
     // draw URI regions?
     "draw_uri_regions": {
         "enabled": false,
@@ -71,11 +76,14 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
         "ftps://": true,
         "http://": true,
         "https://": true,
-        "mailto://": false,
+        "mailto://": true,
         // server
+        "sftp://": false,
         "ssh://": false,
         "telnet://": false,
         "telnets://": false,
+        "ws://": false,
+        "wss://": false,
         // VCS
         "git://": false,
         "hg://": false,
@@ -105,7 +113,7 @@ or by downloading the tarball from GitHub and decompress it to `Packages/`.
 
 ## Commands (Key Bindings)
 
-These commands are always available no matter what `show_open_button` is set to.
+These commands are always available no matter what `show_open_button` is or how large the file is.
 
 | Commands | Functionality |
 |---|---|

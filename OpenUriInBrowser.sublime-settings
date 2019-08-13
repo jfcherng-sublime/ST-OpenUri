@@ -20,13 +20,13 @@
     "on_modified_typing_period": 150,
     // the image used for "open a new window" (only supports PNG format)
     // if you don't like them, you can even define your own image path.
-    "image_new_window": "Packages/${package}/images/new-window.png",
+    "image_new_window": "Packages/${package}/images/external-link-square.png",
     // the color which used to color the whole image
     // values can be
     //     - empty string (use the original color of the image)
     //     - ST's scope (use the scope color, require ST >= 3170)
     //     - color code in the form of "#RRGGBBAA" (the "AA" part can be omitted)
-    "image_new_window_color": "#1976d2",
+    "image_new_window_color": "#fa8c00",
     // draw URI regions?
     "draw_uri_regions": {
         "enabled": false,

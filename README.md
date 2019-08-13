@@ -138,12 +138,6 @@ the current cursor(s). For example, I am using the following one.
 `o, i, b` is mnemonic for `Open, In, Browser`.
 
 
-## Acknowledgment
-
-This plugin is initially modified from [Open In Browser](https://packagecontrol.io/packages/Open%20In%20Browser).
-But it has been fully rewritten now.
-
-
 Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>
 ----------
 

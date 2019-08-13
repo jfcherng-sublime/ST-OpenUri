@@ -8,9 +8,10 @@ class Globals(object):
     # fmt: off
     image_new_window = {
         "base64": "",
-        "data_uri": "",
         "ext": "",
         "mime": "",
         "path": "",
+        "ratio_wh": 0,
+        "size": (0, 0),  # w, h
     }
     # fmt: on

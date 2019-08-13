@@ -98,6 +98,7 @@ def get_image_info(img_name: str) -> dict:
     """
 
     from .functions import change_png_bytes_color
+    from .libs import imagesize
 
     img_path = get_image_path(img_name)
     img_ext = os.path.splitext(img_path)[1]
@@ -112,17 +113,16 @@ def get_image_info(img_name: str) -> dict:
 
     img_bytes = change_png_bytes_color(img_bytes, get_image_color_code(img_name))
     img_base64 = base64.b64encode(img_bytes).decode()
-    img_data_uri = "data:{mime};base64,{base64}".format(mime=img_mime, base64=img_base64)
+    img_w, img_h = imagesize.get_from_bytes(img_bytes)
 
-    # fmt: off
     return {
         "base64": img_base64,
-        "data_uri": img_data_uri,
         "ext": img_ext,
         "mime": img_mime,
         "path": img_path,
+        "ratio_wh": img_w / img_h,
+        "size": (img_w, img_h),
     }
-    # fmt: on
 
 
 def get_settings_file() -> str:

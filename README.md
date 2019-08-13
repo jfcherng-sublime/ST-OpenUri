@@ -68,6 +68,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
         "flags": 802,
     },
     // defined schemes (case-insensitive) that wants to be detected
+    // you may add your own new schemes to be detected
     // key / value = scheme / enabled
     "detect_schemes": {
         // basic
@@ -104,7 +105,9 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
         "rtmps://": false,
     },
     // the regex (case-insensitive) used to match a URI's path part
-    "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
+    // if you prefer matching ASCII-only URIs, you may use the following one
+    // "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
+    "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:;.,!?¡¿，。！？])",
     // how many neighbor chars will be used to find URIs around regions
     "uri_search_radius": 200,
 }

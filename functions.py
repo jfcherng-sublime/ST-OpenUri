@@ -98,8 +98,7 @@ def find_uri_regions_by_regions(
 
     regions = sorted(map(region_into_st_region_form, regions))
     search_regions = simplify_intersected_regions(
-        sublime.Region(region.begin() - search_radius, region.end() + search_radius)
-        for region in regions
+        (region_expand(region, search_radius) for region in regions), True
     )
 
     uri_regex_obj = get_uri_regex_object()
@@ -224,6 +223,40 @@ def region_shift(region, shift: int):
     return [region[0] + shift, region[-1] + shift]
 
 
+def region_expand(region, expansion):
+    """
+    @brief Expand the region by given amount.
+
+    @param region    The region
+    @param expansion Union[int, list[int]] The amount of left/right expansion
+
+    @return the expanded region
+    """
+
+    if isinstance(expansion, int) or isinstance(expansion, float):
+        expansion = [int(expansion)] * 2
+
+    if len(expansion) == 0:
+        expansion = [0, 0]
+
+    if len(expansion) == 1:
+        # do not modify the input variable by "expansion *= 2"
+        expansion = [expansion[0]] * 2
+
+    if isinstance(region, int) or isinstance(region, float):
+        return [region - expansion[0], region + expansion[1]]
+
+    if isinstance(region, sublime.Region):
+        return sublime.Region(region.begin() - expansion[0], region.end() + expansion[1])
+
+    # fmt: off
+    return [
+        min(region[0], region[-1]) - expansion[0],
+        max(region[0], region[-1]) + expansion[1],
+    ]
+    # fmt: on
+
+
 def region_into_list_form(region, sort_result: bool = False) -> list:
     """
     @brief Convert the "region" into list form
@@ -276,11 +309,12 @@ def region_into_st_region_form(region, sort_result: bool = False) -> list:
     return sublime.Region(region.begin(), region.end()) if sort_result else region
 
 
-def simplify_intersected_regions(regions: Iterable) -> list:
+def simplify_intersected_regions(regions: Iterable, allow_boundary: bool = False) -> list:
     """
     @brief Simplify intersected regions by merging them into one region.
 
-    @param regions Iterable[sublime.Region] The regions
+    @param regions        Iterable[sublime.Region] The regions
+    @param allow_boundary Treat boundary contact as intersected
 
     @return list[sublime.Region] Simplified regions
     """
@@ -294,7 +328,7 @@ def simplify_intersected_regions(regions: Iterable) -> list:
 
         region_prev = merged_regions[-1]
 
-        if is_regions_intersected(region_prev, region, True):
+        if is_regions_intersected(region_prev, region, allow_boundary):
             merged_regions[-1] = sublime.Region(region_prev.begin(), region.end())
         else:
             merged_regions.append(region)

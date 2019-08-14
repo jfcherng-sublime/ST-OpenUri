@@ -23,8 +23,8 @@
     "image_new_window": "Packages/${package}/images/external-link-square.png",
     // the color which used to color the whole image
     // values can be
-    //     - empty string (use the original color of the image)
-    //     - ST's scope (use the scope color, require ST >= 3170)
+    //     - "" (empty string, use the original color of the image)
+    //     - ST's scope (use the color of the scope, require ST >= 3170)
     //     - color code in the form of "#RRGGBBAA" (the "AA" part can be omitted)
     "image_new_window_color": "#fa8c00",
     // draw URI regions?
@@ -90,6 +90,6 @@
     // if you prefer matching ASCII-only URIs, you may use the following one
     // "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
     "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:;.,!?¡¿，。！？])",
-    // how many neighbor chars will be used to find URIs around regions
+    // how many neighbor chars from a cursor will be used to find a URI
     "uri_search_radius": 200,
 }

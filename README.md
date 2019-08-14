@@ -1,9 +1,9 @@
 # Sublime-OpenUriInBrowser
 
-`OpenUriInBrowser` is a Sublime Text 3 plugin that adds a button (inline phantom in ST's term)
-beside a URI. Users can click on the button to open the URI from a browser.
-
 ![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/screenshot.png)
+
+`OpenUriInBrowser` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
+`OpenUriInBrowser` means to be high performance, highly customizable and the ultimate solution for opening URIs (mostly URLs).
 
 
 ## Installation
@@ -32,10 +32,11 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     // if the file size is larger than the given one and "show_open_button" is "always"
     // use "show_open_button_fallback" as the fallback
     "use_show_open_button_fallback_if_file_larger_than": 800000, // 800K
-    // the period (in milisecond) that consecutive modifications are treated as typing
+    // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing
     "on_modified_typing_period": 150,
+    // the image used for "open a new window" (only supports PNG format)
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.
     "image_new_window": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
@@ -45,7 +46,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     //     - "@scope" (use the same color with the corresponding URI's, require ST >= 3170)
     //     - "@scope_inverted" (use the inverted color of the corresponding URI's, require ST >= 3170)
     //     - ST's scope (use the color of the scope, require ST >= 3170)
-    //     - color code in the form of "#RGB" or "#RRGGBB" or "#RRGGBBAA"
+    //     - color code in the form of "#RGB", "#RRGGBB" or "#RRGGBBAA"
     "image_new_window_color": "#fa8c00",
     // draw URI regions?
     "draw_uri_regions": {
@@ -107,8 +108,6 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
         "rtmps://": false,
     },
     // the regex (case-insensitive) used to match a URI's path part
-    // if you prefer matching ASCII-only URIs, you may use the following one
-    // "uri_path_regex": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
     "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:;.,!?¡¿，。！？])",
     // how many neighbor chars from a cursor will be used to find a URI
     "uri_search_radius": 200,
@@ -120,7 +119,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 
 These commands are always available no matter what `show_open_button` is or how large the file is.
 
-| Commands | Functionality |
+| Command | Functionality |
 |---|---|
 | open_uri_in_browser_from_cursor | Open URIs in browser from cursors |
 | select_uri | Select URIs from view |

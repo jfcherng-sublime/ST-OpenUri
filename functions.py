@@ -1,8 +1,10 @@
+import functools
 import io
 import re
 import sublime
 import webbrowser
 from collections.abc import Iterable
+from .Globals import Globals
 from .libs import png, triegex
 from .log import msg
 from .settings import get_setting
@@ -237,7 +239,7 @@ def region_expand(region, expansion):
         expansion = [int(expansion)] * 2
 
     if len(expansion) == 0:
-        expansion = [0, 0]
+        raise ValueError("Invalid expansion: {}".format(expansion))
 
     if len(expansion) == 1:
         # do not modify the input variable by "expansion *= 2"
@@ -361,30 +363,27 @@ def is_regions_intersected(
     return region_1.intersects(region_2)
 
 
-def change_png_bytes_color(img_bytes: bytes, color_code: str) -> bytes:
+def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     """
     @brief Change all colors in the PNG bytes to the new color.
 
-    @param img_bytes  The PNG image bytes
-    @param color_code The color code
+    @param img_bytes The PNG image bytes
+    @param rgba_code The color code in the form of #RRGGBBAA
 
     @return Color-changed PNG image bytes.
     """
 
     IMG_RGBA_CHANNELS = 4
 
-    if not color_code:
+    if not rgba_code:
         return img_bytes
 
-    if not re.match(r"#(?:[0-9a-f]{6}|[0-9a-f]{8})$", color_code, re.IGNORECASE):
-        raise ValueError("Invalid color code: " + color_code)
+    if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
+        raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    color_code = color_code.lstrip("#")
+    rgba = rgba_code.lstrip("#")
 
-    if len(color_code) == 6:
-        color_code += "ff"  # default opaque
-
-    r, g, b, a = [int(color_code[i : i + 2], 16) for i in range(0, 8, 2)]
+    r, g, b, a = [int(rgba[i : i + 2], 16) for i in range(0, 8, 2)]
     w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
     rows_dst = []
@@ -398,3 +397,75 @@ def change_png_bytes_color(img_bytes: bytes, color_code: str) -> bytes:
     png.from_array(rows_dst, "RGBA").write(buf)
 
     return buf.getvalue()
+
+
+def add_alpha_to_rgb(color_code: str) -> str:
+    """
+    @brief Add the alpha part to a valid RGB color code (#RGB, #RRGGBB, #RRGGBBAA)
+
+    @param color_code The color code
+
+    @return The color code in the form of #RRGGBBAA
+    """
+
+    if not color_code:
+        return ""
+
+    rgb = color_code[1:9]  # strip "#" and possible extra chars
+
+    # RGB to RRGGBBAA
+    if len(rgb) == 3:
+        rgb = rgb[0] * 2 + rgb[1] * 2 + rgb[2] * 2 + "ff"
+    # RRGGBB to RRGGBBAA
+    elif len(rgb) == 6:
+        rgb += "ff"
+
+    return ("#" + rgb).lower()
+
+
+def simple_decorator(decorator):
+    """
+    @brief A decorator that turns a function into a decorator.
+    """
+
+    def outer_wrapper(decoratee):
+        @functools.wraps(decoratee)
+        def wrapper(*args, **kwargs):
+            return decorator(decoratee(*args, **kwargs))
+
+        return wrapper
+
+    return outer_wrapper
+
+
+@simple_decorator(add_alpha_to_rgb)
+def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(0, 0)) -> str:
+    """
+    @brief Convert user settings color code in to #RRGGBBAA form
+
+    @param color_code The color code string in the same format from user settings
+    @param region     The region
+
+    @return The color code in the form of #RRGGBBAA
+    """
+
+    if not color_code:
+        return ""
+
+    view = sublime.active_window().active_view()
+
+    # "color_code" is a scope?
+    if color_code == "@scope" or not color_code.startswith("#"):
+        if Globals.HAS_API_VIEW_STYLE_FOR_SCOPE:
+            return view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
+        else:
+            return ""
+
+    # now color code must starts with "#"
+    rgb = color_code[1:9]  # strip "#" and possible extra chars
+
+    # RGB, RRGGBB, RRGGBBAA are legal
+    if len(rgb) in [3, 6, 8] and re.match(r"[0-9a-fA-F]+$", rgb):
+        return "#" + rgb
+
+    return ""

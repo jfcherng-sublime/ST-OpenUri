@@ -1,6 +1,5 @@
 import base64
 import os
-import re
 import sublime
 import time
 from .log import msg
@@ -52,42 +51,6 @@ def get_image_path(img_name: str) -> str:
     )
 
 
-def get_image_color_code(img_name: str) -> str:
-    """
-    @brief Get the preprocessed image color code from plugin settings.
-
-    @param img_name The image name
-
-    @return The preprocessed image color code.
-    """
-
-    color_code = get_setting("image_{name}_color".format(name=img_name))
-
-    if not color_code:
-        return ""
-
-    if color_code.startswith("#"):
-        c = color_code[1:]  # strip "#"
-
-        # must be RGB, RRGGBB, RRGGBBAA
-        if not (len(c) in [3, 6, 8] and re.match(r"[0-9a-f]+$", c, re.IGNORECASE)):
-            color_code = ""
-
-        # RGB to RRGGBB
-        if len(c) == 3:
-            color_code = "#" + c[0] * 2 + c[1] * 2 + c[2] * 2
-    # "color_code" is a scope?
-    elif HAS_API_VIEW_STYLE_FOR_SCOPE:
-        # get the real color code of the scope
-        color_code = (
-            sublime.active_window().active_view().style_for_scope(color_code).get("foreground", "")
-        )
-    else:
-        color_code = ""
-
-    return color_code
-
-
 def get_image_info(img_name: str) -> dict:
     """
     @brief Get image informations of an image from plugin settings.
@@ -97,7 +60,6 @@ def get_image_info(img_name: str) -> dict:
     @return Dict[str, Any] The image information.
     """
 
-    from .functions import change_png_bytes_color
     from .libs import imagesize
 
     img_path = get_image_path(img_name)
@@ -111,18 +73,46 @@ def get_image_info(img_name: str) -> dict:
     except IOError:
         print(msg("Resource not found: " + img_path))
 
-    img_bytes = change_png_bytes_color(img_bytes, get_image_color_code(img_name))
     img_base64 = base64.b64encode(img_bytes).decode()
     img_w, img_h = imagesize.get_from_bytes(img_bytes)
 
     return {
         "base64": img_base64,
+        "bytes": img_bytes,
         "ext": img_ext,
         "mime": img_mime,
         "path": img_path,
         "ratio_wh": img_w / img_h,
         "size": (img_w, img_h),
     }
+
+
+def get_colored_image_base64(img_name: str, rgba_code: str) -> str:
+    """
+    @brief Get the colored image in base64 string.
+
+    @param img_name  The image name
+    @param rgba_code The color code in #RRGGBBAA
+
+    @return The image base64 string
+    """
+
+    from .functions import change_png_bytes_color
+    from .Globals import Globals
+
+    if not rgba_code:
+        return getattr(Globals, "image_" + img_name)["base64"]
+
+    cache_key = "{name}@{color}".format(name=img_name, color=rgba_code)
+
+    if cache_key not in Globals.colored_image_base64:
+        img_bytes = getattr(Globals, "image_" + img_name)["bytes"]
+        img_bytes = change_png_bytes_color(img_bytes, rgba_code)
+        img_base64 = base64.b64encode(img_bytes).decode()
+
+        Globals.colored_image_base64[cache_key] = img_base64
+
+    return Globals.colored_image_base64[cache_key]
 
 
 def get_settings_file() -> str:

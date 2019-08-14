@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 from collections.abc import Iterable
 from .functions import (
+    color_code_to_rgba,
     find_uri_regions_by_region,
     get_uri_regex_object,
     open_uri_from_browser,
@@ -12,6 +13,7 @@ from .functions import (
 )
 from .Globals import Globals
 from .settings import (
+    get_colored_image_base64,
     get_image_info,
     get_package_name,
     get_setting,
@@ -39,6 +41,7 @@ def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
         Globals.uri_regex_obj = get_uri_regex_object()
         Globals.image_new_window = get_image_info("new_window")
+        Globals.colored_image_base64 = {}
 
     get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
     plugin_settings_listener()
@@ -116,8 +119,18 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         else:
             self._erase_uri_regions()
 
-    def _generate_phantom_html(self, uri: str) -> str:
-        return PHANTOM_TEMPLATE.format(uri=uri, **Globals.image_new_window)
+    def _generate_phantom_html(self, uri_region: sublime.Region) -> str:
+        # fmt: off
+        return PHANTOM_TEMPLATE.format(
+            uri=self.view.substr(uri_region),
+            mime=Globals.image_new_window["mime"],
+            ratio_wh=Globals.image_new_window["ratio_wh"],
+            base64=get_colored_image_base64(
+                "new_window",
+                color_code_to_rgba(get_setting("image_new_window_color"), uri_region),
+            ),
+        )
+        # fmt: on
 
     def _new_uri_phantom(self, uri_region) -> sublime.Phantom:
         uri_region = region_into_st_region_form(uri_region)
@@ -133,7 +146,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
 
         return sublime.Phantom(
             sublime.Region(phantom_point),
-            self._generate_phantom_html(self.view.substr(uri_region)),
+            self._generate_phantom_html(uri_region),
             sublime.LAYOUT_INLINE,
             on_navigate=open_uri_from_browser,
         )

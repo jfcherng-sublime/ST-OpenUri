@@ -42,8 +42,9 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     // the color which used to color the whole image
     // values can be
     //     - "" (empty string, use the original color of the image)
+    //     - "@scope" (use the same color with matched URI's, require ST >= 3170)
     //     - ST's scope (use the color of the scope, require ST >= 3170)
-    //     - color code in the form of "#RRGGBBAA" (the "AA" part can be omitted)
+    //     - color code in the form of "#RGB" or "#RRGGBB" or "#RRGGBBAA"
     "image_new_window_color": "#fa8c00",
     // draw URI regions?
     "draw_uri_regions": {

@@ -132,9 +132,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         )
         # fmt: on
 
-    def _new_uri_phantom(self, uri_region) -> sublime.Phantom:
-        uri_region = region_into_st_region_form(uri_region)
-
+    def _new_uri_phantom(self, uri_region: sublime.Region) -> sublime.Phantom:
         # Calculate the point to insert the phantom.
         #
         # Usually it's exact at the end of the URI, but if the next char is a quotation mark,
@@ -152,13 +150,19 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         )
 
     def _new_uri_phantoms(self, uri_regions: Iterable) -> list:
+        """
+        @brief Note that "uri_regions" should be Iterable[sublime.Region]
+        """
+
         return [self._new_uri_phantom(r) for r in uri_regions]
 
     def _erase_phantom(self) -> None:
         self.phantom_set.update([])
 
     def _update_phantom(self, uri_regions: Iterable) -> None:
-        self.phantom_set.update(self._new_uri_phantoms(uri_regions))
+        self.phantom_set.update(
+            self._new_uri_phantoms(map(region_into_st_region_form, uri_regions))
+        )
 
     def _erase_uri_regions(self) -> None:
         self.view.erase_regions("OUIB_uri_regions")

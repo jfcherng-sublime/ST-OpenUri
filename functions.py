@@ -238,14 +238,11 @@ def add_alpha_to_rgb(color_code: str) -> str:
 
     rgb = color_code[1:9]  # strip "#" and possible extra chars
 
-    # RGB to RRGGBBAA
+    # RGB to RRGGBB
     if len(rgb) == 3:
-        rgb = rgb[0] * 2 + rgb[1] * 2 + rgb[2] * 2 + "ff"
-    # RRGGBB to RRGGBBAA
-    elif len(rgb) == 6:
-        rgb += "ff"
+        rgb = rgb[0] * 2 + rgb[1] * 2 + rgb[2] * 2
 
-    return ("#" + rgb).lower()
+    return "#" + (rgb + "ff")[:8].lower()
 
 
 @simple_decorator(add_alpha_to_rgb)
@@ -265,11 +262,21 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
     view = sublime.active_window().active_view()
 
     # "color_code" is a scope?
-    if color_code == "@scope" or not color_code.startswith("#"):
+    if not color_code.startswith("#"):
         if Globals.HAS_API_VIEW_STYLE_FOR_SCOPE:
-            return view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
-        else:
-            return ""
+            # "color" is guaranteed to be #RRGGBB or #RRGGBBAA
+            color = view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
+
+            if color_code == "@scope":
+                return color
+
+            if color_code == "@scope_inverted":
+                # strip "#" and make color into RRGGBBAA
+                rgba_int = int((color + "ff")[1:9], 16)
+
+                return "#" + hex((~rgba_int & 0xFFFFFF00) | (rgba_int & 0xFF))[2:].zfill(8)
+
+        return ""
 
     # now color code must starts with "#"
     rgb = color_code[1:9]  # strip "#" and possible extra chars

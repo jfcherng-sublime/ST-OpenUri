@@ -42,7 +42,8 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     // the color which used to color the whole image
     // values can be
     //     - "" (empty string, use the original color of the image)
-    //     - "@scope" (use the same color with matched URI's, require ST >= 3170)
+    //     - "@scope" (use the same color with the corresponding URI's, require ST >= 3170)
+    //     - "@scope_inverted" (use the inverted color of the corresponding URI's, require ST >= 3170)
     //     - ST's scope (use the color of the scope, require ST >= 3170)
     //     - color code in the form of "#RGB" or "#RRGGBB" or "#RRGGBBAA"
     "image_new_window_color": "#fa8c00",

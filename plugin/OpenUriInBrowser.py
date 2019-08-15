@@ -4,21 +4,13 @@ from collections.abc import Iterable
 from .functions import (
     color_code_to_rgba,
     find_uri_regions_by_region,
-    get_uri_regex_object,
     open_uri_from_browser,
     view_last_update_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
 )
 from .Globals import Globals
-from .settings import (
-    get_colored_image_base64,
-    get_image_info,
-    get_package_name,
-    get_setting,
-    get_settings_object,
-    get_timestamp,
-)
+from .settings import get_colored_image_base64, get_package_name, get_setting, get_timestamp
 
 PHANTOM_TEMPLATE = """
     <body id="open-uri-box">
@@ -34,20 +26,6 @@ PHANTOM_TEMPLATE = """
         <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
     </body>
 """
-
-
-def plugin_loaded() -> None:
-    def plugin_settings_listener() -> None:
-        Globals.uri_regex_obj = get_uri_regex_object()
-        Globals.image_new_window = get_image_info("new_window")
-        Globals.colored_image_base64 = {}
-
-    get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
-    plugin_settings_listener()
-
-
-def plugin_unloaded() -> None:
-    get_settings_object().clear_on_change(get_package_name())
 
 
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):

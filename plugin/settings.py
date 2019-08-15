@@ -14,7 +14,9 @@ def get_package_name() -> str:
     @return The package name.
     """
 
-    return __package__
+    # __package__ will be "XXX.plugin" under this folder structure
+    # so I just have it hard-coded, sadly :/
+    return "OpenUriInBrowser"
 
 
 def get_package_path() -> str:
@@ -122,7 +124,7 @@ def get_settings_file() -> str:
     @return The settings file name.
     """
 
-    return "OpenUriInBrowser.sublime-settings"
+    return get_package_name() + ".sublime-settings"
 
 
 def get_settings_object() -> sublime.Settings:

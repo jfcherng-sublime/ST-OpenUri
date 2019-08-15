@@ -145,21 +145,15 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
-def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> list:
+def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> None:
     """
     @brief Update view's "uri_regions" variable
 
     @param view          The view
     @param uri_regex_obj The URI regex obj
-
-    @return list[list[int]] the new "uri_regions" in the view
     """
 
-    uri_regions = view_find_all_fast(view, uri_regex_obj, False)
-
-    view_uri_regions_val(view, uri_regions)
-
-    return uri_regions
+    view_uri_regions_val(view, view_find_all_fast(view, uri_regex_obj, False))
 
 
 def view_uri_regions_val(view: sublime.View, uri_regions=...):
@@ -175,9 +169,7 @@ def view_uri_regions_val(view: sublime.View, uri_regions=...):
     if uri_regions is ...:
         return view.settings().get("OUIB_uri_regions", [])
 
-    uri_regions = [region_into_list_form(r, True) for r in uri_regions]
-
-    view.settings().set("OUIB_uri_regions", uri_regions)
+    view.settings().set("OUIB_uri_regions", [region_into_list_form(r, True) for r in uri_regions])
 
 
 def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):

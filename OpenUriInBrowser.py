@@ -19,7 +19,6 @@ from .settings import (
     get_settings_object,
     get_timestamp,
 )
-from .utils import region_into_st_region_form
 
 PHANTOM_TEMPLATE = """
     <body id="open-uri-box">
@@ -109,7 +108,9 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
                 self._erase_uri_regions()
 
     def _detect_uris_globally(self) -> None:
-        uri_regions = view_update_uri_regions(self.view, Globals.uri_regex_obj)
+        view_update_uri_regions(self.view, Globals.uri_regex_obj)
+
+        uri_regions = [sublime.Region(*r) for r in view_uri_regions_val(self.view)]
 
         if self._get_setting_show_open_button() == "always":
             self._update_phantom(uri_regions)
@@ -152,6 +153,8 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def _new_uri_phantoms(self, uri_regions: Iterable) -> list:
         """
         @brief Note that "uri_regions" should be Iterable[sublime.Region]
+
+        @return list[sublime.Phantom]
         """
 
         return [self._new_uri_phantom(r) for r in uri_regions]
@@ -160,22 +163,28 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self.phantom_set.update([])
 
     def _update_phantom(self, uri_regions: Iterable) -> None:
-        self.phantom_set.update(
-            self._new_uri_phantoms(map(region_into_st_region_form, uri_regions))
-        )
+        """
+        @brief Note that "uri_regions" should be Iterable[sublime.Region]
+        """
+
+        self.phantom_set.update(self._new_uri_phantoms(uri_regions))
 
     def _erase_uri_regions(self) -> None:
         self.view.erase_regions("OUIB_uri_regions")
 
     def _draw_uri_regions(self, uri_regions: Iterable) -> None:
-        settings = get_setting("draw_uri_regions")
+        """
+        @brief Note that "uri_regions" should be Iterable[sublime.Region]
+        """
+
+        draw_uri_regions = get_setting("draw_uri_regions")
 
         self.view.add_regions(
             "OUIB_uri_regions",
-            [region_into_st_region_form(r) for r in uri_regions],
-            scope=settings.get("scope"),
-            icon=settings.get("icon"),
-            flags=settings.get("flags"),
+            list(uri_regions),
+            scope=draw_uri_regions.get("scope"),
+            icon=draw_uri_regions.get("icon"),
+            flags=draw_uri_regions.get("flags"),
         )
 
     def _get_setting_show_open_button(self) -> str:

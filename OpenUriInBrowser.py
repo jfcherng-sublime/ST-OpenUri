@@ -6,7 +6,6 @@ from .functions import (
     find_uri_regions_by_region,
     get_uri_regex_object,
     open_uri_from_browser,
-    region_into_st_region_form,
     view_last_update_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
@@ -20,6 +19,7 @@ from .settings import (
     get_settings_object,
     get_timestamp,
 )
+from .utils import region_into_st_region_form
 
 PHANTOM_TEMPLATE = """
     <body id="open-uri-box">

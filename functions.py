@@ -1,4 +1,3 @@
-import functools
 import io
 import re
 import sublime
@@ -8,6 +7,16 @@ from .Globals import Globals
 from .libs import png, triegex
 from .log import msg
 from .settings import get_setting
+from .utils import (
+    is_regions_intersected,
+    region_expand,
+    region_into_list_form,
+    region_into_st_region_form,
+    region_shift,
+    simple_decorator,
+    simplify_intersected_regions,
+    view_find_all_fast,
+)
 
 
 def open_uri_from_browser(uri: str, browser=...) -> None:
@@ -136,25 +145,6 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
-def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:
-    """
-    @brief A faster/simpler implementation of View.find_all().
-
-    @param view             the View object
-    @param regex_obj        the compiled regex object
-    @param return_st_region return region in sublime.Region type
-
-    @return list[Union[sublime.Region, list[int]]]
-    """
-
-    regions = [m.span() for m in regex_obj.finditer(view.substr(sublime.Region(0, view.size())))]
-
-    if return_st_region:
-        regions = [sublime.Region(*r) for r in regions]
-
-    return regions
-
-
 def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> list:
     """
     @brief Update view's "uri_regions" variable
@@ -204,163 +194,6 @@ def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
         return view.settings().get("OUIB_last_update_timestamp", False)
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
-
-
-def region_shift(region, shift: int):
-    """
-    @brief Shift the region by given amount.
-
-    @param region The region
-    @param shift  The shift
-
-    @return the shifted region
-    """
-
-    if isinstance(region, int) or isinstance(region, float):
-        return region + shift
-
-    if isinstance(region, sublime.Region):
-        return sublime.Region(region.a + shift, region.b + shift)
-
-    return [region[0] + shift, region[-1] + shift]
-
-
-def region_expand(region, expansion):
-    """
-    @brief Expand the region by given amount.
-
-    @param region    The region
-    @param expansion Union[int, list[int]] The amount of left/right expansion
-
-    @return the expanded region
-    """
-
-    if isinstance(expansion, int) or isinstance(expansion, float):
-        expansion = [int(expansion)] * 2
-
-    if len(expansion) == 0:
-        raise ValueError("Invalid expansion: {}".format(expansion))
-
-    if len(expansion) == 1:
-        # do not modify the input variable by "expansion *= 2"
-        expansion = [expansion[0]] * 2
-
-    if isinstance(region, int) or isinstance(region, float):
-        return [region - expansion[0], region + expansion[1]]
-
-    if isinstance(region, sublime.Region):
-        return sublime.Region(region.begin() - expansion[0], region.end() + expansion[1])
-
-    # fmt: off
-    return [
-        min(region[0], region[-1]) - expansion[0],
-        max(region[0], region[-1]) + expansion[1],
-    ]
-    # fmt: on
-
-
-def region_into_list_form(region, sort_result: bool = False) -> list:
-    """
-    @brief Convert the "region" into list form
-
-    @param region      The region
-    @param sort_result Sort the region
-
-    @return list[int] the "region" in list form
-    """
-
-    if isinstance(region, sublime.Region):
-        region = [region.a, region.b]
-    elif isinstance(region, int) or isinstance(region, float):
-        region = [int(region)] * 2
-    elif isinstance(region, Iterable) and not isinstance(region, list):
-        region = list(region)
-
-    assert isinstance(region, list)
-
-    if not region:
-        raise ValueError("region must not be empty.")
-
-    if len(region) > 0:
-        region = [region[0], region[-1]]
-
-    return sorted(region) if sort_result else region
-
-
-def region_into_st_region_form(region, sort_result: bool = False) -> list:
-    """
-    @brief Convert the "region" into ST's region form
-
-    @param region      The region
-    @param sort_result Sort the region
-
-    @return list[sublime.Region] the "region" in ST's region form
-    """
-
-    if isinstance(region, int) or isinstance(region, float):
-        region = [int(region)] * 2
-    elif isinstance(region, Iterable) and not isinstance(region, list):
-        region = list(region)
-
-    if isinstance(region, list) and not region:
-        raise ValueError("region must not be empty.")
-
-    if not isinstance(region, sublime.Region):
-        region = sublime.Region(region[0], region[-1])
-
-    return sublime.Region(region.begin(), region.end()) if sort_result else region
-
-
-def simplify_intersected_regions(regions: Iterable, allow_boundary: bool = False) -> list:
-    """
-    @brief Simplify intersected regions by merging them into one region.
-
-    @param regions        Iterable[sublime.Region] The regions
-    @param allow_boundary Treat boundary contact as intersected
-
-    @return list[sublime.Region] Simplified regions
-    """
-
-    merged_regions = []
-    for region in sorted(regions):
-        if not merged_regions:
-            merged_regions.append(region)
-
-            continue
-
-        region_prev = merged_regions[-1]
-
-        if is_regions_intersected(region_prev, region, allow_boundary):
-            merged_regions[-1] = sublime.Region(region_prev.begin(), region.end())
-        else:
-            merged_regions.append(region)
-
-    return merged_regions
-
-
-def is_regions_intersected(
-    region_1: sublime.Region, region_2: sublime.Region, allow_boundary: bool = False
-) -> bool:
-    """
-    @brief Check whether two regions are intersected.
-
-    @param region_1       The 1st region
-    @param region_2       The 2nd region
-    @param allow_boundary Treat boundary contact as intersected
-
-    @return True if intersected, False otherwise.
-    """
-
-    # treat boundary contact as intersected
-    if allow_boundary:
-        # left/right begin/end = l/r b/e
-        lb_, le_ = region_1.begin(), region_1.end()
-        rb_, re_ = region_2.begin(), region_2.end()
-
-        if lb_ == rb_ or lb_ == re_ or le_ == rb_ or le_ == re_:
-            return True
-
-    return region_1.intersects(region_2)
 
 
 def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
@@ -421,21 +254,6 @@ def add_alpha_to_rgb(color_code: str) -> str:
         rgb += "ff"
 
     return ("#" + rgb).lower()
-
-
-def simple_decorator(decorator):
-    """
-    @brief A decorator that turns a function into a decorator.
-    """
-
-    def outer_wrapper(decoratee):
-        @functools.wraps(decoratee)
-        def wrapper(*args, **kwargs):
-            return decorator(decoratee(*args, **kwargs))
-
-        return wrapper
-
-    return outer_wrapper
 
 
 @simple_decorator(add_alpha_to_rgb)

@@ -36,9 +36,9 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing
     "on_modified_typing_period": 150,
-    // the image used for "open a new window" (only supports PNG format)
+    // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.
-    "image_new_window": "Packages/${package}/images/external-link-square.png",
+    "image_new_window": "Packages/${package}/images/FontAwesome/external-link-square.png",
     // the color which used to color the whole image
     // values can be
     //     - "" (empty string, use the original color of the image)

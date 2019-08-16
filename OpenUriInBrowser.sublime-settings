@@ -17,7 +17,8 @@
     // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing
-    "on_modified_typing_period": 150,
+    // or if you consider your machine is powerful, you can set it to a smaller value
+    "on_modified_typing_period": 200,
     // the image used for "open a new window" (only supports PNG format)
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.

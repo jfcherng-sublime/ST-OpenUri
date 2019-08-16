@@ -4,8 +4,6 @@ import sublime
 import time
 from .log import msg
 
-HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
-
 
 def get_package_name() -> str:
     """
@@ -46,7 +44,7 @@ def get_image_path(img_name: str) -> str:
         img_path,
         {
             # fmt: off
-            "package": get_package_name(),
+            "package_name": get_package_name(),
             "package_path": get_package_path(),
             # fmt: on
         },

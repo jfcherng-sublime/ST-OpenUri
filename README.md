@@ -38,7 +38,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
     "on_modified_typing_period": 150,
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.
-    "image_new_window": "Packages/${package}/images/FontAwesome/external-link-square.png",
+    "image_new_window": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
     // the color which used to color the whole image
     // values can be
     //     - "" (empty string, use the original color of the image)

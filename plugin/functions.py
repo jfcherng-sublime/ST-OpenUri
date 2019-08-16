@@ -248,10 +248,10 @@ def add_alpha_to_rgb(color_code: str) -> str:
 @simple_decorator(add_alpha_to_rgb)
 def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(0, 0)) -> str:
     """
-    @brief Convert user settings color code in to #RRGGBBAA form
+    @brief Convert user settings color code into #RRGGBBAA form
 
-    @param color_code The color code string in the same format from user settings
-    @param region     The region
+    @param color_code The color code string from user settings
+    @param region     The scope-related region
 
     @return The color code in the form of #RRGGBBAA
     """
@@ -271,9 +271,9 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
                 return color
 
             if color_code == "@scope_inverted":
-                # strip "#" and make color into RRGGBBAA
+                # strip "#" and make color into RRGGBBAA int
                 rgba_int = int((color + "ff")[1:9], 16)
-
+                # invert RRGGBB, remain AA, strip "0x" prefix from hex and prepend 0s until 8 chars
                 return "#" + hex((~rgba_int & 0xFFFFFF00) | (rgba_int & 0xFF))[2:].zfill(8)
 
         return ""

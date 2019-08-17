@@ -2,7 +2,7 @@
     // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
     "browser": "",
-    // when to show a phantom button beside a URI?
+    // when to show a phantom/popup button beside a URI?
     // values can be
     //     - "always" (always show buttons)
     //     - "hover" (only when the URI is hovered)
@@ -22,7 +22,8 @@
     // the image used for "open a new window" (only supports PNG format)
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.
-    "image_new_window": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
+    "image_phantom": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
+    "image_popup": "Packages/${package_name}/images/FontAwesome/share-square.png",
     // the color which used to color the whole image
     // values can be
     //     - "" (empty string, use the original color of the image)
@@ -30,7 +31,8 @@
     //     - "@scope_inverted" (use the inverted color of the corresponding URI's, require ST >= 3170)
     //     - ST's scope (use the color of the scope, require ST >= 3170)
     //     - color code in the form of "#RGB", "#RRGGBB" or "#RRGGBBAA"
-    "image_new_window_color": "#fa8c00",
+    "image_phantom_color": "#fa8c00",
+    "image_popup_color": "#fa8c00",
     // draw URI regions?
     "draw_uri_regions": {
         "enabled": false,

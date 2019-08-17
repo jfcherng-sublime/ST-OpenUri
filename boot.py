@@ -10,7 +10,8 @@ from .plugin.OpenUriInBrowserCommands import *
 def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
         Globals.uri_regex_obj = get_uri_regex_object()
-        Globals.image_new_window = get_image_info("new_window")
+        Globals.image_phantom = get_image_info("phantom")
+        Globals.image_popup = get_image_info("popup")
         Globals.colored_image_base64 = {}
 
     get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)

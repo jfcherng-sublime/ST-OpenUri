@@ -2,7 +2,6 @@ import sublime
 import sublime_plugin
 from collections.abc import Iterable
 from .functions import (
-    color_code_to_rgba,
     find_uri_regions_by_region,
     open_uri_from_browser,
     view_last_update_timestamp_val,
@@ -10,7 +9,12 @@ from .functions import (
     view_uri_regions_val,
 )
 from .Globals import Globals
-from .settings import get_colored_image_base64, get_package_name, get_setting, get_timestamp
+from .settings import (
+    get_colored_image_base64_by_region,
+    get_package_name,
+    get_setting,
+    get_timestamp,
+)
 
 PHANTOM_TEMPLATE = """
     <body id="open-uri-phantom">
@@ -123,12 +127,9 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         # fmt: off
         return PHANTOM_TEMPLATE.format(
             uri=self.view.substr(uri_region),
-            mime=Globals.image_new_window["mime"],
-            ratio_wh=Globals.image_new_window["ratio_wh"],
-            base64=get_colored_image_base64(
-                "new_window",
-                color_code_to_rgba(get_setting("image_new_window_color"), uri_region),
-            ),
+            mime=Globals.image_phantom["mime"],
+            ratio_wh=Globals.image_phantom["ratio_wh"],
+            base64=get_colored_image_base64_by_region("phantom", uri_region),
         )
         # fmt: on
 
@@ -138,14 +139,11 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         # fmt: off
         return POPUP_TEMPLATE.format(
             uri=self.view.substr(uri_region),
-            mime=Globals.image_new_window["mime"],
-            w=base_size * Globals.image_new_window["ratio_wh"],
+            mime=Globals.image_popup["mime"],
+            w=base_size * Globals.image_popup["ratio_wh"],
             h=base_size,
             size_unit="em",
-            base64=get_colored_image_base64(
-                "new_window",
-                color_code_to_rgba(get_setting("image_new_window_color"), uri_region),
-            ),
+            base64=get_colored_image_base64_by_region("popup", uri_region),
         )
         # fmt: on
 

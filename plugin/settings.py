@@ -51,6 +51,21 @@ def get_image_path(img_name: str) -> str:
     )
 
 
+def get_image_color(img_name: str, region: sublime.Region) -> str:
+    """
+    @brief Get the image color from plugin settings in the form of #RRGGBBAA.
+
+    @param img_name The image name
+    @param region   The region
+
+    @return The color code in the form of #RRGGBBAA
+    """
+
+    from .functions import color_code_to_rgba
+
+    return color_code_to_rgba(get_setting("image_" + img_name + "_color"), region)
+
+
 def get_image_info(img_name: str) -> dict:
     """
     @brief Get image informations of an image from plugin settings.
@@ -87,9 +102,9 @@ def get_image_info(img_name: str) -> dict:
     }
 
 
-def get_colored_image_base64(img_name: str, rgba_code: str) -> str:
+def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     """
-    @brief Get the colored image in base64 string.
+    @brief Get the colored image in base64 string by RGBA color code.
 
     @param img_name  The image name
     @param rgba_code The color code in #RRGGBBAA
@@ -113,6 +128,19 @@ def get_colored_image_base64(img_name: str, rgba_code: str) -> str:
         Globals.colored_image_base64[cache_key] = img_base64
 
     return Globals.colored_image_base64[cache_key]
+
+
+def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) -> str:
+    """
+    @brief Get the colored image in base64 string by region.
+
+    @param img_name The image name
+    @param region   The region
+
+    @return The image base64 string
+    """
+
+    return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
 
 
 def get_settings_file() -> str:

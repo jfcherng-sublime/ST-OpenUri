@@ -11,7 +11,19 @@ class Globals(object):
     uri_regex_obj = None
 
     # fmt: off
-    image_new_window = {
+    image_phantom = {
+        "base64": "",
+        "bytes": b"",
+        "ext": "",
+        "mime": "",
+        "path": "",
+        "ratio_wh": 0,
+        "size": (0, 0),  # w, h
+    }
+    # fmt: on
+
+    # fmt: off
+    image_popup = {
         "base64": "",
         "bytes": b"",
         "ext": "",

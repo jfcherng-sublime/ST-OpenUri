@@ -3,7 +3,6 @@
 ![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/screenshot.png)
 
 `OpenUriInBrowser` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
-`OpenUriInBrowser` means to be high performance, highly customizable and the ultimate solution for opening URIs (mostly URLs).
 
 
 ## Installation
@@ -12,8 +11,14 @@ This plugin is available on Package Control by the name of [Open URI in Browser]
 
 Note that this plugin only supports ST >= 3118 because of Phantom API.
 
+💡 You may also interest in my other plugins: https://packagecontrol.io/search/jfcherng
+
 
 ## Settings
+
+To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` » `Settings`.
+
+<details><summary>Click to Show Full Settings</summary>
 
 ```javascript
 {
@@ -115,8 +120,25 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 }
 ```
 
+</details>
 
-## Commands (Key Bindings)
+
+## Bindings
+
+
+### Key Binding
+
+- <kbd>Alt + o</kbd>, <kbd>Alt + i</kbd>, <kbd>Alt + b</kbd>:
+  Open URIs in browser from (multiple) cursors.
+  `o, i, b` is mnemonic for `Open, In, Browser`.
+
+
+### Mouse Binding
+
+- <kbd>Alt + Left Click</kbd>: Open the clicked URI in browser.
+
+
+## Commands
 
 These commands are always available no matter what `show_open_button` is or how large the file is.
 
@@ -125,19 +147,6 @@ These commands are always available no matter what `show_open_button` is or how 
 | open_uri_in_browser_from_cursor | Open URIs in browser from cursors |
 | select_uri | Select URIs from view |
 | select_uri_from_cursor | Select URIs from cursors |
-
-There is no default key binding, but you can define one for opening URIs at
-the current cursor(s). For example, I am using the following one.
-
-```javascript
-{ 
-    "keys": ["alt+o", "alt+i", "alt+b"],
-    "command": "open_uri_in_browser_from_cursor",
-    // "args": {"browser": ""}, // if you want to force using a specific browser
-},
-```
-
-`o, i, b` is mnemonic for `Open, In, Browser`.
 
 
 Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>

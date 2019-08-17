@@ -44,7 +44,7 @@ def open_uri_from_browser(uri: str, browser=...) -> None:
         )
 
 
-def get_uri_regex_object():
+def compile_uri_regex():
     """
     @brief Get the compiled regex object for matching URIs.
 
@@ -112,16 +112,14 @@ def find_uri_regions_by_regions(
         (region_expand(region, search_radius) for region in regions), True
     )
 
-    uri_regex_obj = get_uri_regex_object()
     uri_regions = []
-
     for region in search_regions:
         coordinate_bias = max(0, region.begin())
 
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
             sublime.Region(*region_shift(m.span(), coordinate_bias))
-            for m in uri_regex_obj.finditer(view.substr(region))
+            for m in Globals.uri_regex_obj.finditer(view.substr(region))
         )
 
     # only pick up "uri_region"s that are intersected with "regions"

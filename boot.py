@@ -1,4 +1,4 @@
-from .plugin.functions import get_uri_regex_object
+from .plugin.functions import compile_uri_regex
 from .plugin.Globals import Globals
 from .plugin.settings import get_image_info, get_package_name, get_settings_object
 
@@ -9,7 +9,7 @@ from .plugin.OpenUriInBrowserCommands import *
 
 def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
-        Globals.uri_regex_obj = get_uri_regex_object()
+        Globals.uri_regex_obj = compile_uri_regex()
         init_images()
 
     def init_images() -> None:

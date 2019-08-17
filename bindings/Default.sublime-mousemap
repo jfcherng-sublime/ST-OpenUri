@@ -1,0 +1,7 @@
+[{
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["alt"],
+    "command": "open_uri_in_browser_from_cursor",
+    "press_command": "drag_select",
+}]

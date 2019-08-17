@@ -2,13 +2,18 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [5.4.0] - 2019-08-16
+## [5.5.0] - 2019-08-17
 
 ### Added
-- Add new FontAwesome imagaes: `link`, `share-square`, `star`.
-- Add new `image_new_window_color` values: `"@scope"`, `"@scope_inverted"`.
-  This will make the phantom be the same color with the corresponding URI.
+- Add new command: `open_uri_from_view`.
+- Add default key/mouse bindings.
+- Allow setting a different image and color for popup.
 
 ### Changed
-- Change default "on_modified_typing_period" to 150.
-- Downscaling FontAwesome images to 48x48.
+- Hovered behavior now uses popup rather than phantom.
+- Image-related user settings have been restructured.
+- Command names have been changed.
+
+  - `open_uri_in_browser_from_cursor` -> `open_uri_from_cursors`
+  - `select_uri_from_cursor` -> `select_uri_from_cursors`
+  - `select_uri` -> `select_uri_from_view`

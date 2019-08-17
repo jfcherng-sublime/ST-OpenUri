@@ -4,13 +4,13 @@
         "caption": "OpenUriInBrowser",
         "children": [{
             "caption": "Select URIs from View",
-            "command": "select_uri",
+            "command": "select_uri_from_view",
         }, {
             "caption": "Select URIs from Cursors",
-            "command": "select_uri_from_cursor",
+            "command": "select_uri_from_cursors",
         }, {
             "caption": "Open URIs in Browser from Cursors",
-            "command": "open_uri_in_browser_from_cursor",
+            "command": "open_uri_from_cursors",
         }]
     }]
 }, {

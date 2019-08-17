@@ -144,9 +144,9 @@ These commands are always available no matter what `show_open_button` is or how 
 
 | Command | Functionality |
 |---|---|
-| open_uri_in_browser_from_cursor | Open URIs in browser from cursors |
-| select_uri | Select URIs from view |
-| select_uri_from_cursor | Select URIs from cursors |
+| open_uri_from_cursors | Open URIs in browser from cursors |
+| select_uri_from_view | Select URIs from view |
+| select_uri_from_cursors | Select URIs from cursors |
 
 
 Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>

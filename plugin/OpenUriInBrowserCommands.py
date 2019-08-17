@@ -8,7 +8,7 @@ from .functions import (
 from .settings import get_setting
 
 
-class SelectUriCommand(sublime_plugin.TextCommand):
+class SelectUriFromViewCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit) -> None:
         sel = self.view.sel()
 
@@ -21,7 +21,7 @@ class SelectUriCommand(sublime_plugin.TextCommand):
             sel.add_all(uri_regions)
 
 
-class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
+class SelectUriFromCursorsCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit) -> None:
         sel = self.view.sel()
 
@@ -32,7 +32,7 @@ class SelectUriFromCursorCommand(sublime_plugin.TextCommand):
             sel.add_all(uri_regions)
 
 
-class OpenUriInBrowserFromCursorCommand(sublime_plugin.TextCommand):
+class OpenUriFromCursorsCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit, browser="") -> None:
         uris = map(
             lambda region: self.view.substr(region),

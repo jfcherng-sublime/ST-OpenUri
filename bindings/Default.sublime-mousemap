@@ -2,6 +2,6 @@
     "button": "button1",
     "count": 1,
     "modifiers": ["alt"],
-    "command": "open_uri_in_browser_from_cursor",
+    "command": "open_uri_from_cursors",
     "press_command": "drag_select",
 }]

@@ -1,5 +1,5 @@
 [{
     "keys": ["alt+o", "alt+i", "alt+b"],
-    "command": "open_uri_in_browser_from_cursor",
+    "command": "open_uri_from_cursors",
     // "args": {"browser": ""}, // if you want to force using a specific browser
 }]

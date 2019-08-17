@@ -22,6 +22,9 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
 
 ```javascript
 {
+    // How detailed log messages should be?
+    // Values can be "CRITICAL" (very few), "ERROR", "WARNING", "INFO", "DEBUG" (most tedious) or "NOTHING" (no log)
+    "log_level": "INFO",
     // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
     "browser": "",

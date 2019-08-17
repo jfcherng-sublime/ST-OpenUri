@@ -1,5 +1,6 @@
 from .plugin.functions import compile_uri_regex
 from .plugin.Globals import Globals
+from .plugin.log import apply_user_log_level, get_plugin_logger
 from .plugin.settings import get_image_info, get_package_name, get_settings_object
 
 # main plugin classes
@@ -9,6 +10,7 @@ from .plugin.OpenUriInBrowserCommands import *
 
 def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
+        apply_user_log_level(Globals.logger)
         Globals.uri_regex_obj = compile_uri_regex()
         init_images()
 
@@ -21,6 +23,7 @@ def plugin_loaded() -> None:
 
             Globals.images[img_name] = get_image_info(img_name)
 
+    Globals.logger = get_plugin_logger()
     get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
     plugin_settings_listener()
 

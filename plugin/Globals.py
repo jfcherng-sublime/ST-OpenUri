@@ -36,6 +36,7 @@ class Globals:
     </body>
     """
 
+    logger = None
     uri_regex_obj = None
 
     images = {

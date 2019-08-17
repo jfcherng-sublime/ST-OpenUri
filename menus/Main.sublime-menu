@@ -12,7 +12,7 @@
             "caption": "Select URIs from Cursors",
             "command": "select_uri_from_cursors",
         }, {
-            "caption": "Select URIs from View",
+            "caption": "Select URIs from the Current View",
             "command": "select_uri_from_view",
         }],
     }],

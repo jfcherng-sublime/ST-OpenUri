@@ -13,7 +13,7 @@ from .Globals import Globals
 from .settings import get_colored_image_base64, get_package_name, get_setting, get_timestamp
 
 PHANTOM_TEMPLATE = """
-    <body id="open-uri-box">
+    <body id="open-uri-phantom">
         <style>
             a {{
                 line-height: 0;
@@ -24,6 +24,19 @@ PHANTOM_TEMPLATE = """
             }}
         </style>
         <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+    </body>
+"""
+
+POPUP_TEMPLATE = """
+    <body id="open-uri-popup">
+        <style>
+            img {{
+                width: {w}{size_unit};
+                height: {h}{size_unit};
+            }}
+        </style>
+        <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+        <span>Open this URI</span>
     </body>
 """
 
@@ -40,12 +53,18 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._erase_uri_regions()
 
     def on_load_async(self) -> None:
+        if self._get_setting_show_open_button() != "always":
+            self._erase_phantom()
+
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
         self._detect_uris_globally()
 
     def on_activated_async(self) -> None:
+        if self._get_setting_show_open_button() != "always":
+            self._erase_phantom()
+
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
             return
 
@@ -78,12 +97,14 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
                 self.view, point, get_setting("uri_search_radius")
             )
 
-            self._update_phantom(uri_regions)
-
-            if get_setting("draw_uri_regions").get("enabled"):
-                self._draw_uri_regions(uri_regions)
-            else:
-                self._erase_uri_regions()
+            if hover_zone == sublime.HOVER_TEXT and uri_regions:
+                self.view.show_popup(
+                    self._generate_popup_html(uri_regions[0]),
+                    flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
+                    location=point,
+                    max_width=500,
+                    on_navigate=open_uri_from_browser,
+                )
 
     def _detect_uris_globally(self) -> None:
         view_update_uri_regions(self.view, Globals.uri_regex_obj)
@@ -104,6 +125,23 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             uri=self.view.substr(uri_region),
             mime=Globals.image_new_window["mime"],
             ratio_wh=Globals.image_new_window["ratio_wh"],
+            base64=get_colored_image_base64(
+                "new_window",
+                color_code_to_rgba(get_setting("image_new_window_color"), uri_region),
+            ),
+        )
+        # fmt: on
+
+    def _generate_popup_html(self, uri_region: sublime.Region) -> str:
+        base_size = 2.5
+
+        # fmt: off
+        return POPUP_TEMPLATE.format(
+            uri=self.view.substr(uri_region),
+            mime=Globals.image_new_window["mime"],
+            w=base_size * Globals.image_new_window["ratio_wh"],
+            h=base_size,
+            size_unit="em",
             base64=get_colored_image_base64(
                 "new_window",
                 color_code_to_rgba(get_setting("image_new_window_color"), uri_region),

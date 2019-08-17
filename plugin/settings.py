@@ -118,7 +118,7 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     if not rgba_code:
         return getattr(Globals, "image_" + img_name)["base64"]
 
-    cache_key = "{name}@{color}".format(name=img_name, color=rgba_code)
+    cache_key = "{name};{color}".format(name=img_name, color=rgba_code)
 
     if cache_key not in Globals.colored_image_base64:
         img_bytes = getattr(Globals, "image_" + img_name)["bytes"]

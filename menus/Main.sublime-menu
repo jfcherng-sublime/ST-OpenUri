@@ -3,16 +3,19 @@
     "children": [{
         "caption": "OpenUriInBrowser",
         "children": [{
-            "caption": "Select URIs from View",
-            "command": "select_uri_from_view",
+            "caption": "Open URIs from Cursors",
+            "command": "open_uri_from_cursors",
+        }, {
+            "caption": "Open URIs from the Current View",
+            "command": "open_uri_from_view",
         }, {
             "caption": "Select URIs from Cursors",
             "command": "select_uri_from_cursors",
         }, {
-            "caption": "Open URIs in Browser from Cursors",
-            "command": "open_uri_from_cursors",
-        }]
-    }]
+            "caption": "Select URIs from View",
+            "command": "select_uri_from_view",
+        }],
+    }],
 }, {
     "id": "preferences",
     "children": [{
@@ -44,7 +47,7 @@
                 },
             }, {
                 "caption": "-",
-            }]
-        }]
-    }]
+            }],
+        }],
+    }],
 }]

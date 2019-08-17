@@ -129,13 +129,12 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
 ### Key Binding
 
 - <kbd>Alt + o</kbd>, <kbd>Alt + i</kbd>, <kbd>Alt + b</kbd>:
-  Open URIs in browser from (multiple) cursors.
-  `o, i, b` is mnemonic for `Open, In, Browser`.
+  Open URIs from (multiple) cursors. `o, i, b` is mnemonic for `Open, In, Browser`.
 
 
 ### Mouse Binding
 
-- <kbd>Alt + Left Click</kbd>: Open the clicked URI in browser.
+- <kbd>Alt + Left Click</kbd>: Open the clicked URI.
 
 
 ## Commands
@@ -144,9 +143,10 @@ These commands are always available no matter what `show_open_button` is or how 
 
 | Command | Functionality |
 |---|---|
-| open_uri_from_cursors | Open URIs in browser from cursors |
-| select_uri_from_view | Select URIs from view |
+| open_uri_from_cursors | Open URIs from cursors |
+| open_uri_from_view | Open URIs from the current view |
 | select_uri_from_cursors | Select URIs from cursors |
+| select_uri_from_view | Select URIs from the current view |
 
 
 Supporters <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=ATXYY9Y78EQ3Y" target="_blank"><img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" /></a>

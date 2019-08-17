@@ -10,9 +10,16 @@ from .plugin.OpenUriInBrowserCommands import *
 def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
         Globals.uri_regex_obj = get_uri_regex_object()
-        Globals.image_phantom = get_image_info("phantom")
-        Globals.image_popup = get_image_info("popup")
-        Globals.colored_image_base64 = {}
+        init_images()
+
+    def init_images() -> None:
+        Globals.images["@cache"] = {}
+
+        for img_name in Globals.images.keys():
+            if img_name.startswith("@"):
+                continue
+
+            Globals.images[img_name] = get_image_info(img_name)
 
     get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
     plugin_settings_listener()

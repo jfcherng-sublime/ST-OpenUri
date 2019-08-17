@@ -10,31 +10,20 @@ class Globals(object):
 
     uri_regex_obj = None
 
-    # fmt: off
-    image_phantom = {
-        "base64": "",
-        "bytes": b"",
-        "ext": "",
-        "mime": "",
-        "path": "",
-        "ratio_wh": 0,
-        "size": (0, 0),  # w, h
-    }
-    # fmt: on
-
-    # fmt: off
-    image_popup = {
-        "base64": "",
-        "bytes": b"",
-        "ext": "",
-        "mime": "",
-        "path": "",
-        "ratio_wh": 0,
-        "size": (0, 0),  # w, h
-    }
-    # fmt: on
-
-    # cached base64 string for colored images
-    colored_image_base64 = {
-        # "{img_name}@{rgba_color_code}": base64 encoded image resource,
+    images = {
+        "@cache": {
+            # cached base64 string for colored images
+            # "{img_name}@{rgba_color_code}": base64 encoded image resource,
+        },
+        # image informations
+        # key/value structure is
+        #     - "base64": "",
+        #     - "bytes": b"",
+        #     - "ext": "",
+        #     - "mime": "",
+        #     - "path": "",
+        #     - "ratio_wh": 0,
+        #     - "size": (0, 0),
+        "phantom": {},
+        "popup": {},
     }

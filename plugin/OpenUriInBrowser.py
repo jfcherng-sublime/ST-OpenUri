@@ -124,28 +124,24 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._erase_uri_regions()
 
     def _generate_phantom_html(self, uri_region: sublime.Region) -> str:
-        # fmt: off
         return PHANTOM_TEMPLATE.format(
             uri=self.view.substr(uri_region),
-            mime=Globals.image_phantom["mime"],
-            ratio_wh=Globals.image_phantom["ratio_wh"],
+            mime=Globals.images["phantom"]["mime"],
+            ratio_wh=Globals.images["phantom"]["ratio_wh"],
             base64=get_colored_image_base64_by_region("phantom", uri_region),
         )
-        # fmt: on
 
     def _generate_popup_html(self, uri_region: sublime.Region) -> str:
         base_size = 2.5
 
-        # fmt: off
         return POPUP_TEMPLATE.format(
             uri=self.view.substr(uri_region),
-            mime=Globals.image_popup["mime"],
-            w=base_size * Globals.image_popup["ratio_wh"],
+            mime=Globals.images["popup"]["mime"],
+            w=base_size * Globals.images["popup"]["ratio_wh"],
             h=base_size,
             size_unit="em",
             base64=get_colored_image_base64_by_region("popup", uri_region),
         )
-        # fmt: on
 
     def _new_uri_phantom(self, uri_region: sublime.Region) -> sublime.Phantom:
         # Calculate the point to insert the phantom.

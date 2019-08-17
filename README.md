@@ -42,20 +42,24 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
     // you can make this value larger if you feel ST gets stucked while typing
     // or if you consider your machine is powerful, you can set it to a smaller value
     "on_modified_typing_period": 200,
-    // the image used for "open a new window" (only supports PNG format)
+    // images used in this plugin (only supports PNG format)
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
     // if you don't like them, you can even define your own image path.
-    "image_phantom": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
-    "image_popup": "Packages/${package_name}/images/FontAwesome/share-square.png",
-    // the color which used to color the whole image
+    "image_files": {
+        "phantom": "Packages/${package_name}/images/FontAwesome/external-link-square.png",
+        "popup": "Packages/${package_name}/images/FontAwesome/share-square.png",
+    },
+    // colors which used to color corresponding images
     // values can be
     //     - "" (empty string, use the original color of the image)
     //     - "@scope" (use the same color with the corresponding URI's, require ST >= 3170)
     //     - "@scope_inverted" (use the inverted color of the corresponding URI's, require ST >= 3170)
     //     - ST's scope (use the color of the scope, require ST >= 3170)
     //     - color code in the form of "#RGB", "#RRGGBB" or "#RRGGBBAA"
-    "image_phantom_color": "#fa8c00",
-    "image_popup_color": "#fa8c00",
+    "image_colors": {
+        "phantom": "#fa8c00",
+        "popup": "#fa8c00",
+    },
     // draw URI regions?
     "draw_uri_regions": {
         "enabled": false,

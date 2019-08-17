@@ -36,8 +36,9 @@ def get_image_path(img_name: str) -> str:
     @return The image resource path.
     """
 
-    img_path = get_setting("image_" + img_name)
+    img_path = get_setting("image_files")[img_name]
 
+    # assert for potential dev code typos
     assert isinstance(img_path, str)
 
     return sublime.expand_variables(
@@ -63,7 +64,12 @@ def get_image_color(img_name: str, region: sublime.Region) -> str:
 
     from .functions import color_code_to_rgba
 
-    return color_code_to_rgba(get_setting("image_" + img_name + "_color"), region)
+    img_color = get_setting("image_colors")[img_name]
+
+    # assert for potential dev code typos
+    assert isinstance(img_color, str)
+
+    return color_code_to_rgba(img_color, region)
 
 
 def get_image_info(img_name: str) -> dict:
@@ -116,18 +122,18 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     from .Globals import Globals
 
     if not rgba_code:
-        return getattr(Globals, "image_" + img_name)["base64"]
+        return Globals.images[img_name]["base64"]
 
     cache_key = "{name};{color}".format(name=img_name, color=rgba_code)
 
-    if cache_key not in Globals.colored_image_base64:
-        img_bytes = getattr(Globals, "image_" + img_name)["bytes"]
+    if cache_key not in Globals.images["@cache"]:
+        img_bytes = Globals.images[img_name]["bytes"]
         img_bytes = change_png_bytes_color(img_bytes, rgba_code)
         img_base64 = base64.b64encode(img_bytes).decode()
 
-        Globals.colored_image_base64[cache_key] = img_base64
+        Globals.images["@cache"][cache_key] = img_base64
 
-    return Globals.colored_image_base64[cache_key]
+    return Globals.images["@cache"][cache_key]
 
 
 def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) -> str:

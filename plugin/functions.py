@@ -5,7 +5,6 @@ import webbrowser
 from collections.abc import Iterable
 from .Globals import Globals
 from .libs import png, triegex
-from .log import msg
 from .settings import get_setting
 from .utils import (
     is_regions_intersected,
@@ -37,10 +36,9 @@ def open_uri_from_browser(uri: str, browser=...) -> None:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
         webbrowser.get(browser).open(uri, autoraise=True)
     except Exception as e:
-        sublime.error_message(
-            'Failed to open browser "{browser}" to "{uri}" because {reason}'.format(
-                browser=browser, uri=uri, reason=e
-            )
+        Globals.logger.critical(
+            'Failed to open browser "{browser}" to "{uri}" '
+            "because {reason}".format(browser=browser, uri=uri, reason=e)
         )
 
 
@@ -68,18 +66,20 @@ def compile_uri_regex():
 
     path_matcher = get_setting("uri_path_regex").lstrip("^").rstrip("$")
 
-    # our goal is to find URIs ASAP rather than validate them
     regex = r"\b{scheme}\b{path}".format(scheme=scheme_matcher, path=path_matcher)
 
     try:
-        return re.compile(regex, re.IGNORECASE)
-    except Exception as e:
-        sublime.error_message(
-            msg(
-                "Cannot compile regex `{regex}` because `{reason}`. "
-                'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
-            )
+        regex_obj = re.compile(regex, re.IGNORECASE)
+        Globals.logger.debug(
+            "Optimized URI matching regex: {regex}".format(regex=regex_obj.pattern)
         )
+    except Exception as e:
+        Globals.logger.critical(
+            "Cannot compile regex `{regex}` because `{reason}`. "
+            'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
+        )
+
+    return regex_obj
 
 
 def find_uri_regions_by_region(view: sublime.View, region, search_radius: int = 200) -> list:

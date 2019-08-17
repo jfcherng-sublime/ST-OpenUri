@@ -8,6 +8,34 @@ class Globals(object):
 
     HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
 
+    PHANTOM_TEMPLATE = """
+    <body id="open-uri-phantom">
+        <style>
+            a {{
+                line-height: 0;
+            }}
+            img {{
+                width: {ratio_wh}em;
+                height: 1em;
+            }}
+        </style>
+        <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+    </body>
+    """
+
+    POPUP_TEMPLATE = """
+    <body id="open-uri-popup">
+        <style>
+            img {{
+                width: {w}{size_unit};
+                height: {h}{size_unit};
+            }}
+        </style>
+        <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+        <span>Open this URI</span>
+    </body>
+    """
+
     uri_regex_obj = None
 
     images = {

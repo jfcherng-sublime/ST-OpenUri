@@ -16,34 +16,6 @@ from .settings import (
     get_timestamp,
 )
 
-PHANTOM_TEMPLATE = """
-    <body id="open-uri-phantom">
-        <style>
-            a {{
-                line-height: 0;
-            }}
-            img {{
-                width: {ratio_wh}em;
-                height: 1em;
-            }}
-        </style>
-        <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
-    </body>
-"""
-
-POPUP_TEMPLATE = """
-    <body id="open-uri-popup">
-        <style>
-            img {{
-                width: {w}{size_unit};
-                height: {h}{size_unit};
-            }}
-        </style>
-        <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
-        <span>Open this URI</span>
-    </body>
-"""
-
 
 class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
@@ -124,7 +96,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._erase_uri_regions()
 
     def _generate_phantom_html(self, uri_region: sublime.Region) -> str:
-        return PHANTOM_TEMPLATE.format(
+        return Globals.PHANTOM_TEMPLATE.format(
             uri=self.view.substr(uri_region),
             mime=Globals.images["phantom"]["mime"],
             ratio_wh=Globals.images["phantom"]["ratio_wh"],
@@ -134,7 +106,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
     def _generate_popup_html(self, uri_region: sublime.Region) -> str:
         base_size = 2.5
 
-        return POPUP_TEMPLATE.format(
+        return Globals.POPUP_TEMPLATE.format(
             uri=self.view.substr(uri_region),
             mime=Globals.images["popup"]["mime"],
             w=base_size * Globals.images["popup"]["ratio_wh"],

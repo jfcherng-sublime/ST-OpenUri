@@ -97,13 +97,6 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
         "sftp://": false,
         "ssh://": false,
         "telnet://": false,
-        "telnets://": false,
-        "ws://": false,
-        "wss://": false,
-        // VCS
-        "git://": false,
-        "hg://": false,
-        "svn://": false,
         // P2P
         "ed2k://": false,
         "freenet://": false,
@@ -114,10 +107,6 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
         "skype:": false,
         "tencent://": false,
         "tg://": false,
-        // streaming
-        "mms://": false,
-        "rtmp://": false,
-        "rtmps://": false,
     },
     // the regex (case-insensitive) used to match a URI's path part
     "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:;.,!?¡¿，。！？])",

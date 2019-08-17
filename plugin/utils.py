@@ -8,6 +8,7 @@ def simple_decorator(decorator):
     @brief A decorator that turns a function into a decorator.
     """
 
+    @functools.wraps(decorator)
     def outer_wrapper(decoratee):
         @functools.wraps(decoratee)
         def wrapper(*args, **kwargs):

@@ -1,1 +1,8 @@
-*.pyc
+# OS
+.DS_Store
+Desktop.ini
+Thumbs.db
+
+# Python
+__pycache__/
+*.py[cod]

@@ -121,7 +121,7 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
 </details>
 
 
-## Bindings
+## Default Bindings
 
 
 ### Key Binding

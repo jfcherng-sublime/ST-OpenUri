@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [5.6.0] - 2019-08-19
+
+### Added
+- Better logging messages with `log_level`.
+- Better fitting for light/dark images via inverting gray scale.
+
+### Changed
+- Auto refresh after saving the settings file to reflect changes.
+
+### Fixed
+- Fix URL matching regex keeps getting compiled in `find_uri_regions_by_regions()`.
+
+
 ## [5.5.0] - 2019-08-17
 
 ### Added

@@ -3,7 +3,7 @@ import re
 import sublime
 import webbrowser
 from collections.abc import Iterable
-from .Globals import Globals
+from .Globals import global_get
 from .libs import png, triegex
 from .settings import get_setting
 from .utils import (
@@ -36,7 +36,7 @@ def open_uri_from_browser(uri: str, browser=...) -> None:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
         webbrowser.get(browser).open(uri, autoraise=True)
     except Exception as e:
-        Globals.logger.critical(
+        global_get("logger").critical(
             'Failed to open browser "{browser}" to "{uri}" '
             "because {reason}".format(browser=browser, uri=uri, reason=e)
         )
@@ -70,11 +70,11 @@ def compile_uri_regex():
 
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
-        Globals.logger.debug(
+        global_get("logger").debug(
             "Optimized URI matching regex: {regex}".format(regex=regex_obj.pattern)
         )
     except Exception as e:
-        Globals.logger.critical(
+        global_get("logger").critical(
             "Cannot compile regex `{regex}` because `{reason}`. "
             'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
         )
@@ -119,7 +119,7 @@ def find_uri_regions_by_regions(
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
             sublime.Region(*region_shift(m.span(), coordinate_bias))
-            for m in Globals.uri_regex_obj.finditer(view.substr(region))
+            for m in global_get("uri_regex_obj").finditer(view.substr(region))
         )
 
     # only pick up "uri_region"s that are intersected with "regions"
@@ -261,7 +261,7 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
 
     # "color_code" is a scope?
     if not color_code.startswith("#"):
-        if Globals.HAS_API_VIEW_STYLE_FOR_SCOPE:
+        if global_get('HAS_API_VIEW_STYLE_FOR_SCOPE'):
             # "color" is guaranteed to be #RRGGBB or #RRGGBBAA
             color = view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
 

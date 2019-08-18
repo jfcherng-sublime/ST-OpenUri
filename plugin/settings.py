@@ -2,7 +2,7 @@ import base64
 import os
 import sublime
 import time
-from .Globals import Globals
+from .Globals import global_get, global_set
 
 
 def get_package_name() -> str:
@@ -92,7 +92,7 @@ def get_image_info(img_name: str) -> dict:
     try:
         img_bytes = sublime.load_binary_resource(img_path)
     except IOError:
-        Globals.logger.error("Resource not found: " + img_path)
+        global_get("logger").error("Resource not found: " + img_path)
 
     img_base64 = base64.b64encode(img_bytes).decode()
     img_w, img_h = imagesize.get_from_bytes(img_bytes)
@@ -119,21 +119,22 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     """
 
     from .functions import change_png_bytes_color
-    from .Globals import Globals
-
-    if not rgba_code:
-        return Globals.images[img_name]["base64"]
 
     cache_key = "{name};{color}".format(name=img_name, color=rgba_code)
 
-    if cache_key not in Globals.images["@cache"]:
-        img_bytes = Globals.images[img_name]["bytes"]
+    if not rgba_code:
+        return global_get("images.%s.base64" % img_name)
+
+    cached = "images.@cache.%s" % cache_key
+
+    if global_get(cached, None) is None:
+        img_bytes = global_get("images.%s.bytes" % img_name)
         img_bytes = change_png_bytes_color(img_bytes, rgba_code)
         img_base64 = base64.b64encode(img_bytes).decode()
 
-        Globals.images["@cache"][cache_key] = img_base64
+        global_set(cached, img_base64)
 
-    return Globals.images["@cache"][cache_key]
+    return global_get(cached)
 
 
 def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) -> str:

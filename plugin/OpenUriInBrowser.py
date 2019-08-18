@@ -1,6 +1,7 @@
 import sublime
 import sublime_plugin
 from collections.abc import Iterable
+from .Globals import global_get
 from .functions import (
     find_uri_regions_by_region,
     open_uri_from_browser,
@@ -8,7 +9,6 @@ from .functions import (
     view_update_uri_regions,
     view_uri_regions_val,
 )
-from .Globals import Globals
 from .settings import (
     get_colored_image_base64_by_region,
     get_package_name,
@@ -83,7 +83,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
                 )
 
     def _detect_uris_globally(self) -> None:
-        view_update_uri_regions(self.view, Globals.uri_regex_obj)
+        view_update_uri_regions(self.view, global_get("uri_regex_obj"))
 
         uri_regions = [sublime.Region(*r) for r in view_uri_regions_val(self.view)]
 
@@ -96,20 +96,23 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._erase_uri_regions()
 
     def _generate_phantom_html(self, uri_region: sublime.Region) -> str:
-        return Globals.PHANTOM_TEMPLATE.format(
+        img = global_get("images.phantom")
+
+        return global_get("PHANTOM_TEMPLATE").format(
             uri=self.view.substr(uri_region),
-            mime=Globals.images["phantom"]["mime"],
-            ratio_wh=Globals.images["phantom"]["ratio_wh"],
+            mime=img["mime"],
+            ratio_wh=img["ratio_wh"],
             base64=get_colored_image_base64_by_region("phantom", uri_region),
         )
 
     def _generate_popup_html(self, uri_region: sublime.Region) -> str:
+        img = global_get("images.popup")
         base_size = 2.5
 
-        return Globals.POPUP_TEMPLATE.format(
+        return global_get("POPUP_TEMPLATE").format(
             uri=self.view.substr(uri_region),
-            mime=Globals.images["popup"]["mime"],
-            w=base_size * Globals.images["popup"]["ratio_wh"],
+            mime=img["mime"],
+            w=base_size * img["ratio_wh"],
             h=base_size,
             size_unit="em",
             base64=get_colored_image_base64_by_region("popup", uri_region),

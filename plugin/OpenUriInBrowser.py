@@ -29,22 +29,10 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         self._erase_uri_regions()
 
     def on_load_async(self) -> None:
-        if self._get_setting_show_open_button() != "always":
-            self._erase_phantom()
-
-        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
-            return
-
-        self._detect_uris_globally()
+        self._refresh()
 
     def on_activated_async(self) -> None:
-        if self._get_setting_show_open_button() != "always":
-            self._erase_phantom()
-
-        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
-            return
-
-        self._detect_uris_globally()
+        self._refresh()
 
     def on_modified_async(self) -> None:
         if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
@@ -68,19 +56,28 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             self._detect_uris_globally()
 
     def on_hover(self, point: int, hover_zone: int) -> None:
-        if self._get_setting_show_open_button() == "hover":
-            uri_regions = find_uri_regions_by_region(
-                self.view, point, get_setting("uri_search_radius")
+        if self._get_setting_show_open_button() != "hover" or hover_zone != sublime.HOVER_TEXT:
+            return
+
+        uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
+
+        if uri_regions:
+            self.view.show_popup(
+                self._generate_popup_html(uri_regions[0]),
+                flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
+                location=point,
+                max_width=500,
+                on_navigate=open_uri_from_browser,
             )
 
-            if hover_zone == sublime.HOVER_TEXT and uri_regions:
-                self.view.show_popup(
-                    self._generate_popup_html(uri_regions[0]),
-                    flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
-                    location=point,
-                    max_width=500,
-                    on_navigate=open_uri_from_browser,
-                )
+    def _refresh(self):
+        if self._get_setting_show_open_button() != "always":
+            self._erase_phantom()
+
+        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
+            return
+
+        self._detect_uris_globally()
 
     def _detect_uris_globally(self) -> None:
         view_update_uri_regions(self.view, global_get("uri_regex_obj"))
@@ -131,7 +128,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
         return sublime.Phantom(
             sublime.Region(phantom_point),
             self._generate_phantom_html(uri_region),
-            sublime.LAYOUT_INLINE,
+            layout=sublime.LAYOUT_INLINE,
             on_navigate=open_uri_from_browser,
         )
 

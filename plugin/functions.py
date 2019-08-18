@@ -261,7 +261,7 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
 
     # "color_code" is a scope?
     if not color_code.startswith("#"):
-        if global_get('HAS_API_VIEW_STYLE_FOR_SCOPE'):
+        if global_get("HAS_API_VIEW_STYLE_FOR_SCOPE"):
             # "color" is guaranteed to be #RRGGBB or #RRGGBBAA
             color = view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
 

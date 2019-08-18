@@ -196,30 +196,70 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     @return Color-changed PNG image bytes.
     """
 
-    IMG_RGBA_CHANNELS = 4
-
     if not rgba_code:
         return img_bytes
 
     if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    rgba = rgba_code.lstrip("#")
+    def render_pixel(rgba_src: list, rgba_dst: list, invert_gray: bool = False) -> list:
+        gray_ratio = calculate_gray(rgba_src) / 0xFF
+        if invert_gray:
+            gray_ratio = 1 - gray_ratio
 
-    r, g, b, a = [int(rgba[i : i + 2], 16) for i in range(0, 8, 2)]
+        return [
+            int(rgba_dst[0] * gray_ratio),
+            int(rgba_dst[1] * gray_ratio),
+            int(rgba_dst[2] * gray_ratio),
+            int(rgba_dst[3] * rgba_src[3] / 0xFF),
+        ]
+
+    invert_gray = not is_img_light(img_bytes)  # invert for dark image to get a solid looking
+    rgba_dst = [int(rgba_code[i : i + 2], 16) for i in range(1, 9, 2)]
     w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
     rows_dst = []
     for row_src in rows_src:
         row_dst = []
-        for i in range(0, len(row_src), IMG_RGBA_CHANNELS):
-            row_dst.extend([r, g, b, int(row_src[i + 3] * a / 0xFF)])
+        for i in range(0, len(row_src), 4):
+            row_dst.extend(render_pixel(row_src[i : i + 4], rgba_dst, invert_gray))
         rows_dst.append(row_dst)
 
     buf = io.BytesIO()
     png.from_array(rows_dst, "RGBA").write(buf)
 
     return buf.getvalue()
+
+
+def calculate_gray(rgb: list) -> list:
+    """
+    @brief Calculate the gray scale of a color.
+
+    @param rgb The rgb color in list form
+
+    @return The gray scale.
+    """
+
+    return (rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
+
+
+def is_img_light(img_bytes: bytes) -> bool:
+    """
+    @brief Determine if image is light colored.
+
+    @param img_bytes The image bytes
+
+    @return True if image is light, False otherwise.
+    """
+
+    w, h, rows, img_info = png.Reader(bytes=img_bytes).asRGBA()
+
+    gray_sum = 0
+    for row in rows:
+        for i in range(0, len(row), 4):
+            gray_sum += calculate_gray(row[i : i + 4])
+
+    return gray_sum * 2 > 0xFF * w * h
 
 
 def add_alpha_to_rgb(color_code: str) -> str:

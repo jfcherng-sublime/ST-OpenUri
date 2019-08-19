@@ -6,7 +6,7 @@
 <a href="https://github.com/jfcherng/Sublime-OpenUriInBrowser/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUriInBrowser?logo=github"></a>
 <a href="https://www.paypal.me/jfcherng/5usd" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?logo=paypal" /></a>
 
-![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/docs/screenshot.png)
 
 `OpenUriInBrowser` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
 

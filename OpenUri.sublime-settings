@@ -16,7 +16,7 @@
     "show_open_button_fallback": "hover",
     // if the file size is larger than the given one and "show_open_button" is "always"
     // use "show_open_button_fallback" as the fallback
-    "use_show_open_button_fallback_if_file_larger_than": 800000, // 800K
+    "use_show_open_button_fallback_if_file_larger_than": 1000000, // 1MB
     // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     // you can make this value larger if you feel ST gets stucked while typing
@@ -40,7 +40,7 @@
         "phantom": "#fa8c00",
         "popup": "#fa8c00",
     },
-    // draw URI regions?
+    // draw URI regions such as adding a underline?
     "draw_uri_regions": {
         "enabled": false,
         // the scope used to highlight URI regions (you may customize it with your theme)

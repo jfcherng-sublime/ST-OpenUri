@@ -14,7 +14,7 @@ def get_package_name() -> str:
 
     # __package__ will be "XXX.plugin" under this folder structure
     # so I just have it hard-coded, sadly :/
-    return "OpenUriInBrowser"
+    return "OpenUri"
 
 
 def get_package_path() -> str:

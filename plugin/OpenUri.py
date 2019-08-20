@@ -4,7 +4,7 @@ from collections.abc import Iterable
 from .Globals import global_get
 from .functions import (
     find_uri_regions_by_region,
-    open_uri_from_browser,
+    open_uri_with_browser,
     view_last_update_timestamp_val,
     view_update_uri_regions,
     view_uri_regions_val,
@@ -17,7 +17,7 @@ from .settings import (
 )
 
 
-class OpenUriInBrowser(sublime_plugin.ViewEventListener):
+class OpenUri(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         self.view = view
         self.phantom_set = sublime.PhantomSet(self.view, get_package_name())
@@ -67,7 +67,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
                 flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
                 location=point,
                 max_width=500,
-                on_navigate=open_uri_from_browser,
+                on_navigate=open_uri_with_browser,
             )
 
     def _refresh(self):
@@ -129,7 +129,7 @@ class OpenUriInBrowser(sublime_plugin.ViewEventListener):
             sublime.Region(phantom_point),
             self._generate_phantom_html(uri_region),
             layout=sublime.LAYOUT_INLINE,
-            on_navigate=open_uri_from_browser,
+            on_navigate=open_uri_with_browser,
         )
 
     def _new_uri_phantoms(self, uri_regions: Iterable) -> list:

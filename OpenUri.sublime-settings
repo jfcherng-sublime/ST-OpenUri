@@ -23,7 +23,7 @@
     // or if you consider your machine is powerful, you can set it to a smaller value
     "on_modified_typing_period": 200,
     // images used in this plugin (only supports PNG format)
-    // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
+    // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUri/tree/master/images
     // if you don't like them, you can even define your own image path.
     "image_files": {
         "phantom": "Packages/${package_name}/images/FontAwesome/external-link-square.png",

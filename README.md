@@ -1,19 +1,19 @@
-# Sublime-OpenUriInBrowser
+# Sublime-OpenUri
 
-<a href="https://packagecontrol.io/packages/Open%20URI%20in%20Browser"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/Open%20URI%20in%20Browser"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUriInBrowser/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/jfcherng/Sublime-OpenUriInBrowser?logo=github"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUriInBrowser/blob/master/LICENSE"><img alt="Project license" src="https://img.shields.io/github/license/jfcherng/Sublime-OpenUriInBrowser?logo=github"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUriInBrowser/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUriInBrowser?logo=github"></a>
+<a href="https://packagecontrol.io/packages/Open%20URI"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/Open%20URI"></a>
+<a href="https://github.com/jfcherng/Sublime-OpenUri/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/jfcherng/Sublime-OpenUri?logo=github"></a>
+<a href="https://github.com/jfcherng/Sublime-OpenUri/blob/master/LICENSE"><img alt="Project license" src="https://img.shields.io/github/license/jfcherng/Sublime-OpenUri?logo=github"></a>
+<a href="https://github.com/jfcherng/Sublime-OpenUri/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUri?logo=github"></a>
 <a href="https://www.paypal.me/jfcherng/5usd" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?logo=paypal" /></a>
 
-![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUriInBrowser/master/docs/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUri/master/docs/screenshot.png)
 
-`OpenUriInBrowser` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
+`OpenUri` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
 
 
 ## Installation
 
-This plugin is available on Package Control by the name of [Open URI in Browser](https://packagecontrol.io/packages/Open%20URI%20in%20Browser).
+This plugin is available on Package Control by the name of [Open URI](https://packagecontrol.io/packages/Open%20URI).
 
 Note that this plugin only supports ST >= 3118 because of Phantom API.
 
@@ -22,7 +22,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 
 ## Settings
 
-To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` » `Settings`.
+To edit settings, go `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
 
 <details><summary>Click to Show Full Settings</summary>
 
@@ -52,7 +52,7 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
     // or if you consider your machine is powerful, you can set it to a smaller value
     "on_modified_typing_period": 200,
     // images used in this plugin (only supports PNG format)
-    // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUriInBrowser/tree/master/images
+    // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUri/tree/master/images
     // if you don't like them, you can even define your own image path.
     "image_files": {
         "phantom": "Packages/${package_name}/images/FontAwesome/external-link-square.png",

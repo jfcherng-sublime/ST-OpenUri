@@ -18,7 +18,7 @@ from .utils import (
 )
 
 
-def open_uri_from_browser(uri: str, browser=...) -> None:
+def open_uri_with_browser(uri: str, browser=...) -> None:
     """
     @brief Open the URI with the browser.
 

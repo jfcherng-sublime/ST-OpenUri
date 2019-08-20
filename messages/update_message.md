@@ -1,5 +1,5 @@
-OpenUrlInBrowser has been updated. To see the changelog, visit
-Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
+OpenUri has been updated. To see the changelog, visit
+Preferences » Package Settings » OpenUri » CHANGELOG
 
 
 ## [5.7.0] - 2019-08-20

@@ -1,7 +1,7 @@
 [{
     "id": "selection",
     "children": [{
-        "caption": "OpenUriInBrowser",
+        "caption": "OpenUri",
         "children": [{
             "caption": "Open URIs from Cursors",
             "command": "open_uri_from_cursors",
@@ -21,14 +21,14 @@
     "children": [{
         "id": "package-settings",
         "children": [{
-            "caption": "OpenUriInBrowser",
+            "caption": "OpenUri",
             "children": [{
                 "caption": "-",
             }, {
                 "caption": "Settings",
                 "command": "edit_settings",
                 "args": {
-                    "base_file": "${packages}/OpenUriInBrowser/OpenUriInBrowser.sublime-settings",
+                    "base_file": "${packages}/OpenUri/OpenUri.sublime-settings",
                     "default": "{\n\t$0\n}\n",
                 },
             }, {
@@ -37,13 +37,13 @@
                 "caption": "README",
                 "command": "open_file",
                 "args": {
-                    "file": "${packages}/OpenUriInBrowser/README.md",
+                    "file": "${packages}/OpenUri/README.md",
                 },
             }, {
                 "caption": "CHANGELOG",
                 "command": "open_file",
                 "args": {
-                    "file": "${packages}/OpenUriInBrowser/CHANGELOG.md",
+                    "file": "${packages}/OpenUri/CHANGELOG.md",
                 },
             }, {
                 "caption": "-",

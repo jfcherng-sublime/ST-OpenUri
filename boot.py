@@ -11,8 +11,8 @@ from .plugin.settings import (
 )
 
 # main plugin classes
-from .plugin.OpenUriInBrowser import *
-from .plugin.OpenUriInBrowserCommands import *
+from .plugin.OpenUri import *
+from .plugin.OpenUriCommands import *
 
 
 def plugin_loaded() -> None:

@@ -6,9 +6,11 @@
 <a href="https://github.com/jfcherng/Sublime-OpenUri/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUri?logo=github"></a>
 <a href="https://www.paypal.me/jfcherng/5usd" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?logo=paypal" /></a>
 
+Finally! A performant and highly customizable URI-opening plugin comes.
+
 ![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUri/master/docs/screenshot.png)
 
-`OpenUri` is a Sublime Text 3 plugin that adds a clickable button beside a URI for opening it.
+`OpenUri` is a Sublime Text 3 plugin which provides easy access to URIs in the file.
 
 
 ## Installation
@@ -23,6 +25,9 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 ## Settings
 
 To edit settings, go `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
+
+I believe the settings file is well self-explaining.
+But if you still have questions, feel free to open an issue.
 
 <details><summary>Click to Show Full Settings</summary>
 

@@ -72,7 +72,7 @@
         "ftps://": true,
         "http://": true,
         "https://": true,
-        "mailto://": true,
+        "mailto:": true,
         // server
         "sftp://": false,
         "ssh://": false,

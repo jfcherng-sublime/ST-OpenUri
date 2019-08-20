@@ -49,30 +49,54 @@ def compile_uri_regex():
     @return The compiled regex object
     """
 
-    # fmt: off
-    schemes = {
-        scheme
-        for scheme, enabled in get_setting("detect_schemes").items()
-        if enabled
-    }
-    # fmt: on
+    detect_schemes = get_setting("detect_schemes")
+    uri_path_regexes = get_setting("uri_path_regexes")
 
-    scheme_matcher = (
-        triegex.Triegex(*map(re.escape, schemes))
-        .to_regex()
-        .replace(r"\b", "")
-        .replace(r"|~^(?#match nothing)", "")
+    schemes_enabled = {
+        scheme
+        for scheme, scheme_settings in detect_schemes.items()
+        if scheme_settings.get("enabled", False)
+    }
+
+    path_regex_name_to_schemes = {}
+    for scheme in schemes_enabled:
+        path_regex_name = detect_schemes[scheme].get("path_regex", "@default")
+
+        if path_regex_name not in path_regex_name_to_schemes:
+            path_regex_name_to_schemes[path_regex_name] = []
+
+        path_regex_name_to_schemes[path_regex_name].append(scheme)
+
+    global_get("logger").debug(
+        "Collected `path_regex_name_to_schemes`: {}".format(path_regex_name_to_schemes)
     )
 
-    path_matcher = get_setting("uri_path_regex").lstrip("^").rstrip("$")
+    uri_regexes = []
+    for path_regex_name, schemes in path_regex_name_to_schemes.items():
+        path_regex = uri_path_regexes.get(path_regex_name)
+        if path_regex is None:
+            global_get("logger").critical(
+                "Schemes ({schemes}) use unknown `path_regex`: {regex_name}".format(
+                    schemes=", ".join(schemes), regex_name=path_regex_name
+                )
+            )
+            continue
 
-    regex = r"\b{scheme}\b{path}".format(scheme=scheme_matcher, path=path_matcher)
+        scheme_regex = (
+            triegex.Triegex(*map(re.escape, schemes))
+            .to_regex()
+            .replace(r"\b", "")
+            .replace(r"|~^(?#match nothing)", "")
+        )
+
+        uri_regexes.append(scheme_regex + path_regex)
+
+    regex = r"\b(?:" + ")|(?:".join(uri_regexes) + ")"
+
+    global_get("logger").debug("Optimized URI matching regex: {}".format(regex))
 
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
-        global_get("logger").debug(
-            "Optimized URI matching regex: {regex}".format(regex=regex_obj.pattern)
-        )
     except Exception as e:
         global_get("logger").critical(
             "Cannot compile regex `{regex}` because `{reason}`. "

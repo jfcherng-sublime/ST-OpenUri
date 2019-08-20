@@ -96,29 +96,36 @@ To edit settings, go `Preferences` » `Package Settings` » `OpenUrlInBrowser` �
     // key / value = scheme / enabled
     "detect_schemes": {
         // basic
-        "file://": false,
-        "ftp://": true,
-        "ftps://": true,
-        "http://": true,
-        "https://": true,
-        "mailto://": true,
+        "file://": {"enabled": false, "path_regex": "@default"},
+        "ftp://": {"enabled": true, "path_regex": "@default"},
+        "ftps://": {"enabled": true, "path_regex": "@default"},
+        "http://": {"enabled": true, "path_regex": "@default"},
+        "https://": {"enabled": true, "path_regex": "@default"},
+        "mailto:": {"enabled": true, "path_regex": "@default"},
         // server
-        "sftp://": false,
-        "ssh://": false,
-        "telnet://": false,
+        "sftp://": {"enabled": false, "path_regex": "@default"},
+        "ssh://": {"enabled": false, "path_regex": "@default"},
+        "telnet://": {"enabled": false, "path_regex": "@default"},
         // P2P
-        "ed2k://": false,
-        "freenet://": false,
-        "magnet:?": false,
+        "ed2k://": {"enabled": false, "path_regex": "@default"},
+        "freenet://": {"enabled": false, "path_regex": "@default"},
+        "magnet:?": {"enabled": false, "path_regex": "@default"},
         // messenger
-        "irc://": false,
-        "line://": false,
-        "skype:": false,
-        "tencent://": false,
-        "tg://": false,
+        "irc://": {"enabled": false, "path_regex": "@default"},
+        "line://": {"enabled": false, "path_regex": "@default"},
+        "skype:": {"enabled": false, "path_regex": "@default"},
+        "tencent://": {"enabled": false, "path_regex": "@default"},
+        "tg://": {"enabled": false, "path_regex": "@default"},
     },
-    // the regex (case-insensitive) used to match a URI's path part
-    "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:;.,!?¡¿，。！？])",
+    // regexes (case-insensitive) used to match the URI's path part
+    // using moret than one regex can hinder the final regex from being optimized
+    // so if not necessary, use only "@default" or as less amount of different regexes as possible
+    "uri_path_regexes": {
+        // this is the default path regex for all schemes
+        "@default": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\})+(?<![:.,!?¡¿，。！？])",
+        // an example which can be used to match ASCII-only URIs
+        "ascii_only": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
+    },
     // how many neighbor chars from a cursor will be used to find a URI
     "uri_search_radius": 200,
 }

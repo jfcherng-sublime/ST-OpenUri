@@ -2,14 +2,15 @@ OpenUrlInBrowser has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUrlInBrowser » CHANGELOG
 
 
-## [5.6.0] - 2019-08-19
+## [5.7.0] - 2019-08-20
 
 ### Added
-- Better logging messages with `log_level`.
-- Better fitting for light/dark images via inverting gray scale.
+Allow using different path regexes for different schemes.
 
 ### Changed
-- Auto refresh after saving the settings file to reflect changes.
+- Change `uri_path_regex` to prevent from some HTML problem.
+  Escaped HTML entity may be trailing in a URL.
+  Disallow `<...>` in URI because it's ambiguous with HTML tags.
 
 ### Fixed
-- Fix URL matching regex keeps getting compiled in `find_uri_regions_by_regions()`.
+- Fix scheme for `mailto:`.

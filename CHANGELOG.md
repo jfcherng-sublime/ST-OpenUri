@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [5.7.0] - 2019-08-20
+
+### Added
+Allow using different path regexes for different schemes.
+
+### Changed
+- Change `uri_path_regex` to prevent from some HTML problem.
+  Escaped HTML entity may be trailing in a URL.
+  Disallow `<...>` in URI because it's ambiguous with HTML tags.
+
+### Fixed
+- Fix scheme for `mailto:`.
+
+
 ## [5.6.0] - 2019-08-19
 
 ### Added

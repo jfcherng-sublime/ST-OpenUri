@@ -2,15 +2,8 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [5.7.0] - 2019-08-20
-
-### Added
-Allow using different path regexes for different schemes.
+## [6.0.0] - 2019-08-21
 
 ### Changed
-- Change `uri_path_regex` to prevent from some HTML problem.
-  Escaped HTML entity may be trailing in a URL.
-  Disallow `<...>` in URI because it's ambiguous with HTML tags.
-
-### Fixed
-- Fix scheme for `mailto:`.
+- Plugin has been renamed from `OpenUriInBrowser` to `OpenUri`.
+- `use_show_open_button_fallback_if_file_larger_than` defaults to `1MB`.

@@ -89,7 +89,7 @@
         "tg://": false,
     },
     // the regex (case-insensitive) used to match a URI's path part
-    "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\}|<[^\\s>]*>)+(?<![:.,!?¡¿，。！？])",
+    "uri_path_regex": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\})+(?<![:.,!?¡¿，。！？])",
     // how many neighbor chars from a cursor will be used to find a URI
     "uri_search_radius": 200,
 }

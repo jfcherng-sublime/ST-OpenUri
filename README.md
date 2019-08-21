@@ -1,6 +1,6 @@
 # Sublime-OpenUri
 
-<a href="https://packagecontrol.io/packages/Open%20URI"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/Open%20URI?style=flat-square"></a>
+<a href="https://packagecontrol.io/packages/OpenUri"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square"></a>
 <a href="https://github.com/jfcherng/Sublime-OpenUri/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
 <a href="https://github.com/jfcherng/Sublime-OpenUri/blob/master/LICENSE"><img alt="Project license" src="https://img.shields.io/github/license/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
 <a href="https://github.com/jfcherng/Sublime-OpenUri/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
@@ -15,7 +15,7 @@ Finally! A performant and highly customizable URI-opening plugin comes.
 
 ## Installation
 
-This plugin is available on Package Control by the name of [Open URI](https://packagecontrol.io/packages/Open%20URI).
+This plugin is available on Package Control by the name of [OpenUri](https://packagecontrol.io/packages/OpenUri).
 
 Note that this plugin only supports ST >= 3118 because of Phantom API.
 

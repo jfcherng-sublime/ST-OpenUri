@@ -56,12 +56,12 @@ class OpenUri(sublime_plugin.ViewEventListener):
             self._detect_uris_globally()
 
     def on_hover(self, point: int, hover_zone: int) -> None:
-        if self._get_setting_show_open_button() != "hover" or hover_zone != sublime.HOVER_TEXT:
-            return
+        if hover_zone != sublime.HOVER_TEXT:
+            uri_regions = []
+        else:
+            uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
 
-        uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
-
-        if uri_regions:
+        if uri_regions and self._get_setting_show_open_button() == "hover":
             self.view.show_popup(
                 self._generate_popup_html(uri_regions[0]),
                 flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
@@ -70,9 +70,18 @@ class OpenUri(sublime_plugin.ViewEventListener):
                 on_navigate=open_uri_with_browser,
             )
 
+        if get_setting("draw_uri_regions")["enabled"] == "hover":
+            if uri_regions:
+                self._draw_uri_regions(uri_regions)
+            else:
+                self._erase_uri_regions()
+
     def _refresh(self):
         if self._get_setting_show_open_button() != "always":
             self._erase_phantom()
+
+        if get_setting("draw_uri_regions")["enabled"] != "always":
+            self._erase_uri_regions()
 
         if not self._need_detect_uris_globally():
             return
@@ -82,7 +91,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
     def _need_detect_uris_globally(self) -> bool:
         return not self._clean_up_if_file_too_large() and (
             self._get_setting_show_open_button() == "always"
-            or get_setting("draw_uri_regions")["enabled"]
+            or get_setting("draw_uri_regions")["enabled"] == "always"
         )
 
     def _detect_uris_globally(self) -> None:
@@ -93,7 +102,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if self._get_setting_show_open_button() == "always":
             self._update_phantom(uri_regions)
 
-        if get_setting("draw_uri_regions")["enabled"]:
+        if get_setting("draw_uri_regions")["enabled"] == "always":
             self._draw_uri_regions(uri_regions)
         else:
             self._erase_uri_regions()

@@ -76,7 +76,12 @@ But if you still have questions, feel free to open an issue.
     },
     // draw URI regions such as adding a underline?
     "draw_uri_regions": {
-        "enabled": false,
+        // when to draw URI regions?
+        // values can be
+        //     - "always" (always draw)
+        //     - "hover" (only when the URI is hovered)
+        //     - "never" (never draw)
+        "enabled": "never",
         // the scope used to highlight URI regions (you may customize it with your theme)
         "scope": "string",
         // icon in the gutter: "dot", "circle", "bookmark" or empty string for nothing

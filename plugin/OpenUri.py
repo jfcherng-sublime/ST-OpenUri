@@ -25,8 +25,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         view_uri_regions_val(self.view, [])
 
     def __del__(self) -> None:
-        self._erase_phantom()
-        self._erase_uri_regions()
+        self._clean_up()
 
     def on_load_async(self) -> None:
         self._refresh()
@@ -59,7 +58,9 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if hover_zone != sublime.HOVER_TEXT:
             uri_regions = []
         else:
-            uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
+            uri_regions = find_uri_regions_by_region(
+                self.view, point, get_setting("uri_search_radius")
+            )
 
         if uri_regions and self._get_setting_show_open_button() == "hover":
             self.view.show_popup(
@@ -70,29 +71,8 @@ class OpenUri(sublime_plugin.ViewEventListener):
                 on_navigate=open_uri_with_browser,
             )
 
-        if get_setting("draw_uri_regions")["enabled"] == "hover":
-            if uri_regions:
-                self._draw_uri_regions(uri_regions)
-            else:
-                self._erase_uri_regions()
-
-    def _refresh(self):
-        if self._get_setting_show_open_button() != "always":
-            self._erase_phantom()
-
-        if get_setting("draw_uri_regions")["enabled"] != "always":
-            self._erase_uri_regions()
-
-        if not self._need_detect_uris_globally():
-            return
-
-        self._detect_uris_globally()
-
-    def _need_detect_uris_globally(self) -> bool:
-        return not self._clean_up_if_file_too_large() and (
-            self._get_setting_show_open_button() == "always"
-            or get_setting("draw_uri_regions")["enabled"] == "always"
-        )
+        if get_setting("draw_uri_regions.enabled") == "hover":
+            self._draw_uri_regions(uri_regions)
 
     def _detect_uris_globally(self) -> None:
         view_update_uri_regions(self.view, global_get("uri_regex_obj"))
@@ -102,10 +82,8 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if self._get_setting_show_open_button() == "always":
             self._update_phantom(uri_regions)
 
-        if get_setting("draw_uri_regions")["enabled"] == "always":
+        if get_setting("draw_uri_regions.enabled") == "always":
             self._draw_uri_regions(uri_regions)
-        else:
-            self._erase_uri_regions()
 
     def _generate_phantom_html(self, uri_region: sublime.Region) -> str:
         img = global_get("images.phantom")
@@ -185,6 +163,29 @@ class OpenUri(sublime_plugin.ViewEventListener):
             flags=draw_uri_regions["flags"],
         )
 
+    def _clean_up(self) -> None:
+        view_uri_regions_val(self.view, [])
+        self._erase_phantom()
+        self._erase_uri_regions()
+
+    def _refresh(self) -> None:
+        if self._get_setting_show_open_button() != "always":
+            self._erase_phantom()
+
+        if get_setting("draw_uri_regions.enabled") != "always":
+            self._erase_uri_regions()
+
+        if not self._need_detect_uris_globally():
+            return
+
+        self._detect_uris_globally()
+
+    def _need_detect_uris_globally(self) -> bool:
+        return not self._clean_up_if_file_too_large() and (
+            self._get_setting_show_open_button() == "always"
+            or get_setting("draw_uri_regions.enabled") == "always"
+        )
+
     def _get_setting_show_open_button(self) -> str:
         return get_setting(
             "show_open_button_fallback" if self._is_file_too_large() else "show_open_button"
@@ -194,9 +195,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         is_file_too_large = self._is_file_too_large()
 
         if is_file_too_large:
-            view_uri_regions_val(self.view, [])
-            self._erase_phantom()
-            self._erase_uri_regions()
+            self._clean_up()
 
         return is_file_too_large
 

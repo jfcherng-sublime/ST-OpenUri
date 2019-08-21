@@ -3,6 +3,7 @@ import os
 import sublime
 import time
 from .Globals import global_get, global_set
+from .utils import dotted_get
 
 
 def get_package_name() -> str:
@@ -170,17 +171,17 @@ def get_settings_object() -> sublime.Settings:
     return sublime.load_settings(get_settings_file())
 
 
-def get_setting(key: str, default=None):
+def get_setting(dotted: str, default=None):
     """
-    @brief Get the plugin setting with the key.
+    @brief Get the plugin setting with the dotted key.
 
-    @param key     The key
+    @param dotted  The dotted key
     @param default The default value if the key doesn't exist
 
     @return Optional[Any] The setting's value.
     """
 
-    return get_settings_object().get(key, default)
+    return dotted_get(get_settings_object(), dotted, default)
 
 
 def get_timestamp() -> float:

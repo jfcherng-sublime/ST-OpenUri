@@ -19,6 +19,61 @@ def simple_decorator(decorator):
     return outer_wrapper
 
 
+def dotted_get(var, dotted: str, default=None):
+    """
+    @brief Get the value from the variable with dotted notation.
+
+    @param var     The variable
+    @param dotted  The dotted
+    @param default The default
+
+    @return The value or the default if dotted not found
+    """
+
+    keys = dotted.split(".")
+
+    try:
+        for key in keys:
+            if isinstance(var, (dict, sublime.Settings)):
+                var = var.get(key)
+            elif isinstance(var, (list, tuple, bytes, bytearray)):
+                var = var[int(key)]
+            else:
+                var = getattr(var, key)
+
+        return var
+    except Exception:
+        return default
+
+
+def dotted_set(var, dotted: str, value) -> None:
+    """
+    @brief Set the value for the variable with dotted notation.
+
+    @param var     The variable
+    @param dotted  The dotted
+    @param default The default
+    """
+
+    keys = dotted.split(".")
+    last_key = keys.pop()
+
+    for key in keys:
+        if isinstance(var, (dict, sublime.Settings)):
+            var = var.get(key)
+        elif isinstance(var, (list, tuple, bytes, bytearray)):
+            var = var[int(key)]
+        else:
+            var = getattr(var, key)
+
+    if isinstance(var, (dict, sublime.Settings)):
+        var[last_key] = value
+    elif isinstance(var, (list, tuple, bytes, bytearray)):
+        var[int(last_key)] = value
+    else:
+        setattr(var, last_key, value)
+
+
 def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:
     """
     @brief A faster/simpler implementation of View.find_all().

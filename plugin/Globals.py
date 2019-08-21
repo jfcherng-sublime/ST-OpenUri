@@ -1,4 +1,5 @@
 import sublime
+from .utils import dotted_get, dotted_set
 
 
 class Globals:
@@ -59,58 +60,8 @@ class Globals:
 
 
 def global_get(dotted: str, default=None):
-    from .Globals import Globals
-
-    var = Globals
-    keys = dotted.split(".")
-
-    try:
-        for key in keys:
-            if isinstance(var, dict):
-                var = var.get(key)
-            elif (
-                isinstance(var, list)
-                or isinstance(var, tuple)
-                or isinstance(var, bytes)
-                or isinstance(var, bytearray)
-            ):
-                var = var[int(key)]
-            else:
-                var = getattr(var, key)
-
-        return var
-    except Exception:
-        return default
+    return dotted_get(Globals, dotted, default)
 
 
 def global_set(dotted: str, value) -> None:
-    from .Globals import Globals
-
-    var = Globals
-    keys = dotted.split(".")
-    last_key = keys.pop()
-
-    for key in keys:
-        if isinstance(var, dict):
-            var = var.get(key)
-        elif (
-            isinstance(var, list)
-            or isinstance(var, tuple)
-            or isinstance(var, bytes)
-            or isinstance(var, bytearray)
-        ):
-            var = var[int(key)]
-        else:
-            var = getattr(var, key)
-
-    if isinstance(var, dict):
-        var[last_key] = value
-    elif (
-        isinstance(var, list)
-        or isinstance(var, tuple)
-        or isinstance(var, bytes)
-        or isinstance(var, bytearray)
-    ):
-        var[int(last_key)] = value
-    else:
-        setattr(var, last_key, value)
+    return dotted_set(Globals, dotted, value)

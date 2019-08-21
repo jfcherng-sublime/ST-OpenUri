@@ -35,7 +35,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         self._refresh()
 
     def on_modified_async(self) -> None:
-        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
+        if not self._need_detect_uris_globally():
             return
 
         view_last_update_timestamp_val(self.view, get_timestamp())
@@ -74,10 +74,16 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if self._get_setting_show_open_button() != "always":
             self._erase_phantom()
 
-        if self._get_setting_show_open_button() != "never" and self._clean_up_if_file_too_large():
+        if not self._need_detect_uris_globally():
             return
 
         self._detect_uris_globally()
+
+    def _need_detect_uris_globally(self) -> bool:
+        return not self._clean_up_if_file_too_large() and (
+            self._get_setting_show_open_button() == "always"
+            or get_setting("draw_uri_regions")["enabled"]
+        )
 
     def _detect_uris_globally(self) -> None:
         view_update_uri_regions(self.view, global_get("uri_regex_obj"))

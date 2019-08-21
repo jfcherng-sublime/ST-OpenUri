@@ -35,8 +35,8 @@ is self-explanatory. But if you still have questions, feel free to open an issue
 
 ### Key Binding
 
-- <kbd>Alt + o</kbd>, <kbd>Alt + i</kbd>, <kbd>Alt + b</kbd>:
-  Open URIs from (multiple) cursors. `o, i, b` is mnemonic for `Open, In, Browser`.
+- <kbd>Alt + o</kbd>, <kbd>Alt + u</kbd>:
+  Open URIs from (multiple) cursors. `o, u` is mnemonic for `Open, URI`.
 
 
 ### Mouse Binding

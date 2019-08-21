@@ -103,7 +103,7 @@ def region_shift(region, shift: int):
     @return the shifted region
     """
 
-    if isinstance(region, int) or isinstance(region, float):
+    if isinstance(region, (int, float)):
         return region + shift
 
     if isinstance(region, sublime.Region):
@@ -122,7 +122,7 @@ def region_expand(region, expansion):
     @return the expanded region
     """
 
-    if isinstance(expansion, int) or isinstance(expansion, float):
+    if isinstance(expansion, (int, float)):
         expansion = [int(expansion)] * 2
 
     if len(expansion) == 0:
@@ -132,7 +132,7 @@ def region_expand(region, expansion):
         # do not modify the input variable by "expansion *= 2"
         expansion = [expansion[0]] * 2
 
-    if isinstance(region, int) or isinstance(region, float):
+    if isinstance(region, (int, float)):
         return [region - expansion[0], region + expansion[1]]
 
     if isinstance(region, sublime.Region):
@@ -158,7 +158,7 @@ def region_into_list_form(region, sort_result: bool = False) -> list:
 
     if isinstance(region, sublime.Region):
         region = [region.a, region.b]
-    elif isinstance(region, int) or isinstance(region, float):
+    elif isinstance(region, (int, float)):
         region = [int(region)] * 2
     elif isinstance(region, Iterable) and not isinstance(region, list):
         region = list(region)
@@ -184,7 +184,7 @@ def region_into_st_region_form(region, sort_result: bool = False) -> list:
     @return list[sublime.Region] the "region" in ST's region form
     """
 
-    if isinstance(region, int) or isinstance(region, float):
+    if isinstance(region, (int, float)):
         region = [int(region)] * 2
     elif isinstance(region, Iterable) and not isinstance(region, list):
         region = list(region)

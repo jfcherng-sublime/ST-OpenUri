@@ -123,8 +123,6 @@ But if you still have questions, feel free to open an issue.
         "tg://": {"enabled": false, "path_regex": "@default"},
     },
     // regexes (case-insensitive) used to match the URI's path part
-    // using moret than one regex can hinder the final regex from being optimized
-    // so if not necessary, use only "@default" or as less amount of different regexes as possible
     "uri_path_regexes": {
         // this is the default path regex for all schemes
         "@default": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\})+(?<![:.,!?¡¿，。！？])",

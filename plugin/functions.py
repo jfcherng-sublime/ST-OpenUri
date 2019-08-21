@@ -52,46 +52,34 @@ def compile_uri_regex():
     detect_schemes = get_setting("detect_schemes")
     uri_path_regexes = get_setting("uri_path_regexes")
 
-    schemes_enabled = {
-        scheme
-        for scheme, scheme_settings in detect_schemes.items()
-        if scheme_settings.get("enabled", False)
-    }
-
-    path_regex_name_to_schemes = {}
-    for scheme in schemes_enabled:
-        path_regex_name = detect_schemes[scheme].get("path_regex", "@default")
-
-        if path_regex_name not in path_regex_name_to_schemes:
-            path_regex_name_to_schemes[path_regex_name] = []
-
-        path_regex_name_to_schemes[path_regex_name].append(scheme)
-
-    global_get("logger").debug(
-        "Collected `path_regex_name_to_schemes`: {}".format(path_regex_name_to_schemes)
-    )
-
     uri_regexes = []
-    for path_regex_name, schemes in path_regex_name_to_schemes.items():
-        path_regex = uri_path_regexes.get(path_regex_name)
-        if path_regex is None:
-            global_get("logger").critical(
-                "Schemes ({schemes}) use unknown `path_regex`: {regex_name}".format(
-                    schemes=", ".join(schemes), regex_name=path_regex_name
+    for scheme, scheme_settings in detect_schemes.items():
+        if not scheme_settings.get("enabled", False):
+            continue
+
+        path_regex_name = scheme_settings.get("path_regex", "@default")
+        if path_regex_name not in uri_path_regexes:
+            global_get("logger").warning(
+                'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex}'.format(
+                    scheme=scheme, path_regex=path_regex_name
                 )
             )
             continue
 
-        scheme_regex = (
-            triegex.Triegex(*map(re.escape, schemes))
-            .to_regex()
-            .replace(r"\b", "")
-            .replace(r"|~^(?#match nothing)", "")
-        )
+        uri_regexes.append(re.escape(scheme) + r"(?:(?#{}))".format(path_regex_name))
 
-        uri_regexes.append(scheme_regex + path_regex)
+    regex = r"\b" + (
+        triegex.Triegex(*uri_regexes)
+        .to_regex()
+        .replace(r"\b", "")
+        .replace(r"|~^(?#match nothing)", "")
+    )
 
-    regex = r"\b(?:" + ")|(?:".join(uri_regexes) + ")"
+    global_get("logger").debug("Optimized URI matching regex (before expanding): {}".format(regex))
+
+    # expand path regexes by their names
+    for path_regex_name, path_regex in uri_path_regexes.items():
+        regex = regex.replace(r"(?#{})".format(path_regex_name), path_regex)
 
     global_get("logger").debug("Optimized URI matching regex: {}".format(regex))
 

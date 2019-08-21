@@ -33,7 +33,7 @@ class Globals:
             }}
         </style>
         <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
-        <span>Open this URI</span>
+        {text_html}
     </body>
     """
 

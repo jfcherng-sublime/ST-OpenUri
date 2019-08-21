@@ -128,6 +128,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
             h=base_size,
             size_unit="em",
             base64=get_colored_image_base64_by_region("popup", uri_region),
+            text_html=get_setting("popup_text_html"),
         )
 
     def _new_uri_phantom(self, uri_region: sublime.Region) -> sublime.Phantom:

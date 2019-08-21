@@ -56,6 +56,8 @@ But if you still have questions, feel free to open an issue.
     // you can make this value larger if you feel ST gets stucked while typing
     // or if you consider your machine is powerful, you can set it to a smaller value
     "on_modified_typing_period": 200,
+    // the text HTML used in the hovering popup
+    "popup_text_html": "<span>Open this URI</span>",
     // images used in this plugin (only supports PNG format)
     // for other plugin-shipped images, visit https://github.com/jfcherng/Sublime-OpenUri/tree/master/images
     // if you don't like them, you can even define your own image path.

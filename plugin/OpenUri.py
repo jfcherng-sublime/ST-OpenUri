@@ -87,7 +87,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if self._get_setting_show_open_button() == "always":
             self._update_phantom(uri_regions)
 
-        if get_setting("draw_uri_regions").get("enabled"):
+        if get_setting("draw_uri_regions")["enabled"]:
             self._draw_uri_regions(uri_regions)
         else:
             self._erase_uri_regions()
@@ -164,9 +164,9 @@ class OpenUri(sublime_plugin.ViewEventListener):
         self.view.add_regions(
             "OUIB_uri_regions",
             list(uri_regions),
-            scope=draw_uri_regions.get("scope"),
-            icon=draw_uri_regions.get("icon"),
-            flags=draw_uri_regions.get("flags"),
+            scope=draw_uri_regions["scope"],
+            icon=draw_uri_regions["icon"],
+            flags=draw_uri_regions["flags"],
         )
 
     def _get_setting_show_open_button(self) -> str:

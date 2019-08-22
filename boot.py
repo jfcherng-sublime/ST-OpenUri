@@ -2,7 +2,7 @@ import os
 import sublime
 from .plugin.functions import compile_uri_regex
 from .plugin.Globals import global_get, global_set
-from .plugin.log import apply_user_log_level, init_plugin_logger
+from .plugin.log import apply_user_log_level, init_plugin_logger, log
 from .plugin.settings import (
     get_image_info,
     get_package_name,
@@ -22,7 +22,7 @@ def plugin_loaded() -> None:
         uri_regex_obj, activated_schemes = compile_uri_regex()
         global_set("activated_schemes", activated_schemes)
         global_set("uri_regex_obj", uri_regex_obj)
-        global_get("logger").info("Activated schemes: {}".format(activated_schemes))
+        log("info", "Activated schemes: {}".format(activated_schemes))
 
         init_images()
         refresh_if_settings_file()

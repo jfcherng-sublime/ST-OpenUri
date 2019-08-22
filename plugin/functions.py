@@ -5,6 +5,7 @@ import webbrowser
 from collections.abc import Iterable
 from .Globals import global_get
 from .libs import png, triegex
+from .log import log
 from .settings import get_setting
 from .utils import (
     is_regions_intersected,
@@ -36,9 +37,10 @@ def open_uri_with_browser(uri: str, browser=...) -> None:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
         webbrowser.get(browser).open(uri, autoraise=True)
     except Exception as e:
-        global_get("logger").critical(
+        log(
+            "critical",
             'Failed to open browser "{browser}" to "{uri}" '
-            "because {reason}".format(browser=browser, uri=uri, reason=e)
+            "because {reason}".format(browser=browser, uri=uri, reason=e),
         )
 
 
@@ -60,10 +62,11 @@ def compile_uri_regex() -> tuple:
 
         path_regex_name = scheme_settings.get("path_regex", "@default")
         if path_regex_name not in uri_path_regexes:
-            global_get("logger").warning(
+            log(
+                "warning",
                 'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex}'.format(
                     scheme=scheme, path_regex=path_regex_name
-                )
+                ),
             )
             continue
 
@@ -77,20 +80,21 @@ def compile_uri_regex() -> tuple:
         .replace(r"|~^(?#match nothing)", "")
     )
 
-    global_get("logger").debug("Optimized URI matching regex (before expanding): {}".format(regex))
+    log("debug", "Optimized URI matching regex (before expanding): {}".format(regex))
 
     # expand path regexes by their names
     for path_regex_name, path_regex in uri_path_regexes.items():
         regex = regex.replace(r"(?#{})".format(path_regex_name), path_regex)
 
-    global_get("logger").debug("Optimized URI matching regex: {}".format(regex))
+    log("debug", "Optimized URI matching regex: {}".format(regex))
 
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
     except Exception as e:
-        global_get("logger").critical(
+        log(
+            "critical",
             "Cannot compile regex `{regex}` because `{reason}`. "
-            'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
+            'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e),
         )
 
     return regex_obj, sorted(activated_schemes)

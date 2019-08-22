@@ -3,6 +3,7 @@ import os
 import sublime
 import time
 from .Globals import global_get, global_set
+from .log import log
 from .utils import dotted_get
 
 
@@ -93,7 +94,7 @@ def get_image_info(img_name: str) -> dict:
     try:
         img_bytes = sublime.load_binary_resource(img_path)
     except IOError:
-        global_get("logger").error("Resource not found: " + img_path)
+        log("error", "Resource not found: " + img_path)
 
     img_base64 = base64.b64encode(img_bytes).decode()
     img_w, img_h = imagesize.get_from_bytes(img_bytes)

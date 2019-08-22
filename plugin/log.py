@@ -1,4 +1,5 @@
 import logging
+from .Globals import global_get
 
 LOG_FORMAT = "[%(name)s][%(levelname)s] %(message)s"
 LOG_LEVEL_DEFAULT = "INFO"
@@ -39,7 +40,7 @@ def apply_user_log_level(logger: logging.Logger) -> None:
 
     from .settings import get_setting
 
-    log_level = get_setting("log_level")
+    log_level = get_setting("log_level").upper()
 
     if not isinstance(logging.getLevelName(log_level), int):
         logger.warning(
@@ -55,27 +56,26 @@ def apply_user_log_level(logger: logging.Logger) -> None:
     logger.setLevel(log_level)
 
 
-def msg(message: str) -> str:
+def log(level: str, msg: str) -> None:
+    """
+    @brief A shorhand for logging message with the global logger.
+
+    @param level The log level
+    @param msg   The message
+    """
+
+    getattr(global_get("logger"), level.lower())(msg)
+
+
+def msg(msg: str) -> str:
     """
     @brief Generate plugin message.
 
-    @param message The message
+    @param msg The message
 
     @return The plugin message.
     """
 
     from .settings import get_package_name
 
-    return "[{plugin}] {message}".format(plugin=get_package_name(), message=message)
-
-
-def print_msg(message: str, show_message: bool = True) -> None:
-    """
-    @brief Print plugin message to ST's console.
-
-    @param message      The message
-    @param show_message Whether to print the message
-    """
-
-    if show_message:
-        print(msg(message))
+    return "[{plugin}] {msg}".format(plugin=get_package_name(), msg=msg)

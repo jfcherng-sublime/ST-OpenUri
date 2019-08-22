@@ -38,6 +38,7 @@ class Globals:
     """
 
     logger = None
+    activated_schemes = []
     uri_regex_obj = None
 
     images = {

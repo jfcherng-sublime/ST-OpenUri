@@ -2,7 +2,7 @@ import os
 import sublime
 from .plugin.functions import compile_uri_regex
 from .plugin.Globals import global_get, global_set
-from .plugin.log import apply_user_log_level, get_plugin_logger
+from .plugin.log import apply_user_log_level, init_plugin_logger
 from .plugin.settings import (
     get_image_info,
     get_package_name,
@@ -18,7 +18,12 @@ from .plugin.OpenUriCommands import *
 def plugin_loaded() -> None:
     def plugin_settings_listener() -> None:
         apply_user_log_level(global_get("logger"))
-        global_set("uri_regex_obj", compile_uri_regex())
+
+        uri_regex_obj, activated_schemes = compile_uri_regex()
+        global_set("activated_schemes", activated_schemes)
+        global_set("uri_regex_obj", uri_regex_obj)
+        global_get("logger").info("Activated schemes: {}".format(activated_schemes))
+
         init_images()
         refresh_if_settings_file()
 
@@ -37,7 +42,7 @@ def plugin_loaded() -> None:
         if os.path.basename(v.file_name() or "").endswith(get_settings_file()):
             v.run_command("revert")
 
-    global_set("logger", get_plugin_logger())
+    global_set("logger", init_plugin_logger())
     get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
     plugin_settings_listener()
 

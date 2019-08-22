@@ -42,16 +42,17 @@ def open_uri_with_browser(uri: str, browser=...) -> None:
         )
 
 
-def compile_uri_regex():
+def compile_uri_regex() -> tuple:
     """
     @brief Get the compiled regex object for matching URIs.
 
-    @return The compiled regex object
+    @return (activated schemes, compiled regex object)
     """
 
     detect_schemes = get_setting("detect_schemes")
     uri_path_regexes = get_setting("uri_path_regexes")
 
+    activated_schemes = []
     uri_regexes = []
     for scheme, scheme_settings in detect_schemes.items():
         if not scheme_settings.get("enabled", False):
@@ -66,6 +67,7 @@ def compile_uri_regex():
             )
             continue
 
+        activated_schemes.append(scheme)
         uri_regexes.append(re.escape(scheme) + r"(?:(?#{}))".format(path_regex_name))
 
     regex = r"\b" + (
@@ -91,7 +93,7 @@ def compile_uri_regex():
             'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e)
         )
 
-    return regex_obj
+    return regex_obj, sorted(activated_schemes)
 
 
 def find_uri_regions_by_region(view: sublime.View, region, search_radius: int = 200) -> list:

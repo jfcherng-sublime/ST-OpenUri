@@ -4,11 +4,11 @@ LOG_FORMAT = "[%(name)s][%(levelname)s] %(message)s"
 LOG_LEVEL_DEFAULT = "INFO"
 
 
-def get_plugin_logger() -> logging.Logger:
+def init_plugin_logger() -> logging.Logger:
     """
-    @brief Get the plugin logger.
+    @brief Initiate a plugin logger.
 
-    @return The plugin logger.
+    @return The initiated plugin logger.
     """
 
     from .settings import get_package_name

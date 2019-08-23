@@ -221,15 +221,16 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
     def render_pixel(rgba_src: list, rgba_dst: list, invert_gray: bool = False) -> list:
-        gray_ratio = calculate_gray(rgba_src) / 0xFF
+        gray = calculate_gray(rgba_src)
         if invert_gray:
-            gray_ratio = 1 - gray_ratio
+            gray = 0xFF - gray
 
+        # ">> 8" is an approximation for "/ 0xFF" in following calculations
         return [
-            int(rgba_dst[0] * gray_ratio),
-            int(rgba_dst[1] * gray_ratio),
-            int(rgba_dst[2] * gray_ratio),
-            int(rgba_dst[3] * rgba_src[3] / 0xFF),
+            int(rgba_dst[0] * gray) >> 8,
+            int(rgba_dst[1] * gray) >> 8,
+            int(rgba_dst[2] * gray) >> 8,
+            int(rgba_dst[3] * rgba_src[3]) >> 8,
         ]
 
     invert_gray = not is_img_light(img_bytes)  # invert for dark image to get a solid looking
@@ -252,13 +253,14 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
 def calculate_gray(rgb: list) -> int:
     """
     @brief Calculate the gray scale of a color.
+    @see   https://atlaboratary.blogspot.com/2013/08/rgb-g-rey-l-gray-r0.html
 
     @param rgb The rgb color in list form
 
     @return The gray scale.
     """
 
-    return (rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
+    return int(rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
 
 
 def is_img_light(img_bytes: bytes) -> bool:
@@ -277,7 +279,7 @@ def is_img_light(img_bytes: bytes) -> bool:
         for i in range(0, len(row), 4):
             gray_sum += calculate_gray(row[i : i + 4])
 
-    return gray_sum * 2 > 0xFF * w * h
+    return (gray_sum << 1) > 0xFF * w * h
 
 
 def add_alpha_to_rgb(color_code: str) -> str:

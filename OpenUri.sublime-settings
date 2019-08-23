@@ -98,7 +98,7 @@
     // regexes (case-insensitive) used to match the URI's path part
     "uri_path_regexes": {
         // this is the default path regex for all schemes
-        "@default": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\([^\\s)]*\\)|\\[[^\\s\\]]*\\]|\\{[^\\s}]*\\})+(?<![:.,!?¡¿，。！？])",
+        "@default": "(?:[^\\s()\\[\\]{}<>`^*'\"“”‘’]|\\((?![/\\\\])[^\\s)]*\\)|\\[(?![/\\\\])[^\\s\\]]*\\]|\\{(?![/\\\\])[^\\s}]*\\})+(?<![:.,!?¡¿，。！？])",
         // an example which can be used to match ASCII-only URIs
         "ascii_only": "[a-z0-9@~_+\\-*/&=#%|:.,!?]+(?<=[a-z0-9@~_+\\-*/&=#%|])",
     },

@@ -249,7 +249,7 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     return buf.getvalue()
 
 
-def calculate_gray(rgb: list) -> list:
+def calculate_gray(rgb: list) -> int:
     """
     @brief Calculate the gray scale of a color.
 

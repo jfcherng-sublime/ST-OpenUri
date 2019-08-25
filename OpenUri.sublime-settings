@@ -11,8 +11,7 @@
     //     - "hover" (only when the URI is hovered)
     //     - "never" (never show buttons)
     "show_open_button": "always",
-    // only useful if "show_open_button" is "always" and the file is too large
-    // this setting will be used as the fallback setting of "show_open_button"
+    // if the file is too large, this setting will be used as the fallback setting of "show_open_button"
     "show_open_button_fallback": "hover",
     // if the file size is larger than the given one, it will uses "show_open_button_fallback" as the fallback mode
     "large_file_threshold": 1000000, // 1MB

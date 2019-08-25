@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.0] - 2019-08-26
+
+### Added
+- Add new log level: DEBUG_LOW
+
+### Changed
+- Render phantoms/regions with another background thread.
+- Rename `on_modified_typing_period` to `typing_period`.
+
+### Fixed
+- Fix and remove workaround for `is_view_too_large()`.
+
+
 ## [6.1.1] - 2019-08-21
 
 ### Fixed

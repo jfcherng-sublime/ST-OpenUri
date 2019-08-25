@@ -25,7 +25,8 @@
     // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
     "typing_period": 250,
-    // the interval for checking whether to render the current view
+    // the interval (in millisecond) for checking whether to render the current view
+    // 500 means the background thread will check the current view should be re-rendered or not, every 500ms
     "renderer_interval": 500,
     // the text HTML used in the hovering popup
     "popup_text_html": "<span>Open this URI</span>",

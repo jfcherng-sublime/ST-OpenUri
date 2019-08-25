@@ -15,26 +15,25 @@ from .settings import (
 from .utils import (
     is_regions_intersected,
     region_expand,
-    region_into_list_form,
     region_into_st_region_form,
     region_shift,
     simple_decorator,
     simplify_intersected_regions,
-    view_find_all_fast,
 )
 
 
-def open_uri_with_browser(uri: str, browser=...) -> None:
+def open_uri_with_browser(uri: str, browser: str = "") -> None:
     """
     @brief Open the URI with the browser.
 
     @param uri     The uri
-    @param browser The browser (None = default settings = system's default)
+    @param browser The browser
     """
 
-    if not isinstance(browser, str):
+    if not browser:
         browser = get_setting("browser")
 
+    # modify browser to None to use the system's default
     if browser == "":
         browser = None
 

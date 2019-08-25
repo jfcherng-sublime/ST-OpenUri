@@ -8,12 +8,12 @@ from .functions import (
     is_view_typing,
     update_phantom_set,
     view_is_dirty_val,
-    view_find_all_fast,
 )
 from .Globals import global_get
 from .log import log
 from .RepeatingTimer import RepeatingTimer
 from .settings import get_setting, get_setting_show_open_button
+from .utils import view_find_all_fast
 
 
 class RendererThread(RepeatingTimer):
@@ -56,21 +56,21 @@ class RendererThread(RepeatingTimer):
         # handle Phantoms
         if get_setting_show_open_button(view) == "always":
             update_phantom_set(view, uri_regions)
-            log("debug", "re-render phantoms: detect_uris_globally()")
+            log("debug", "re-render phantoms")
         else:
             self._clean_up_phantom_set(view)
 
         # handle draw URI regions
         if get_setting("draw_uri_regions.enabled") == "always":
             draw_uri_regions(view, uri_regions)
-            log("debug", "draw URI regions: detect_uris_globally()")
+            log("debug", "draw URI regions")
         else:
             self._clean_up_uri_regions(view)
 
     def _clean_up_phantom_set(self, view: sublime.View) -> None:
         erase_phantom_set(view)
-        log("debug", "erase phantoms: detect_uris_globally()")
+        log("debug", "erase phantoms")
 
     def _clean_up_uri_regions(self, view: sublime.View) -> None:
         erase_uri_regions(view)
-        log("debug", "erase URI regions: detect_uris_globally()")
+        log("debug", "erase URI regions")

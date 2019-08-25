@@ -9,7 +9,7 @@ from .settings import get_setting
 
 
 class OpenUriFromCursorsCommand(sublime_plugin.TextCommand):
-    def run(self, edit: sublime.Edit, browser="") -> None:
+    def run(self, edit: sublime.Edit, browser: str = "") -> None:
         uris = map(
             lambda region: self.view.substr(region),
             find_uri_regions_by_regions(
@@ -22,7 +22,7 @@ class OpenUriFromCursorsCommand(sublime_plugin.TextCommand):
 
 
 class OpenUriFromViewCommand(sublime_plugin.TextCommand):
-    def run(self, edit: sublime.Edit, browser="") -> None:
+    def run(self, edit: sublime.Edit, browser: str = "") -> None:
         uris = map(
             lambda region: self.view.substr(region),
             find_uri_regions_by_region(

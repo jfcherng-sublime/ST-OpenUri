@@ -1,6 +1,13 @@
 {
-    // How detailed log messages should be?
-    // Values can be "CRITICAL" (very few), "ERROR", "WARNING", "INFO", "DEBUG" (most tedious) or "NOTHING" (no log)
+    // how detailed log messages should be?
+    // values can be
+    //     - "NOTHING" (do not show anything)
+    //     - "CRITICAL" (something makes plugin not workable)
+    //     - "ERROR" (something is wrong)
+    //     - "WARNING" (something may be wrong)
+    //     - "INFO" (those that users may interest in)
+    //     - "DEBUG" (for developer)
+    //     - "DEBUG_LOW" (for developer, even more detailed than DEBUG)
     "log_level": "INFO",
     // browser used to open a URI. leave this empty to use a default browser.
     // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get

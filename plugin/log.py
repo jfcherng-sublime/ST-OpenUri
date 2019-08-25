@@ -23,7 +23,8 @@ def init_plugin_logger() -> logging.Logger:
         logging_handler.setFormatter(logging.Formatter(LOG_FORMAT))
         logger.addHandler(logging_handler)
 
-    logging.addLevelName(101, "NOTHING")
+    logging.addLevelName(5, "DEBUG_LOW")
+    logging.addLevelName(1001, "NOTHING")
     logger = logging.getLogger(get_package_name())
     logger.propagate = False  # prevent appear multiple same log messages
     set_logger_hander(logger)
@@ -64,7 +65,15 @@ def log(level: str, msg: str) -> None:
     @param msg   The message
     """
 
-    getattr(global_get("logger"), level.lower())(msg)
+    level_upper = level.upper()
+    level_int = logging.getLevelName(level_upper)
+
+    if not isinstance(level_int, int):
+        raise ValueError(
+            'Unknown log level "{level}" whose message is: {msg}'.format(level=level, msg=msg)
+        )
+
+    global_get("logger").log(level_int, msg)
 
 
 def msg(msg: str) -> str:

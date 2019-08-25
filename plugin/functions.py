@@ -344,3 +344,15 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
         return "#" + rgb
 
     return ""
+
+
+def is_view_too_large(view: sublime.View) -> bool:
+    """
+    @brief Determine if the view is too large. Note that size will be 0 if the view is loading.
+
+    @param view The view
+
+    @return True if the view is too large, False otherwise.
+    """
+
+    return view.size() > get_setting("use_show_open_button_fallback_if_file_larger_than")

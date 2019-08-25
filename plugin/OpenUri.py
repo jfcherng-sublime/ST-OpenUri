@@ -4,6 +4,7 @@ from collections.abc import Iterable
 from .Globals import global_get
 from .functions import (
     find_uri_regions_by_region,
+    is_view_too_large,
     open_uri_with_browser,
     view_last_update_timestamp_val,
     view_update_uri_regions,
@@ -181,31 +182,24 @@ class OpenUri(sublime_plugin.ViewEventListener):
         self._detect_uris_globally()
 
     def _need_detect_uris_globally(self) -> bool:
-        return not self._clean_up_if_file_too_large() and (
-            self._get_setting_show_open_button() == "always"
-            or get_setting("draw_uri_regions.enabled") == "always"
+        return (
+            not self.view.is_loading()
+            and not self._clean_up_if_file_too_large()
+            and (
+                self._get_setting_show_open_button() == "always"
+                or get_setting("draw_uri_regions.enabled") == "always"
+            )
         )
 
     def _get_setting_show_open_button(self) -> str:
         return get_setting(
-            "show_open_button_fallback" if self._is_file_too_large() else "show_open_button"
+            "show_open_button_fallback" if is_view_too_large(self.view) else "show_open_button"
         )
 
     def _clean_up_if_file_too_large(self) -> bool:
-        is_file_too_large = self._is_file_too_large()
+        is_file_too_large = is_view_too_large(self.view)
 
         if is_file_too_large:
             self._clean_up()
 
         return is_file_too_large
-
-    def _is_file_too_large(self) -> bool:
-        view_size = self.view.size()
-
-        # somehow ST sometimes return size == 0 when reloading a file...
-        # it looks like ST thinks the file content is empty during reloading
-        # and triggered "on_modified_async()"
-        if view_size == 0:
-            return True
-
-        return view_size > get_setting("use_show_open_button_fallback_if_file_larger_than")

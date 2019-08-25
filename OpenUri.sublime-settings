@@ -19,9 +19,7 @@
     "use_show_open_button_fallback_if_file_larger_than": 1000000, // 1MB
     // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
-    // you can make this value larger if you feel ST gets stucked while typing
-    // or if you consider your machine is powerful, you can set it to a smaller value
-    "on_modified_typing_period": 200,
+    "typing_period": 200,
     // the text HTML used in the hovering popup
     "popup_text_html": "<span>Open this URI</span>",
     // images used in this plugin (only supports PNG format)

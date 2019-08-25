@@ -42,7 +42,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         sublime.set_timeout_async(
             # fmt: off
             self.on_modified_async_callback,
-            get_setting("on_modified_typing_period")
+            get_setting("typing_period")
             # fmt: on
         )
 
@@ -50,7 +50,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         now_s = get_timestamp()
         pass_ms = (now_s - view_last_update_timestamp_val(self.view)) * 1000
 
-        if pass_ms >= get_setting("on_modified_typing_period"):
+        if pass_ms >= get_setting("typing_period"):
             view_last_update_timestamp_val(self.view, now_s)
             self._detect_uris_globally()
 

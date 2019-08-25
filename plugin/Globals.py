@@ -37,7 +37,12 @@ class Globals:
     </body>
     """
 
+    # the logger to log messages
     logger = None
+
+    # the background thread for managing phantoms for views
+    renderer_thread = None
+
     activated_schemes = []
     uri_regex_obj = None
 
@@ -57,6 +62,10 @@ class Globals:
         #     - "size": (0, 0),
         "phantom": {},
         "popup": {},
+    }
+
+    phantom_sets = {
+        # phantom_set_id: sublime.PhantomSet object,
     }
 
 

@@ -193,3 +193,11 @@ def get_timestamp() -> float:
     """
 
     return time.time()
+
+
+def get_setting_show_open_button(view: sublime.View) -> str:
+    from .functions import is_view_too_large
+
+    return get_setting(
+        "show_open_button_fallback" if is_view_too_large(view) else "show_open_button"
+    )

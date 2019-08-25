@@ -14,12 +14,13 @@
     // only useful if "show_open_button" is "always" and the file is too large
     // this setting will be used as the fallback setting of "show_open_button"
     "show_open_button_fallback": "hover",
-    // if the file size is larger than the given one and "show_open_button" is "always"
-    // use "show_open_button_fallback" as the fallback
-    "use_show_open_button_fallback_if_file_larger_than": 1000000, // 1MB
+    // if the file size is larger than the given one, it will uses "show_open_button_fallback" as the fallback mode
+    "large_file_threshold": 1000000, // 1MB
     // the period (in millisecond) that consecutive modifications are treated as typing
     // phantoms will be updated only when the user is not considered typing
-    "typing_period": 200,
+    "typing_period": 250,
+    // the interval for checking whether to render the current view
+    "renderer_interval": 500,
     // the text HTML used in the hovering popup
     "popup_text_html": "<span>Open this URI</span>",
     // images used in this plugin (only supports PNG format)

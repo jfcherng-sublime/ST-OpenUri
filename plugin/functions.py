@@ -6,7 +6,12 @@ from collections.abc import Iterable
 from .Globals import global_get
 from .libs import png, triegex
 from .log import log
-from .settings import get_setting
+from .settings import (
+    get_colored_image_base64_by_region,
+    get_package_name,
+    get_setting,
+    get_timestamp,
+)
 from .utils import (
     is_regions_intersected,
     region_expand,
@@ -161,34 +166,7 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
-def view_update_uri_regions(view: sublime.View, uri_regex_obj) -> None:
-    """
-    @brief Update view's "uri_regions" variable
-
-    @param view          The view
-    @param uri_regex_obj The URI regex obj
-    """
-
-    view_uri_regions_val(view, view_find_all_fast(view, uri_regex_obj, False))
-
-
-def view_uri_regions_val(view: sublime.View, uri_regions=...):
-    """
-    @brief Set/Get the URI regions (in list of lists) of the current view
-
-    @param view        The view
-    @param uri_regions The URI regions (... = get mode, otherwise = set mode)
-
-    @return Optional[list[list[int]]] None if the set mode, otherwise the URI regions
-    """
-
-    if uri_regions is ...:
-        return view.settings().get("OUIB_uri_regions", [])
-
-    view.settings().set("OUIB_uri_regions", [region_into_list_form(r, True) for r in uri_regions])
-
-
-def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s=...):
     """
     @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
 
@@ -202,6 +180,49 @@ def view_last_update_timestamp_val(view: sublime.View, timestamp_s=...):
         return view.settings().get("OUIB_last_update_timestamp", False)
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
+
+
+def view_is_dirty_val(view: sublime.View, is_dirty=...):
+    """
+    @brief Set/Get the is_dirty of the current view
+
+    @param view     The view
+    @param is_dirty Indicates if dirty
+
+    @return Optional[bool] None if the set mode, otherwise the is_dirty
+    """
+
+    if is_dirty is ...:
+        return view.settings().get("OUIB_is_dirty", True)
+
+    view.settings().set("OUIB_is_dirty", is_dirty)
+
+
+def set_is_dirty_for_all_views(is_dirty: bool) -> None:
+    """
+    @brief Set is_dirty for all views.
+
+    @param is_dirty Indicate if views are dirty
+    """
+
+    for w in sublime.windows():
+        for v in w.views():
+            if is_view_normal_ready(v):
+                view_is_dirty_val(v, is_dirty)
+
+
+def get_phantom_set_key(window_id: int, view_id: int) -> str:
+    return "w{w_id}v{v_id}".format(w_id=window_id, v_id=view_id)
+
+
+def get_view_phantom_set(view: sublime.View) -> sublime.PhantomSet:
+    phantom_sets = global_get("phantom_sets")
+    phantom_set_id = get_phantom_set_key(view.window().id(), view.id())
+
+    if phantom_set_id not in phantom_sets:
+        phantom_sets[phantom_set_id] = sublime.PhantomSet(view, get_package_name())
+
+    return phantom_sets[phantom_set_id]
 
 
 def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
@@ -346,6 +367,117 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
     return ""
 
 
+def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
+    img = global_get("images.popup")
+    base_size = 2.5
+
+    return global_get("POPUP_TEMPLATE").format(
+        uri=view.substr(uri_region),
+        mime=img["mime"],
+        w=base_size * img["ratio_wh"],
+        h=base_size,
+        size_unit="em",
+        base64=get_colored_image_base64_by_region("popup", uri_region),
+        text_html=get_setting("popup_text_html"),
+    )
+
+
+def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str:
+    img = global_get("images.phantom")
+
+    return global_get("PHANTOM_TEMPLATE").format(
+        uri=view.substr(uri_region),
+        mime=img["mime"],
+        ratio_wh=img["ratio_wh"],
+        base64=get_colored_image_base64_by_region("phantom", uri_region),
+    )
+
+
+def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.Phantom:
+    # Calculate the point to insert the phantom.
+    #
+    # Usually it's exact at the end of the URI, but if the next char is a quotation mark,
+    # there can be a problem on breaking "scope brackets" highlighting in BracketHilighter.
+    # In that case, we shift the position until the next char is not a quotation mark.
+    phantom_point = uri_region.end()
+    while view.substr(phantom_point) in "'\"`":
+        phantom_point += 1
+
+    return sublime.Phantom(
+        sublime.Region(phantom_point),
+        generate_phantom_html(view, uri_region),
+        layout=sublime.LAYOUT_INLINE,
+        on_navigate=open_uri_with_browser,
+    )
+
+
+def new_uri_phantoms(view: sublime.View, uri_regions: Iterable) -> list:
+    """
+    @brief Note that "uri_regions" should be Iterable[sublime.Region]
+
+    @return list[sublime.Phantom]
+    """
+
+    return [new_uri_phantom(view, r) for r in uri_regions]
+
+
+def delete_phantom_set(view: sublime.View) -> None:
+    phantom_sets = global_get("phantom_sets")
+    phantom_set_id = get_phantom_set_key(view.window().id(), view.id())
+    phantom_sets.pop(phantom_set_id, None)
+
+
+def erase_phantom_set(view: sublime.View) -> None:
+    get_view_phantom_set(view).update([])
+
+
+def update_phantom_set(view: sublime.View, char_regions: Iterable) -> None:
+    """
+    @brief Note that "char_regions" should be Iterable[sublime.Region]
+    """
+
+    get_view_phantom_set(view).update(new_uri_phantoms(view, char_regions))
+
+
+def erase_uri_regions(view: sublime.View) -> None:
+    view.erase_regions("OUIB_uri_regions")
+
+
+def draw_uri_regions(view: sublime.View, uri_regions: Iterable) -> None:
+    """
+    @brief Note that "uri_regions" should be Iterable[sublime.Region]
+    """
+
+    draw_uri_regions = get_setting("draw_uri_regions")
+
+    view.add_regions(
+        "OUIB_uri_regions",
+        list(uri_regions),
+        scope=draw_uri_regions["scope"],
+        icon=draw_uri_regions["icon"],
+        flags=draw_uri_regions["flags"],
+    )
+
+
+def is_view_normal_ready(view: sublime.View):
+    return not view.settings().get("is_widget") and not view.is_loading()
+
+
+def is_view_typing(view: sublime.View) -> bool:
+    """
+    @brief Determine if the view typing.
+
+    @param view The view
+
+    @return True if the view is typing, False otherwise.
+    """
+
+    now_s = get_timestamp()
+    pass_ms = (now_s - view_last_typing_timestamp_val(view)) * 1000
+
+    return pass_ms < get_setting("typing_period")
+
+
 def is_view_too_large(view: sublime.View) -> bool:
     """
     @brief Determine if the view is too large. Note that size will be 0 if the view is loading.
@@ -355,4 +487,4 @@ def is_view_too_large(view: sublime.View) -> bool:
     @return True if the view is too large, False otherwise.
     """
 
-    return view.size() > get_setting("use_show_open_button_fallback_if_file_larger_than")
+    return view.size() > get_setting("large_file_threshold")

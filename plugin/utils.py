@@ -251,4 +251,4 @@ def is_regions_intersected(
 
 
 def is_view_normal_ready(view: sublime.View):
-    return not view.settings().get("is_widget") and not view.is_loading()
+    return view and not view.settings().get("is_widget") and not view.is_loading()

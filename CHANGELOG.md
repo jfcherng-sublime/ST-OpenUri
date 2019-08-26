@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.1] - 2019-08-26
+
+### Changed
+- Just some code structure tweaks.
+
+### Fixed
+- Prevent from weird `phantom_set_id` KeyError.
+
+
 ## [6.2.0] - 2019-08-26
 
 ### Added

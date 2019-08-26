@@ -2,14 +2,10 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [6.2.0] - 2019-08-26
-
-### Added
-- Add new log level: DEBUG_LOW
+## [6.2.1] - 2019-08-26
 
 ### Changed
-- Render phantoms/regions with another background thread.
-- Rename `on_modified_typing_period` to `typing_period`.
+- Just some code structure tweaks.
 
 ### Fixed
-- Fix and remove workaround for `is_view_too_large()`.
+- Prevent from weird `phantom_set_id` KeyError.

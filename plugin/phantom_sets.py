@@ -2,8 +2,9 @@ import sublime
 from collections.abc import Iterable
 from .functions import open_uri_with_browser
 from .Globals import global_get
+from .image_processing import get_colored_image_base64_by_region
 from .PhatomSetsManager import PhatomSetsManager
-from .settings import get_colored_image_base64_by_region, get_package_name
+from .settings import get_package_name
 
 
 def get_phantom_set_id(view: sublime.View) -> str:

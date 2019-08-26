@@ -2,9 +2,8 @@ import base64
 import os
 import sublime
 import time
-from .Globals import global_get, global_set
-from .log import log
 from .utils import dotted_get
+from .log import log
 
 
 def get_package_name() -> str:
@@ -54,26 +53,6 @@ def get_image_path(img_name: str) -> str:
     )
 
 
-def get_image_color(img_name: str, region: sublime.Region) -> str:
-    """
-    @brief Get the image color from plugin settings in the form of #RRGGBBAA.
-
-    @param img_name The image name
-    @param region   The region
-
-    @return The color code in the form of #RRGGBBAA
-    """
-
-    from .functions import color_code_to_rgba
-
-    img_color = get_setting("image_colors")[img_name]
-
-    # assert for potential dev code typos
-    assert isinstance(img_color, str)
-
-    return color_code_to_rgba(img_color, region)
-
-
 def get_image_info(img_name: str) -> dict:
     """
     @brief Get image informations of an image from plugin settings.
@@ -110,46 +89,24 @@ def get_image_info(img_name: str) -> dict:
     }
 
 
-def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
+def get_image_color(img_name: str, region: sublime.Region) -> str:
     """
-    @brief Get the colored image in base64 string by RGBA color code.
-
-    @param img_name  The image name
-    @param rgba_code The color code in #RRGGBBAA
-
-    @return The image base64 string
-    """
-
-    from .functions import change_png_bytes_color
-
-    cache_key = "{name};{color}".format(name=img_name, color=rgba_code)
-
-    if not rgba_code:
-        return global_get("images.%s.base64" % img_name)
-
-    cached = "images.@cache.%s" % cache_key
-
-    if global_get(cached, None) is None:
-        img_bytes = global_get("images.%s.bytes" % img_name)
-        img_bytes = change_png_bytes_color(img_bytes, rgba_code)
-        img_base64 = base64.b64encode(img_bytes).decode()
-
-        global_set(cached, img_base64)
-
-    return global_get(cached)
-
-
-def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) -> str:
-    """
-    @brief Get the colored image in base64 string by region.
+    @brief Get the image color from plugin settings in the form of #RRGGBBAA.
 
     @param img_name The image name
     @param region   The region
 
-    @return The image base64 string
+    @return The color code in the form of #RRGGBBAA
     """
 
-    return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
+    from .image_processing import color_code_to_rgba
+
+    img_color = get_setting("image_colors")[img_name]
+
+    # assert for potential dev code typos
+    assert isinstance(img_color, str)
+
+    return color_code_to_rgba(img_color, region)
 
 
 def get_settings_file() -> str:

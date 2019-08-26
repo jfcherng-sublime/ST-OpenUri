@@ -10,7 +10,7 @@ class PhatomSetsManager:
 
     @classmethod
     def get_phantom_set(cls, phantom_set_id: str) -> sublime.PhantomSet:
-        return cls._phantom_sets[phantom_set_id]
+        return cls._phantom_sets.get(phantom_set_id)
 
     @classmethod
     def init_phantom_set(
@@ -24,7 +24,8 @@ class PhatomSetsManager:
 
     @classmethod
     def erase_phantom_set(cls, phantom_set_id: str) -> None:
-        cls._phantom_sets[phantom_set_id].update([])
+        if phantom_set_id in cls._phantom_sets:
+            cls._phantom_sets[phantom_set_id].update([])
 
     @classmethod
     def update_phantom_set(cls, phantom_set_id: str, phantoms: Iterable) -> None:
@@ -32,4 +33,5 @@ class PhatomSetsManager:
         @brief Note that "phantoms" should be Iterable[sublime.Phantom]
         """
 
-        cls._phantom_sets[phantom_set_id].update(list(phantoms))
+        if phantom_set_id in cls._phantom_sets:
+            cls._phantom_sets[phantom_set_id].update(list(phantoms))

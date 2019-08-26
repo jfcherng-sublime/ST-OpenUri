@@ -4,12 +4,25 @@ from .Globals import global_get
 from .image_processing import get_colored_image_base64_by_region
 from .settings import get_setting
 
+POPUP_TEMPLATE = """
+<body id="open-uri-popup">
+    <style>
+        img {{
+            width: {w}{size_unit};
+            height: {h}{size_unit};
+        }}
+    </style>
+    <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+    {text_html}
+</body>
+"""
+
 
 def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
     img = global_get("images.popup")
     base_size = 2.5
 
-    return global_get("POPUP_TEMPLATE").format(
+    return POPUP_TEMPLATE.format(
         uri=view.substr(uri_region),
         mime=img["mime"],
         w=base_size * img["ratio_wh"],

@@ -6,6 +6,21 @@ from .image_processing import get_colored_image_base64_by_region
 from .PhatomSetsManager import PhatomSetsManager
 from .settings import get_package_name
 
+PHANTOM_TEMPLATE = """
+<body id="open-uri-phantom">
+    <style>
+        a {{
+            line-height: 0;
+        }}
+        img {{
+            width: {ratio_wh}em;
+            height: 1em;
+        }}
+    </style>
+    <a href="{uri}"><img src="data:{mime};base64,{base64}"></a>
+</body>
+"""
+
 
 def get_phantom_set_id(view: sublime.View) -> str:
     return "w{w_id}v{v_id}".format(w_id=view.window().id(), v_id=view.id())
@@ -36,7 +51,7 @@ def update_phantom_set(view: sublime.View, uri_regions: Iterable) -> None:
 def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str:
     img = global_get("images.phantom")
 
-    return global_get("PHANTOM_TEMPLATE").format(
+    return PHANTOM_TEMPLATE.format(
         uri=view.substr(uri_region),
         mime=img["mime"],
         ratio_wh=img["ratio_wh"],

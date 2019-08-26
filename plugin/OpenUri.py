@@ -1,7 +1,6 @@
 import sublime
 import sublime_plugin
 from .functions import (
-    delete_phantom_set,
     draw_uri_regions,
     find_uri_regions_by_region,
     generate_popup_html,
@@ -9,6 +8,7 @@ from .functions import (
     view_is_dirty_val,
     view_last_typing_timestamp_val,
 )
+from .phantom_sets import init_phantom_set, delete_phantom_set
 from .settings import get_setting, get_setting_show_open_button, get_timestamp
 
 
@@ -17,6 +17,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         super().__init__(view)
 
         self.view = view
+        init_phantom_set(self.view)
         view_is_dirty_val(self.view, True)
         view_last_typing_timestamp_val(self.view, 0)
 

@@ -64,10 +64,6 @@ class Globals:
         "popup": {},
     }
 
-    phantom_sets = {
-        # phantom_set_id: sublime.PhantomSet object,
-    }
-
 
 def global_get(dotted: str, default=None):
     return dotted_get(Globals, dotted, default)

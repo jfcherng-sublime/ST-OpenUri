@@ -6,12 +6,7 @@ from collections.abc import Iterable
 from .Globals import global_get
 from .libs import png, triegex
 from .log import log
-from .settings import (
-    get_colored_image_base64_by_region,
-    get_package_name,
-    get_setting,
-    get_timestamp,
-)
+from .settings import get_colored_image_base64_by_region, get_setting, get_timestamp
 from .utils import (
     is_regions_intersected,
     region_expand,
@@ -210,20 +205,6 @@ def set_is_dirty_for_all_views(is_dirty: bool) -> None:
                 view_is_dirty_val(v, is_dirty)
 
 
-def get_phantom_set_key(window_id: int, view_id: int) -> str:
-    return "w{w_id}v{v_id}".format(w_id=window_id, v_id=view_id)
-
-
-def get_view_phantom_set(view: sublime.View) -> sublime.PhantomSet:
-    phantom_sets = global_get("phantom_sets")
-    phantom_set_id = get_phantom_set_key(view.window().id(), view.id())
-
-    if phantom_set_id not in phantom_sets:
-        phantom_sets[phantom_set_id] = sublime.PhantomSet(view, get_package_name())
-
-    return phantom_sets[phantom_set_id]
-
-
 def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     """
     @brief Change all colors in the PNG bytes to the new color.
@@ -379,63 +360,6 @@ def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
         base64=get_colored_image_base64_by_region("popup", uri_region),
         text_html=get_setting("popup_text_html"),
     )
-
-
-def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str:
-    img = global_get("images.phantom")
-
-    return global_get("PHANTOM_TEMPLATE").format(
-        uri=view.substr(uri_region),
-        mime=img["mime"],
-        ratio_wh=img["ratio_wh"],
-        base64=get_colored_image_base64_by_region("phantom", uri_region),
-    )
-
-
-def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.Phantom:
-    # Calculate the point to insert the phantom.
-    #
-    # Usually it's exact at the end of the URI, but if the next char is a quotation mark,
-    # there can be a problem on breaking "scope brackets" highlighting in BracketHilighter.
-    # In that case, we shift the position until the next char is not a quotation mark.
-    phantom_point = uri_region.end()
-    while view.substr(phantom_point) in "'\"`":
-        phantom_point += 1
-
-    return sublime.Phantom(
-        sublime.Region(phantom_point),
-        generate_phantom_html(view, uri_region),
-        layout=sublime.LAYOUT_INLINE,
-        on_navigate=open_uri_with_browser,
-    )
-
-
-def new_uri_phantoms(view: sublime.View, uri_regions: Iterable) -> list:
-    """
-    @brief Note that "uri_regions" should be Iterable[sublime.Region]
-
-    @return list[sublime.Phantom]
-    """
-
-    return [new_uri_phantom(view, r) for r in uri_regions]
-
-
-def delete_phantom_set(view: sublime.View) -> None:
-    phantom_sets = global_get("phantom_sets")
-    phantom_set_id = get_phantom_set_key(view.window().id(), view.id())
-    phantom_sets.pop(phantom_set_id, None)
-
-
-def erase_phantom_set(view: sublime.View) -> None:
-    get_view_phantom_set(view).update([])
-
-
-def update_phantom_set(view: sublime.View, char_regions: Iterable) -> None:
-    """
-    @brief Note that "char_regions" should be Iterable[sublime.Region]
-    """
-
-    get_view_phantom_set(view).update(new_uri_phantoms(view, char_regions))
 
 
 def erase_uri_regions(view: sublime.View) -> None:

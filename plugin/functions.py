@@ -347,41 +347,6 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
     return ""
 
 
-def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
-    img = global_get("images.popup")
-    base_size = 2.5
-
-    return global_get("POPUP_TEMPLATE").format(
-        uri=view.substr(uri_region),
-        mime=img["mime"],
-        w=base_size * img["ratio_wh"],
-        h=base_size,
-        size_unit="em",
-        base64=get_colored_image_base64_by_region("popup", uri_region),
-        text_html=get_setting("popup_text_html"),
-    )
-
-
-def erase_uri_regions(view: sublime.View) -> None:
-    view.erase_regions("OUIB_uri_regions")
-
-
-def draw_uri_regions(view: sublime.View, uri_regions: Iterable) -> None:
-    """
-    @brief Note that "uri_regions" should be Iterable[sublime.Region]
-    """
-
-    draw_uri_regions = get_setting("draw_uri_regions")
-
-    view.add_regions(
-        "OUIB_uri_regions",
-        list(uri_regions),
-        scope=draw_uri_regions["scope"],
-        icon=draw_uri_regions["icon"],
-        flags=draw_uri_regions["flags"],
-    )
-
-
 def is_view_normal_ready(view: sublime.View):
     return not view.settings().get("is_widget") and not view.is_loading()
 

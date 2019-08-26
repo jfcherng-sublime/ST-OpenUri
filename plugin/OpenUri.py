@@ -1,14 +1,9 @@
 import sublime
 import sublime_plugin
-from .functions import (
-    draw_uri_regions,
-    find_uri_regions_by_region,
-    generate_popup_html,
-    open_uri_with_browser,
-    view_is_dirty_val,
-    view_last_typing_timestamp_val,
-)
+from .functions import find_uri_regions_by_region, view_is_dirty_val, view_last_typing_timestamp_val
 from .phantom_sets import init_phantom_set, delete_phantom_set
+from .popup import show_popup
+from .region_drawing import draw_uri_regions
 from .settings import get_setting, get_setting_show_open_button, get_timestamp
 
 
@@ -40,13 +35,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
             )
 
         if uri_regions and get_setting_show_open_button(self.view) == "hover":
-            self.view.show_popup(
-                generate_popup_html(self.view, uri_regions[0]),
-                flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,
-                location=point,
-                max_width=500,
-                on_navigate=open_uri_with_browser,
-            )
+            show_popup(self.view, uri_regions[0], point)
 
         if get_setting("draw_uri_regions.enabled") == "hover":
             draw_uri_regions(self.view, uri_regions)

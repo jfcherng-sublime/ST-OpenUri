@@ -8,7 +8,6 @@ from .log import log
 from .settings import get_setting, get_timestamp
 from .utils import (
     is_regions_intersected,
-    is_view_normal_ready,
     region_expand,
     region_into_st_region_form,
     region_shift,

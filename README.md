@@ -44,6 +44,18 @@ is self-explanatory. But if you still have questions, feel free to open an issue
 - <kbd>Alt + Left Click</kbd>: Open the clicked URI.
 
 
+### How to disable default bindings?
+
+If you do not want those default key/mouse bindings, you can use an empty one to overwrite them.
+
+Here I take the default mouse binding as an example.
+
+1. Go to `Preferences` » `Browser Packages...`.
+1. Create file `OpenUri/bindings/Default.sublime-mousemap` (and its parent directories if necessary).
+1. Fill `Default.sublime-mousemap` with `[]`.
+   Then this `Default.sublime-mousemap` will overwrite this plugin's.
+
+
 ## Commands
 
 These commands are always available no matter what `show_open_button` is or how large the file is.

@@ -2,10 +2,7 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [6.2.1] - 2019-08-26
-
-### Changed
-- Just some code structure tweaks.
+## [6.2.2] - 2019-08-29
 
 ### Fixed
-- Prevent from weird `phantom_set_id` KeyError.
+- Fix renderer thread crashes when viewing an image file with ST.

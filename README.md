@@ -19,7 +19,7 @@ This plugin is available on Package Control by the name of [OpenUri](https://pac
 
 Note that this plugin only supports ST >= 3118 because of Phantom API.
 
-💡 You may also interest in my other plugins: https://packagecontrol.io/search/jfcherng
+💡 You may also be interested in my other plugins: https://packagecontrol.io/search/jfcherng
 
 
 ## Settings

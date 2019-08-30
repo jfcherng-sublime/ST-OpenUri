@@ -47,6 +47,7 @@ is self-explanatory. But if you still have questions, feel free to open an issue
 ### How to disable default bindings?
 
 If you do not want those default key/mouse bindings, you can use an empty one to overwrite them.
+Or if you want to change them, you can use a non-empty one.
 
 Here I take the default mouse binding as an example.
 

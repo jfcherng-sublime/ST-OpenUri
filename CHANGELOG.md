@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.5] - 2019-08-31
+
+### Added
+- Add and utilize the `typing` module.
+
+### Changed
+- Make `get_package_name()` not hard-coded.
+
+
 ## [6.2.4] - 2019-08-30
 
 ### Changed

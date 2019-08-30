@@ -41,7 +41,7 @@ is self-explanatory. But if you still have questions, feel free to open an issue
 
 ### Mouse Binding
 
-- <kbd>Alt + Left Click</kbd>: Open the clicked URI.
+- <kbd>Ctrl + Right Click</kbd>: Open the clicked URI.
 
 
 ### How to disable default bindings?

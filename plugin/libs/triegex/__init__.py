@@ -1,3 +1,4 @@
+# @see https://github.com/ZhukovAlexander/triegex
 import collections
 
 __all__ = ('Triegex',)
@@ -43,7 +44,7 @@ class TriegexNode:
         suffixes = [v.to_regex() for k, v in self.children.items()]
         if self.end:
             suffixes += [WORD_BOUNDARY]
-        
+
         if len(suffixes) > 1:
             return self.char + GROUP.format(OR.join(suffixes))
         elif len(suffixes) == 1:
@@ -51,7 +52,7 @@ class TriegexNode:
         else:
             return self.char
         '''
-        
+
         stack = [self]
         # marks starting indices of children of a node
         lookup = []
@@ -64,7 +65,7 @@ class TriegexNode:
             lookup.append(j)
             j += len(stack[i].children)
             i += 1
-        
+
         i = len(stack)
         # temp value array
         sub_regexes = [None] * i

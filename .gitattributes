@@ -1,1 +1,7 @@
+.editorconfig export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
 docs/ export-ignore
+images/*.sh export-ignore
+images/FontAwesome/*.svg export-ignore
+pyproject.toml export-ignore

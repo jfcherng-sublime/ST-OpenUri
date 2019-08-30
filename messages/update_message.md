@@ -2,7 +2,9 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [6.2.3] - 2019-08-29
+## [6.2.4] - 2019-08-30
 
-### Fixed
-- Do not let exceptions terminate the rendering thread.
+### Changed
+- The default mouse binding has been changed to `Ctrl + Right Click`.
+  Because the `Alt` key seems not working under Linux and I would like to
+  provide a binding that hopefully works under all platform.

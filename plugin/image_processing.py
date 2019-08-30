@@ -2,6 +2,7 @@ import base64
 import io
 import re
 import sublime
+from typing import ByteString, List
 from .Globals import global_get, global_set
 from .libs import png
 from .settings import get_image_color
@@ -48,7 +49,7 @@ def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) ->
     return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
 
 
-def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
+def change_png_bytes_color(img_bytes: ByteString, rgba_code: str) -> ByteString:
     """
     @brief Change all colors in the PNG bytes to the new color.
 
@@ -64,7 +65,9 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    def render_pixel(rgba_src: list, rgba_dst: list, invert_gray: bool = False) -> list:
+    def render_pixel(
+        rgba_src: List[int], rgba_dst: List[int], invert_gray: bool = False
+    ) -> List[int]:
         gray = calculate_gray(rgba_src)
         if invert_gray:
             gray = 0xFF - gray
@@ -94,7 +97,7 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     return buf.getvalue()
 
 
-def calculate_gray(rgb: list) -> int:
+def calculate_gray(rgb: List[int]) -> int:
     """
     @brief Calculate the gray scale of a color.
     @see   https://atlaboratary.blogspot.com/2013/08/rgb-g-rey-l-gray-r0.html
@@ -107,7 +110,7 @@ def calculate_gray(rgb: list) -> int:
     return int(rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
 
 
-def is_img_light(img_bytes: bytes) -> bool:
+def is_img_light(img_bytes: ByteString) -> bool:
     """
     @brief Determine if image is light colored.
 

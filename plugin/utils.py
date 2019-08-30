@@ -1,17 +1,18 @@
 import functools
 import sublime
-from collections.abc import Iterable
+from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
+from .st_types import RegionLike
 
 
-def simple_decorator(decorator):
+def simple_decorator(decorator: Callable) -> Callable:
     """
     @brief A decorator that turns a function into a decorator.
     """
 
     @functools.wraps(decorator)
-    def outer_wrapper(decoratee):
+    def outer_wrapper(decoratee: Callable) -> Callable:
         @functools.wraps(decoratee)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs) -> Any:
             return decorator(decoratee(*args, **kwargs))
 
         return wrapper
@@ -19,7 +20,7 @@ def simple_decorator(decorator):
     return outer_wrapper
 
 
-def dotted_get(var, dotted: str, default=None):
+def dotted_get(var: Any, dotted: str, default: Optional[Any] = None) -> Any:
     """
     @brief Get the value from the variable with dotted notation.
 
@@ -46,7 +47,7 @@ def dotted_get(var, dotted: str, default=None):
         return default
 
 
-def dotted_set(var, dotted: str, value) -> None:
+def dotted_set(var: Any, dotted: str, value: Any) -> None:
     """
     @brief Set the value for the variable with dotted notation.
 
@@ -74,15 +75,17 @@ def dotted_set(var, dotted: str, value) -> None:
         setattr(var, last_key, value)
 
 
-def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = True) -> list:
+def view_find_all_fast(
+    view: sublime.View, regex_obj: Pattern, return_st_region: bool = True
+) -> List[RegionLike]:
     """
     @brief A faster/simpler implementation of View.find_all().
 
     @param view             the View object
     @param regex_obj        the compiled regex object
-    @param return_st_region return regions in list[sublime.Region] type, otherwise in list[list[int]] type
+    @param return_st_region return regions in sublime.Region type or in list form otherwise
 
-    @return list[Union[sublime.Region, list[int]]]
+    @return Found regions
     """
 
     regions = [m.span() for m in regex_obj.finditer(view.substr(sublime.Region(0, view.size())))]
@@ -93,7 +96,7 @@ def view_find_all_fast(view: sublime.View, regex_obj, return_st_region: bool = T
     return regions
 
 
-def region_shift(region, shift: int):
+def region_shift(region: RegionLike, shift: int) -> RegionLike:
     """
     @brief Shift the region by given amount.
 
@@ -112,12 +115,12 @@ def region_shift(region, shift: int):
     return [region[0] + shift, region[-1] + shift]
 
 
-def region_expand(region, expansion):
+def region_expand(region: RegionLike, expansion: Union[int, List[int]]) -> RegionLike:
     """
     @brief Expand the region by given amount.
 
     @param region    The region
-    @param expansion Union[int, list[int]] The amount of left/right expansion
+    @param expansion The amount of left/right expansion
 
     @return the expanded region
     """
@@ -146,14 +149,14 @@ def region_expand(region, expansion):
     # fmt: on
 
 
-def region_into_list_form(region, sort_result: bool = False) -> list:
+def region_into_list_form(region: RegionLike, sort_result: bool = False) -> List[int]:
     """
     @brief Convert the "region" into list form
 
     @param region      The region
     @param sort_result Sort the region
 
-    @return list[int] the "region" in list form
+    @return the "region" in list form
     """
 
     if isinstance(region, sublime.Region):
@@ -174,14 +177,14 @@ def region_into_list_form(region, sort_result: bool = False) -> list:
     return sorted(region) if sort_result else region
 
 
-def region_into_st_region_form(region, sort_result: bool = False) -> list:
+def region_into_st_region_form(region: RegionLike, sort_result: bool = False) -> sublime.Region:
     """
     @brief Convert the "region" into ST's region form
 
     @param region      The region
     @param sort_result Sort the region
 
-    @return list[sublime.Region] the "region" in ST's region form
+    @return the "region" in ST's region form
     """
 
     if isinstance(region, (int, float)):
@@ -198,14 +201,16 @@ def region_into_st_region_form(region, sort_result: bool = False) -> list:
     return sublime.Region(region.begin(), region.end()) if sort_result else region
 
 
-def simplify_intersected_regions(regions: Iterable, allow_boundary: bool = False) -> list:
+def simplify_intersected_regions(
+    regions: Iterable[sublime.Region], allow_boundary: bool = False
+) -> List[sublime.Region]:
     """
     @brief Simplify intersected regions by merging them to reduce numbers of regions.
 
     @param regions        Iterable[sublime.Region] The regions
     @param allow_boundary Treat boundary contact as intersected
 
-    @return list[sublime.Region] Simplified regions
+    @return Simplified regions
     """
 
     merged_regions = []
@@ -250,5 +255,5 @@ def is_regions_intersected(
     return region_1.intersects(region_2)
 
 
-def is_view_normal_ready(view: sublime.View):
+def is_view_normal_ready(view: sublime.View) -> bool:
     return view and not view.settings().get("is_widget") and not view.is_loading()

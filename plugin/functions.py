@@ -1,11 +1,12 @@
 import re
 import sublime
 import webbrowser
-from collections.abc import Iterable
+from typing import Iterable, List, Tuple, Optional, Pattern
 from .Globals import global_get
 from .libs import triegex
 from .log import log
 from .settings import get_setting, get_timestamp
+from .st_types import RegionLike
 from .utils import (
     is_regions_intersected,
     region_expand,
@@ -41,11 +42,11 @@ def open_uri_with_browser(uri: str, browser: str = "") -> None:
         )
 
 
-def compile_uri_regex() -> tuple:
+def compile_uri_regex() -> Tuple[Pattern, List[str]]:
     """
     @brief Get the compiled regex object for matching URIs.
 
-    @return (activated schemes, compiled regex object)
+    @return (compiled regex object, activated schemes)
     """
 
     detect_schemes = get_setting("detect_schemes")
@@ -97,29 +98,31 @@ def compile_uri_regex() -> tuple:
     return regex_obj, sorted(activated_schemes)
 
 
-def find_uri_regions_by_region(view: sublime.View, region, search_radius: int = 200) -> list:
+def find_uri_regions_by_region(
+    view: sublime.View, region: RegionLike, search_radius: int = 200
+) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by the region
 
     @param view   The view
     @param region The region
 
-    @return list[sublime.Region] Found URI regions
+    @return Found URI regions
     """
 
     return find_uri_regions_by_regions(view, [region], search_radius)
 
 
 def find_uri_regions_by_regions(
-    view: sublime.View, regions: Iterable, search_radius: int = 200
-) -> list:
+    view: sublime.View, regions: Iterable[RegionLike], search_radius: int = 200
+) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by regions
 
     @param view    The view
     @param regions The regions
 
-    @return list[sublime.Region] Found URI regions
+    @return Found URI regions
     """
 
     regions = sorted(map(region_into_st_region_form, regions))
@@ -158,33 +161,35 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s=...):
+def view_last_typing_timestamp_val(
+    view: sublime.View, timestamp_s: Optional[float] = None
+) -> Optional[float]:
     """
     @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
 
     @param view        The view
     @param timestamp_s The last timestamp (in sec)
 
-    @return Optional[float] None if the set mode, otherwise the value
+    @return None if the set mode, otherwise the value
     """
 
-    if timestamp_s is ...:
+    if timestamp_s is None:
         return view.settings().get("OUIB_last_update_timestamp", False)
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
 
 
-def view_is_dirty_val(view: sublime.View, is_dirty=...):
+def view_is_dirty_val(view: sublime.View, is_dirty: Optional[float] = None) -> Optional[bool]:
     """
     @brief Set/Get the is_dirty of the current view
 
     @param view     The view
     @param is_dirty Indicates if dirty
 
-    @return Optional[bool] None if the set mode, otherwise the is_dirty
+    @return None if the set mode, otherwise the is_dirty
     """
 
-    if is_dirty is ...:
+    if is_dirty is None:
         return view.settings().get("OUIB_is_dirty", True)
 
     view.settings().set("OUIB_is_dirty", is_dirty)

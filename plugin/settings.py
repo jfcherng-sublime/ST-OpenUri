@@ -2,6 +2,7 @@ import base64
 import os
 import sublime
 import time
+from typing import Any, Dict, Optional
 from .utils import dotted_get
 from .log import log
 
@@ -53,13 +54,13 @@ def get_image_path(img_name: str) -> str:
     )
 
 
-def get_image_info(img_name: str) -> dict:
+def get_image_info(img_name: str) -> Dict[str, Any]:
     """
     @brief Get image informations of an image from plugin settings.
 
     @param img_name The image name
 
-    @return Dict[str, Any] The image information.
+    @return The image information.
     """
 
     from .libs import imagesize
@@ -129,14 +130,14 @@ def get_settings_object() -> sublime.Settings:
     return sublime.load_settings(get_settings_file())
 
 
-def get_setting(dotted: str, default=None):
+def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
     """
     @brief Get the plugin setting with the dotted key.
 
     @param dotted  The dotted key
     @param default The default value if the key doesn't exist
 
-    @return Optional[Any] The setting's value.
+    @return The setting's value.
     """
 
     return dotted_get(get_settings_object(), dotted, default)

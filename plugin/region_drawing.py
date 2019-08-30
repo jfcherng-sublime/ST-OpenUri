@@ -1,5 +1,5 @@
 import sublime
-from collections.abc import Iterable
+from typing import Iterable
 from .settings import get_setting
 
 
@@ -7,11 +7,7 @@ def erase_uri_regions(view: sublime.View) -> None:
     view.erase_regions("OUIB_uri_regions")
 
 
-def draw_uri_regions(view: sublime.View, uri_regions: Iterable) -> None:
-    """
-    @brief Note that "uri_regions" should be Iterable[sublime.Region]
-    """
-
+def draw_uri_regions(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> None:
     draw_uri_regions = get_setting("draw_uri_regions")
 
     view.add_regions(

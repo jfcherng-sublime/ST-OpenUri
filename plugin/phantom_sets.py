@@ -1,5 +1,5 @@
 import sublime
-from collections.abc import Iterable
+from typing import Iterable, List
 from .functions import open_uri_with_browser
 from .Globals import global_get
 from .image_processing import get_colored_image_base64_by_region
@@ -38,11 +38,7 @@ def erase_phantom_set(view: sublime.View) -> None:
     PhatomSetsManager.erase_phantom_set(get_phantom_set_id(view))
 
 
-def update_phantom_set(view: sublime.View, uri_regions: Iterable) -> None:
-    """
-    @brief Note that "uri_regions" should be Iterable[sublime.Region]
-    """
-
+def update_phantom_set(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> None:
     PhatomSetsManager.update_phantom_set(
         get_phantom_set_id(view), new_uri_phantoms(view, uri_regions)
     )
@@ -77,11 +73,8 @@ def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.P
     )
 
 
-def new_uri_phantoms(view: sublime.View, uri_regions: Iterable) -> list:
-    """
-    @brief Note that "uri_regions" should be Iterable[sublime.Region]
-
-    @return list[sublime.Phantom]
-    """
+def new_uri_phantoms(
+    view: sublime.View, uri_regions: Iterable[sublime.Region]
+) -> List[sublime.Phantom]:
 
     return [new_uri_phantom(view, r) for r in uri_regions]

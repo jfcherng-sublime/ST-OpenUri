@@ -1,8 +1,9 @@
 import threading
+from typing import Callable
 
 
 class RepeatingTimer:
-    def __init__(self, interval_ms: int, func, *args, **kwargs) -> None:
+    def __init__(self, interval_ms: int, func: Callable, *args, **kwargs) -> None:
         self.interval_s = interval_ms / 1000
         self.func = func
         self.args = args
@@ -10,7 +11,7 @@ class RepeatingTimer:
         self.timer = None
         self.is_running = False
 
-    def set_func(self, func, *args, **kwargs) -> None:
+    def set_func(self, func: Callable, *args, **kwargs) -> None:
         self.func = func
         self.args = args
         self.kwargs = kwargs

@@ -1,5 +1,5 @@
 import sublime
-from collections.abc import Iterable
+from typing import Iterable
 
 
 class PhatomSetsManager:
@@ -28,10 +28,6 @@ class PhatomSetsManager:
             cls._phantom_sets[phantom_set_id].update([])
 
     @classmethod
-    def update_phantom_set(cls, phantom_set_id: str, phantoms: Iterable) -> None:
-        """
-        @brief Note that "phantoms" should be Iterable[sublime.Phantom]
-        """
-
+    def update_phantom_set(cls, phantom_set_id: str, phantoms: Iterable[sublime.Phantom]) -> None:
         if phantom_set_id in cls._phantom_sets:
             cls._phantom_sets[phantom_set_id].update(list(phantoms))

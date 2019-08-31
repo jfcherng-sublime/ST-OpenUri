@@ -2,10 +2,7 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [6.2.5] - 2019-08-31
+## [6.2.6] - 2019-09-01
 
 ### Added
-- Add and utilize the `typing` module.
-
-### Changed
-- Make `get_package_name()` not hard-coded.
+- Introduce `mypy` for static analysis.

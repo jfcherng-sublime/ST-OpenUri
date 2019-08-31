@@ -1,5 +1,7 @@
+import logging
 import sublime
-from typing import Any, Optional
+import threading
+from typing import Any, Dict, List, Optional, Pattern
 from .utils import dotted_get, dotted_set
 
 
@@ -11,13 +13,13 @@ class Globals:
     HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
 
     # the logger to log messages
-    logger = None
+    logger = None  # type: logging.logger
 
     # the background thread for managing phantoms for views
-    renderer_thread = None
+    renderer_thread = None  # type: threading.Thread
 
-    activated_schemes = []
-    uri_regex_obj = None
+    activated_schemes = []  # type: List[str]
+    uri_regex_obj = None  # type: Pattern
 
     images = {
         "@cache": {
@@ -35,7 +37,7 @@ class Globals:
         #     - "size": (0, 0),
         "phantom": {},
         "popup": {},
-    }
+    }  # type: Dict[str, Any]
 
 
 def global_get(dotted: str, default: Optional[Any] = None) -> Any:

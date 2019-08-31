@@ -1,5 +1,6 @@
 import sublime
 import sublime_plugin
+from typing import List
 from .functions import find_uri_regions_by_region, view_is_dirty_val, view_last_typing_timestamp_val
 from .phantom_sets import init_phantom_set, delete_phantom_set
 from .popup import show_popup
@@ -28,7 +29,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if hover_zone != sublime.HOVER_TEXT:
-            uri_regions = []
+            uri_regions = []  # type: List[sublime.Region]
         else:
             uri_regions = find_uri_regions_by_region(
                 self.view, point, get_setting("uri_search_radius")

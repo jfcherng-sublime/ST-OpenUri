@@ -1,5 +1,5 @@
 import threading
-from typing import Callable
+from typing import Callable, Optional
 
 
 class RepeatingTimer:
@@ -8,7 +8,7 @@ class RepeatingTimer:
         self.func = func
         self.args = args
         self.kwargs = kwargs
-        self.timer = None
+        self.timer = None  # type: Optional[threading.Timer]
         self.is_running = False
 
     def set_func(self, func: Callable, *args, **kwargs) -> None:
@@ -25,6 +25,7 @@ class RepeatingTimer:
         self.is_running = True
 
     def cancel(self) -> None:
+        assert isinstance(self.timer, threading.Timer)
         self.timer.cancel()
         self.is_running = False
 

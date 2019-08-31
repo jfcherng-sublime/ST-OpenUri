@@ -1,7 +1,7 @@
 import re
 import sublime
 import webbrowser
-from typing import Iterable, List, Tuple, Optional, Pattern
+from typing import cast, Iterable, List, Tuple, Optional, Pattern
 from .Globals import global_get
 from .libs import triegex
 from .log import log
@@ -16,7 +16,7 @@ from .utils import (
 )
 
 
-def open_uri_with_browser(uri: str, browser: str = "") -> None:
+def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
     """
     @brief Open the URI with the browser.
 
@@ -125,29 +125,36 @@ def find_uri_regions_by_regions(
     @return Found URI regions
     """
 
-    regions = sorted(map(region_into_st_region_form, regions))
+    st_regions = sorted(map(region_into_st_region_form, regions))  # type: List[sublime.Region]
+
     search_regions = simplify_intersected_regions(
-        (region_expand(region, search_radius) for region in regions), True
+        (
+            # fmt: off
+            cast(sublime.Region, region_expand(region, search_radius))
+            for region in st_regions
+            # fmt: on
+        ),
+        True,
     )
 
-    uri_regions = []
+    uri_regions = []  # type: List[sublime.Region]
     for region in search_regions:
         coordinate_bias = max(0, region.begin())
 
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
-            sublime.Region(*region_shift(m.span(), coordinate_bias))
+            sublime.Region(*region_shift(m.span(), coordinate_bias))  # type: ignore
             for m in global_get("uri_regex_obj").finditer(view.substr(region))
         )
 
-    # only pick up "uri_region"s that are intersected with "regions"
-    # note that both "regions" and "uri_regions" are guaranteed sorted here
+    # only pick up "uri_region"s that are intersected with "st_regions"
+    # note that both "st_regions" and "uri_regions" are guaranteed sorted here
     regions_idx = 0
-    uri_regions_intersected = []
+    uri_regions_intersected = []  # type: List[sublime.Region]
 
     for uri_region in uri_regions:
-        for idx in range(regions_idx, len(regions)):
-            region = regions[idx]
+        for idx in range(regions_idx, len(st_regions)):
+            region = st_regions[idx]
 
             # later "uri_region" is always even larger so this "idx" is useless since now
             if uri_region.begin() > region.end():
@@ -177,6 +184,7 @@ def view_last_typing_timestamp_val(
         return view.settings().get("OUIB_last_update_timestamp", False)
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
+    return None
 
 
 def view_is_dirty_val(view: sublime.View, is_dirty: Optional[float] = None) -> Optional[bool]:
@@ -193,6 +201,7 @@ def view_is_dirty_val(view: sublime.View, is_dirty: Optional[float] = None) -> O
         return view.settings().get("OUIB_is_dirty", True)
 
     view.settings().set("OUIB_is_dirty", is_dirty)
+    return None
 
 
 def is_view_typing(view: sublime.View) -> bool:
@@ -205,12 +214,15 @@ def is_view_typing(view: sublime.View) -> bool:
     """
 
     now_s = get_timestamp()
-    pass_ms = (now_s - view_last_typing_timestamp_val(view)) * 1000
+    last_typing_s = view_last_typing_timestamp_val(view)
 
-    return pass_ms < get_setting("typing_period")
+    if not last_typing_s:
+        last_typing_s = 0
+
+    return (now_s - last_typing_s) * 1000 < get_setting("typing_period")
 
 
-def is_view_too_large(view: sublime.View) -> bool:
+def is_view_too_large(view: Optional[sublime.View]) -> bool:
     """
     @brief Determine if the view is too large. Note that size will be 0 if the view is loading.
 
@@ -219,4 +231,4 @@ def is_view_too_large(view: sublime.View) -> bool:
     @return True if the view is too large, False otherwise.
     """
 
-    return view.size() > get_setting("large_file_threshold")
+    return bool(view and view.size() > get_setting("large_file_threshold"))

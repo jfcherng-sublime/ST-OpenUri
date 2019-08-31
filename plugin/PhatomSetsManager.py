@@ -1,15 +1,15 @@
 import sublime
-from typing import Iterable
+from typing import Dict, Iterable, Optional
 
 
 class PhatomSetsManager:
     # class-level (shared across objects)
     _phantom_sets = {
-        # phantom_set_id: sublime.PhantomSet object,
-    }
+        # phantom_set_id: PhantomSet object,
+    }  # type: Dict[str, sublime.PhantomSet]
 
     @classmethod
-    def get_phantom_set(cls, phantom_set_id: str) -> sublime.PhantomSet:
+    def get_phantom_set(cls, phantom_set_id: str) -> Optional[sublime.PhantomSet]:
         return cls._phantom_sets.get(phantom_set_id)
 
     @classmethod

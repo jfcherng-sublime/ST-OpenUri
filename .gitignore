@@ -4,5 +4,6 @@ Desktop.ini
 Thumbs.db
 
 # Python
-__pycache__/
 *.py[cod]
+.mypy_cache/
+__pycache__/

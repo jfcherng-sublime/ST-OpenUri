@@ -1,5 +1,6 @@
 # Sublime-OpenUri
 
+<a href="https://travis-ci.org/jfcherng/Sublime-OpenUri"><img alt="Travis (.org) branch" src="https://img.shields.io/travis/jfcherng/Sublime-OpenUri/master?style=flat-square"></a>
 <a href="https://packagecontrol.io/packages/OpenUri"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square"></a>
 <a href="https://github.com/jfcherng/Sublime-OpenUri/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
 <a href="https://github.com/jfcherng/Sublime-OpenUri/blob/master/LICENSE"><img alt="Project license" src="https://img.shields.io/github/license/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>

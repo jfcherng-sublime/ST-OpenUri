@@ -33,7 +33,7 @@ def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
     )
 
 
-def show_popup(view: sublime.View, uri_region: sublime.Region, point: int) -> str:
+def show_popup(view: sublime.View, uri_region: sublime.Region, point: int) -> None:
     view.show_popup(
         generate_popup_html(view, uri_region),
         flags=sublime.COOPERATE_WITH_AUTO_COMPLETE | sublime.HIDE_ON_MOUSE_MOVE_AWAY,

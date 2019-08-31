@@ -1,0 +1,13 @@
+dist: bionic
+env:
+    global:
+        - PACKAGE="OpenUri" # Package name
+        - SUBLIME_TEXT_VERSION="3"
+language: python
+python:
+    - "3.7"
+install:
+    - python -m pip install -U pip
+    - pip install -U -r requirements.txt
+script:
+    - ./scripts/run_local_tests.sh

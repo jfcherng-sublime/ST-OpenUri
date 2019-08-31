@@ -23,7 +23,15 @@ PHANTOM_TEMPLATE = """
 
 
 def get_phantom_set_id(view: sublime.View) -> str:
-    return "w{w_id}v{v_id}".format(w_id=view.window().id(), v_id=view.id())
+    if not view:
+        v_id = -1
+        w_id = -1
+    else:
+        v_id = view.id()
+        w = view.window()
+        w_id = w.id() if w else -1
+
+    return "w{w_id}v{v_id}".format(w_id=w_id, v_id=v_id)
 
 
 def init_phantom_set(view: sublime.View) -> None:

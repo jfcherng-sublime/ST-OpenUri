@@ -1,6 +1,6 @@
 import functools
 import sublime
-from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
+from typing import Any, Callable, Iterable, List, Optional, Pattern, Union, Tuple, Sequence
 from .st_types import RegionLike
 
 
@@ -68,32 +68,27 @@ def dotted_set(var: Any, dotted: str, value: Any) -> None:
             var = getattr(var, key)
 
     if isinstance(var, (dict, sublime.Settings)):
-        var[last_key] = value
+        var[last_key] = value  # type: ignore
     elif isinstance(var, (list, tuple, bytes, bytearray)):
-        var[int(last_key)] = value
+        var[int(last_key)] = value  # type: ignore
     else:
         setattr(var, last_key, value)
 
 
-def view_find_all_fast(
-    view: sublime.View, regex_obj: Pattern, return_st_region: bool = True
-) -> List[RegionLike]:
+def view_find_all_fast(view: sublime.View, regex_obj: Pattern) -> List[sublime.Region]:
     """
     @brief A faster/simpler implementation of View.find_all().
 
     @param view             the View object
     @param regex_obj        the compiled regex object
-    @param return_st_region return regions in sublime.Region type or in list form otherwise
 
     @return Found regions
     """
 
-    regions = [m.span() for m in regex_obj.finditer(view.substr(sublime.Region(0, view.size())))]
-
-    if return_st_region:
-        regions = [sublime.Region(*r) for r in regions]
-
-    return regions
+    return [
+        sublime.Region(*m.span())
+        for m in regex_obj.finditer(view.substr(sublime.Region(0, view.size())))
+    ]
 
 
 def region_shift(region: RegionLike, shift: int) -> RegionLike:
@@ -213,7 +208,7 @@ def simplify_intersected_regions(
     @return Simplified regions
     """
 
-    merged_regions = []
+    merged_regions = []  #  type: List[sublime.Region]
     for region in sorted(regions):
         if not merged_regions:
             merged_regions.append(region)
@@ -255,5 +250,5 @@ def is_regions_intersected(
     return region_1.intersects(region_2)
 
 
-def is_view_normal_ready(view: sublime.View) -> bool:
-    return view and not view.settings().get("is_widget") and not view.is_loading()
+def is_view_normal_ready(view: Optional[sublime.View]) -> bool:
+    return bool(view and not view.settings().get("is_widget") and not view.is_loading())

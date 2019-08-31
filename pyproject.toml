@@ -6,6 +6,7 @@ target-version = ['py33']
 exclude = '''
 /(
   \.git |
-  libs
+  plugin/libs |
+  stubs
 )/
 '''

@@ -1,7 +1,7 @@
 dist: bionic
 env:
     global:
-        - PACKAGE="OpenUri" # Package name
+        - PACKAGE="AutoSetIndentation" # Package name
         - SUBLIME_TEXT_VERSION="3"
 language: python
 python:
@@ -10,4 +10,5 @@ install:
     - python -m pip install -U pip
     - pip install -U -r requirements.txt
 script:
-    - ./scripts/run_local_tests.sh
+    - mypy -p plugin
+    - black --check .

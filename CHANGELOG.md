@@ -5,6 +5,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.7] - 2019-09-02
+
+### Changed
+- Bound renderer interval with a minimum value.
+  So if you accidentally use a tiny value like `0` will not causing ST unresponsive.
+
+
 ## [6.2.6] - 2019-09-01
 
 ### Added

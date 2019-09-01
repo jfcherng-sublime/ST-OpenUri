@@ -13,7 +13,7 @@ class Globals:
     HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
 
     # the logger to log messages
-    logger = None  # type: logging.logger
+    logger = None  # type: logging.Logger
 
     # the background thread for managing phantoms for views
     renderer_thread = None  # type: threading.Thread

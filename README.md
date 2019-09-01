@@ -14,6 +14,19 @@ Finally! A performant and highly customizable URI-opening plugin comes.
 `OpenUri` is a Sublime Text 3 plugin which provides easy access to URIs in the file.
 
 
+## Bug fix for `PhantomSet`
+
+The `PhantomSet` implementation before ST 3209 (not released yet) is buggy.
+You can fix it by overwriting [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
+Remember, backup `sublime.py` before patching it.
+
+- On Windows: `C:\Program Files\Sublime Text 3\sublime.py`
+- On Linux: `/opt/sublime_text/sublime.py`
+- On Mac OSX: `/Applications/Sublime Text.app/Contents/MacOS/sublime.py`
+
+Reference: https://github.com/SublimeTextIssues/Core/issues/2897#issuecomment-514868381
+
+
 ## Installation
 
 This plugin is available on Package Control by the name of [OpenUri](https://packagecontrol.io/packages/OpenUri).

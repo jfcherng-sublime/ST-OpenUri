@@ -6,6 +6,9 @@ env:
 language: python
 python:
     - "3.7"
+before_install:
+    # remove potential mypy cache
+    - rm -rf .mypy_cache/
 install:
     - python -m pip install -U pip
     - pip install -U -r requirements.txt

@@ -42,7 +42,10 @@ is self-explanatory. But if you still have questions, feel free to open an issue
 
 ### Mouse Binding
 
-- <kbd>Ctrl + Right Click</kbd>: Open the clicked URI.
+- <kbd>Ctrl + Right Click</kbd>: Open the clicked URI. (`open_uri_from_cursors`)
+
+You may also add a mouse binding for `select_uri_from_cursors`.
+There are just too few modifier keys to be chosen so I am not adding a default one for it.
 
 
 ### How to disable default bindings?

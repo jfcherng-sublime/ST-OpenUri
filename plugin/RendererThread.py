@@ -34,7 +34,7 @@ class RendererThread(RepeatingTimer):
                 self._clean_up_uri_regions(view)
                 view_is_dirty_val(view, False)
 
-            if self._need_detect_chars_globally(view):
+            if self._need_detect_uris_globally(view):
                 assert isinstance(view, sublime.View)
 
                 self._detect_uris_globally(view)
@@ -46,7 +46,7 @@ class RendererThread(RepeatingTimer):
 
         self.is_rendering = False
 
-    def _need_detect_chars_globally(self, view: Optional[sublime.View]) -> bool:
+    def _need_detect_uris_globally(self, view: Optional[sublime.View]) -> bool:
         if not is_view_normal_ready(view):
             return False
 

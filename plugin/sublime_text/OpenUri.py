@@ -1,11 +1,15 @@
 import sublime
 import sublime_plugin
 from typing import List
-from .functions import find_uri_regions_by_region, view_is_dirty_val, view_last_typing_timestamp_val
-from .phantom_sets import init_phantom_set, delete_phantom_set
-from .popup import show_popup
-from .region_drawing import draw_uri_regions
-from .settings import get_setting, get_setting_show_open_button, get_timestamp
+from ..functions import (
+    find_uri_regions_by_region,
+    view_is_dirty_val,
+    view_last_typing_timestamp_val,
+)
+from ..phantom_sets import init_phantom_set, delete_phantom_set
+from ..popup import show_popup
+from ..region_drawing import draw_uri_regions
+from ..settings import get_setting, get_setting_show_open_button, get_timestamp
 
 
 class OpenUri(sublime_plugin.ViewEventListener):

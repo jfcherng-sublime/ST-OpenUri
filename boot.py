@@ -1,8 +1,8 @@
 from .plugin import set_up, tear_down
 
 # main plugin classes
-from .plugin.OpenUri import *
-from .plugin.OpenUriCommands import *
+from .plugin.sublime_text.OpenUri import *
+from .plugin.sublime_text.OpenUriCommands import *
 
 
 def plugin_loaded() -> None:

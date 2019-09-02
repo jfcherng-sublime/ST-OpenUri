@@ -1,11 +1,11 @@
 import sublime
 import sublime_plugin
-from .functions import (
+from ..functions import (
     find_uri_regions_by_region,
     find_uri_regions_by_regions,
     open_uri_with_browser,
 )
-from .settings import get_setting
+from ..settings import get_setting
 
 
 class OpenUriFromCursorsCommand(sublime_plugin.TextCommand):

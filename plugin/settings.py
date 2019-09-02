@@ -2,6 +2,7 @@ import base64
 import os
 import sublime
 import sys
+import tempfile
 import time
 from typing import Any, Dict, Optional
 from .utils import dotted_get
@@ -30,6 +31,20 @@ def get_package_path() -> str:
     return "Packages/" + get_package_name()
 
 
+def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, Any]:
+    variables = {
+        "home": os.path.expanduser("~"),
+        "package_name": get_package_name(),
+        "package_path": get_package_path(),
+        "temp_dir": tempfile.gettempdir(),
+    }
+
+    if window:
+        variables.update(window.extract_variables())
+
+    return variables
+
+
 def get_image_path(img_name: str) -> str:
     """
     @brief Get the image resource path from plugin settings.
@@ -44,15 +59,7 @@ def get_image_path(img_name: str) -> str:
     # assert for potential dev code typos
     assert isinstance(img_path, str)
 
-    return sublime.expand_variables(
-        img_path,
-        {
-            # fmt: off
-            "package_name": get_package_name(),
-            "package_path": get_package_path(),
-            # fmt: on
-        },
-    )
+    return sublime.expand_variables(img_path, get_expanding_variables(sublime.active_window()))
 
 
 def get_image_info(img_name: str) -> Dict[str, Any]:

@@ -17,7 +17,7 @@ Finally! A performant and highly customizable URI-opening plugin comes.
 ## Bug fix for `PhantomSet`
 
 The `PhantomSet` implementation before ST 3209 (not released yet) is buggy.
-You can fix it by overwriting [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
+You can fix it by overwriting it with [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
 Remember, backup `sublime.py` before patching it.
 
 - On Windows: `C:\Program Files\Sublime Text 3\sublime.py`

@@ -11,7 +11,8 @@ Finally! A performant and highly customizable URI-opening plugin comes.
 
 ![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUri/master/docs/screenshot.png)
 
-`OpenUri` is a Sublime Text 3 plugin which provides easy access to URIs in the file.
+`OpenUri` is a Sublime Text 3 plugin which provides an easy access to URIs (mostly URLs)
+in a file by clicking on a phantom, the popup or key/mouse bindings.
 
 
 ## Bug fix for `PhantomSet`
@@ -40,8 +41,8 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 
 To edit settings, go to `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
 
-I think the [settings file](https://github.com/jfcherng/Sublime-OpenUri/blob/master/OpenUri.sublime-settings) 
-is self-explanatory. But if you still have questions, feel free to open an issue.
+I try to make the [settings file](https://github.com/jfcherng/Sublime-OpenUri/blob/master/OpenUri.sublime-settings) 
+self-explanatory. But if you still have questions, feel free to open an issue.
 
 
 ## Default Bindings

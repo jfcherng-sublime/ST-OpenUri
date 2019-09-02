@@ -6,7 +6,7 @@ from ..functions import (
     view_is_dirty_val,
     view_last_typing_timestamp_val,
 )
-from ..phantom_sets import init_phantom_set, delete_phantom_set
+from ..phantom_set import init_phantom_set, delete_phantom_set
 from ..popup import show_popup
 from ..region_drawing import draw_uri_regions
 from ..settings import get_setting, get_setting_show_open_button, get_timestamp

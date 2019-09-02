@@ -4,7 +4,7 @@ from typing import Optional
 from .functions import is_view_too_large, is_view_typing, view_is_dirty_val
 from .Globals import global_get
 from .log import log
-from .phantom_sets import erase_phantom_set, update_phantom_set
+from .phantom_set import erase_phantom_set, update_phantom_set
 from .region_drawing import draw_uri_regions, erase_uri_regions
 from .RepeatingTimer import RepeatingTimer
 from .settings import get_setting, get_setting_show_open_button

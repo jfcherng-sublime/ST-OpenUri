@@ -1,6 +1,6 @@
 import functools
 import sublime
-from typing import Any, Callable, Iterable, List, Optional, Pattern, Union, Tuple, Sequence
+from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
 from .st_types import RegionLike
 
 

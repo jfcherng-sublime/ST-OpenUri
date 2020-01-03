@@ -17,7 +17,7 @@ in a file by clicking on a phantom, the popup or key/mouse bindings.
 
 ## Bug fix for `PhantomSet`
 
-The `PhantomSet` implementation before ST 3212 (not released yet) is buggy.
+The official `PhantomSet` implementation before Sublime Text 4 (not released yet) is buggy.
 You can fix it by overwriting it with [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
 Remember, backup `sublime.py` before patching it.
 

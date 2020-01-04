@@ -191,7 +191,7 @@ def view_last_typing_timestamp_val(
     """
 
     if timestamp_s is None:
-        return view.settings().get("OUIB_last_update_timestamp", False)
+        return cast(float, view.settings().get("OUIB_last_update_timestamp", 0.0))
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
     return None
@@ -208,7 +208,7 @@ def view_is_dirty_val(view: sublime.View, is_dirty: Optional[float] = None) -> O
     """
 
     if is_dirty is None:
-        return view.settings().get("OUIB_is_dirty", True)
+        return bool(view.settings().get("OUIB_is_dirty", True))
 
     view.settings().set("OUIB_is_dirty", is_dirty)
     return None

@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.8] - 2020-01-04
+
+### Changed
+- `file://` scheme is enabled by default now.
+- Update icon `FontAwesome/external-link.svg`.
+
+### Fixed
+- `file://` scheme is not working for URL-encoded URIs.
+
+
 ## [6.2.7] - 2019-09-02
 
 ### Changed

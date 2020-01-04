@@ -2,8 +2,11 @@ OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
 
-## [6.2.7] - 2019-09-02
+## [6.2.8] - 2020-01-04
 
 ### Changed
-- Bound renderer interval with a minimum value.
-  So if you accidentally use a tiny value like `0` will not causing ST unresponsive.
+- `file://` scheme is enabled by default now.
+- Update icon `FontAwesome/external-link.svg`.
+
+### Fixed
+- `file://` scheme is not working for URL-encoded URIs.

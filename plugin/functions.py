@@ -1,6 +1,7 @@
 import re
 import sublime
 import webbrowser
+import urllib.parse as urllib_parse
 from typing import cast, Iterable, List, Tuple, Optional, Pattern
 from .Globals import global_get
 from .libs import triegex
@@ -23,6 +24,15 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
     @param uri     The uri
     @param browser The browser
     """
+
+    parsedUri = urllib_parse.urlparse(uri)
+
+    log("debug", "Parsed URI: {parsedUri}".format(parsedUri=parsedUri))
+
+    # decode URL-encoded "file" scheme such as
+    # "file:///D:/%E6%B8%AC%E8%A9%A6.html" -> "file:///D:/測試.html"
+    if parsedUri.scheme == "file":
+        uri = urllib_parse.unquote(uri)
 
     if not browser:
         browser = get_setting("browser")

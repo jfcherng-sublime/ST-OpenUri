@@ -80,7 +80,7 @@
     // key / value = scheme / enabled
     "detect_schemes": {
         // basic
-        "file://": {"enabled": false, "path_regex": "@default"},
+        "file://": {"enabled": true, "path_regex": "@default"},
         "ftp://": {"enabled": true, "path_regex": "@default"},
         "ftps://": {"enabled": true, "path_regex": "@default"},
         "http://": {"enabled": true, "path_regex": "@default"},

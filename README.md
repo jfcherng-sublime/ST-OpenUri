@@ -1,32 +1,32 @@
 # Sublime-OpenUri
 
-<a href="https://www.sublimetext.com"><img alt="Required ST Build" src="https://img.shields.io/badge/ST-Build%203118+-orange.svg?style=flat-square&logo=sublime-text"></a>
-<a href="https://travis-ci.org/jfcherng/Sublime-OpenUri"><img alt="Travis (.org) branch" src="https://img.shields.io/travis/jfcherng/Sublime-OpenUri/master?style=flat-square"></a>
-<a href="https://packagecontrol.io/packages/OpenUri"><img alt="Package Control" src="https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUri/tags"><img alt="GitHub tag (latest SemVer)" src="https://img.shields.io/github/tag/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUri/blob/master/LICENSE"><img alt="Project license" src="https://img.shields.io/github/license/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
-<a href="https://github.com/jfcherng/Sublime-OpenUri/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/jfcherng/Sublime-OpenUri?style=flat-square&logo=github"></a>
-<a href="https://www.paypal.me/jfcherng/5usd" title="Donate to this project using Paypal"><img src="https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal"></a>
+[![Required ST Build](https://img.shields.io/badge/ST-3118+-orange.svg?style=flat-square&logo=sublime-text)](https://www.sublimetext.com)
+[![Travis (.org) branch](https://img.shields.io/travis/jfcherng/Sublime-OpenUri/master?style=flat-square)](https://travis-ci.org/jfcherng/Sublime-OpenUri)
+[![Package Control](https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square)](https://packagecontrol.io/packages/OpenUri)
+[![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/jfcherng/Sublime-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng/Sublime-OpenUri/tags)
+[![Project license](https://img.shields.io/github/license/jfcherng/Sublime-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng/Sublime-OpenUri/blob/master/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/jfcherng/Sublime-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng/Sublime-OpenUri/stargazers)
+[![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/jfcherng/5usd)
 
 Finally! A performant and highly customizable URI-opening plugin comes.
 
 ![screenshot](https://raw.githubusercontent.com/jfcherng/Sublime-OpenUri/master/docs/screenshot.png)
 
-`OpenUri` is a Sublime Text 3 plugin which provides an easy access to URIs (mostly URLs)
+`OpenUri` is a Sublime Text plugin which provides an easy access to URIs (mostly URLs)
 in a file by clicking on a phantom, the popup or key/mouse bindings.
 
 
-## Bug fix for `PhantomSet`
+## Bug fix for `PhantomSet` in ST 3
 
-The official `PhantomSet` implementation before Sublime Text 4 (not released yet) is buggy.
+If you are using ST 4, just ignore this section.
+
+The official `PhantomSet` implementation in Sublime Text 3 is [buggy](https://github.com/SublimeTextIssues/Core/issues/2897#issuecomment-514868381).
 You can fix it by overwriting it with [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
 Remember, backup `sublime.py` before patching it.
 
 - On Windows: `C:\Program Files\Sublime Text 3\sublime.py`
 - On Linux: `/opt/sublime_text/sublime.py`
 - On Mac OSX: `/Applications/Sublime Text.app/Contents/MacOS/sublime.py`
-
-Reference: https://github.com/SublimeTextIssues/Core/issues/2897#issuecomment-514868381
 
 
 ## Installation

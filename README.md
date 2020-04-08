@@ -42,7 +42,7 @@ Note that this plugin only supports ST >= 3118 because of Phantom API.
 
 To edit settings, go to `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
 
-I try to make the [settings file](https://github.com/jfcherng/Sublime-OpenUri/blob/master/OpenUri.sublime-settings) 
+I try to make the [settings file](https://github.com/jfcherng/Sublime-OpenUri/blob/master/OpenUri.sublime-settings)
 self-explanatory. But if you still have questions, feel free to open an issue.
 
 
@@ -63,7 +63,7 @@ You may also add a mouse binding for `select_uri_from_cursors`.
 There are just too few modifier keys to be chosen so I am not adding a default one for it.
 
 
-### How to disable default bindings?
+### How to disable default bindings
 
 If you do not want those default key/mouse bindings, you can use an empty one to overwrite them.
 Or if you want to change them, you can use a non-empty one.

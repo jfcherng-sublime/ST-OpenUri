@@ -1,12 +1,10 @@
 OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
-
-## [6.2.8] - 2020-01-04
-
-### Changed
-- `file://` scheme is enabled by default now.
-- Update icon `FontAwesome/external-link.svg`.
+## [6.2.10] - 2020-05-24
 
 ### Fixed
-- `file://` scheme is not working for URL-encoded URIs.
+- Phantom padding for some color schemes.
+
+  Some color schemes such as Material Theme's have large
+  unneeded padding for phantoms somehow.

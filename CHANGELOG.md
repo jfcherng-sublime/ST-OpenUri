@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.10] - 2020-05-24
+
+### Fixed
+- Phantom padding for some color schemes.
+
+  Some color schemes such as Material Theme's have large
+  unneeded padding for phantoms somehow.
+
+
 ## [6.2.9] - 2020-04-09
 
 ### Changed

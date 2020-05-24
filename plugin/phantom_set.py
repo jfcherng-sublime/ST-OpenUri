@@ -9,6 +9,10 @@ from .settings import get_package_name
 PHANTOM_TEMPLATE = """
 <body id="open-uri-phantom">
     <style>
+        html, body {{
+            margin: 0;
+            padding: 0;
+        }}
         a {{
             line-height: 0;
         }}

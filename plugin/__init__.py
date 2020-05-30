@@ -2,6 +2,7 @@ import sublime
 from .functions import compile_uri_regex, view_is_dirty_val
 from .Globals import global_get, global_set
 from .log import apply_user_log_level, init_plugin_logger, log
+from .PhatomSetsManager import PhatomSetsManager
 from .RendererThread import RendererThread
 from .settings import (
     get_image_info,
@@ -40,6 +41,7 @@ def tear_down() -> None:
 
     get_settings_object().clear_on_change(get_package_name())
     global_get("renderer_thread").cancel()
+    PhatomSetsManager.clear()
 
 
 def init_images() -> None:

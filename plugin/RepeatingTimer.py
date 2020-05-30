@@ -25,8 +25,8 @@ class RepeatingTimer:
         self.is_running = True
 
     def cancel(self) -> None:
-        assert isinstance(self.timer, threading.Timer)
-        self.timer.cancel()
+        if isinstance(self.timer, threading.Timer):
+            self.timer.cancel()
         self.is_running = False
 
     def _callback(self) -> None:

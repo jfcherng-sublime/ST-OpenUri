@@ -31,3 +31,10 @@ class PhatomSetsManager:
     def update_phantom_set(cls, phantom_set_id: str, phantoms: Iterable[sublime.Phantom]) -> None:
         if phantom_set_id in cls._phantom_sets:
             cls._phantom_sets[phantom_set_id].update(list(phantoms))
+
+    @classmethod
+    def clear(cls) -> None:
+        for phantom_set_id in list(cls._phantom_sets.keys()):
+            cls.delete_phantom_set(phantom_set_id)
+
+        cls._phantom_sets = {}

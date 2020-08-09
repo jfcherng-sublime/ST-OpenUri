@@ -51,9 +51,7 @@ def erase_phantom_set(view: sublime.View) -> None:
 
 
 def update_phantom_set(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> None:
-    PhatomSetsManager.update_phantom_set(
-        get_phantom_set_id(view), new_uri_phantoms(view, uri_regions)
-    )
+    PhatomSetsManager.update_phantom_set(get_phantom_set_id(view), new_uri_phantoms(view, uri_regions))
 
 
 def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str:
@@ -85,8 +83,6 @@ def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.P
     )
 
 
-def new_uri_phantoms(
-    view: sublime.View, uri_regions: Iterable[sublime.Region]
-) -> List[sublime.Phantom]:
+def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> List[sublime.Phantom]:
 
     return [new_uri_phantom(view, r) for r in uri_regions]

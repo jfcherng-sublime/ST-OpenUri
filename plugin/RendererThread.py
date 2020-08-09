@@ -52,9 +52,7 @@ class RendererThread(RepeatingTimer):
 
         assert isinstance(view, sublime.View)
 
-        return bool(
-            view_is_dirty_val(view) and not is_view_typing(view) and not is_view_too_large(view)
-        )
+        return bool(view_is_dirty_val(view) and not is_view_typing(view) and not is_view_too_large(view))
 
     def _detect_uris_globally(self, view: sublime.View) -> None:
         uri_regions = view_find_all_fast(view, global_get("uri_regex_obj"))

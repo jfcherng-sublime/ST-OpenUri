@@ -12,9 +12,7 @@ class OpenUriFromCursorsCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit, browser: str = "") -> None:
         uris = map(
             lambda region: self.view.substr(region),
-            find_uri_regions_by_regions(
-                self.view, self.view.sel(), get_setting("uri_search_radius")
-            ),
+            find_uri_regions_by_regions(self.view, self.view.sel(), get_setting("uri_search_radius")),
         )
 
         for uri in set(uris):
@@ -25,9 +23,7 @@ class OpenUriFromViewCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit, browser: str = "") -> None:
         uris = map(
             lambda region: self.view.substr(region),
-            find_uri_regions_by_region(
-                self.view, [0, self.view.size()], get_setting("uri_search_radius")
-            ),
+            find_uri_regions_by_region(self.view, [0, len(self.view)], get_setting("uri_search_radius")),
         )
 
         for uri in set(uris):
@@ -49,9 +45,7 @@ class SelectUriFromViewCommand(sublime_plugin.TextCommand):
     def run(self, edit: sublime.Edit) -> None:
         sel = self.view.sel()
 
-        uri_regions = find_uri_regions_by_region(
-            self.view, [0, self.view.size()], get_setting("uri_search_radius")
-        )
+        uri_regions = find_uri_regions_by_region(self.view, [0, len(self.view)], get_setting("uri_search_radius"))
 
         if uri_regions:
             sel.clear()

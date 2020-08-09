@@ -69,9 +69,7 @@ def log(level: str, msg: str) -> None:
     level_int = logging.getLevelName(level_upper)
 
     if not isinstance(level_int, int):
-        raise ValueError(
-            'Unknown log level "{level}" whose message is: {msg}'.format(level=level, msg=msg)
-        )
+        raise ValueError('Unknown log level "{level}" whose message is: {msg}'.format(level=level, msg=msg))
 
     global_get("logger").log(level_int, msg)
 

@@ -65,9 +65,7 @@ def change_png_bytes_color(img_bytes: ByteString, rgba_code: str) -> ByteString:
     if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    def render_pixel(
-        rgba_src: List[int], rgba_dst: List[int], invert_gray: bool = False
-    ) -> List[int]:
+    def render_pixel(rgba_src: List[int], rgba_dst: List[int], invert_gray: bool = False) -> List[int]:
         gray = calculate_gray(rgba_src)
         if invert_gray:
             gray = 0xFF - gray

@@ -81,12 +81,14 @@ def compile_uri_regex() -> Tuple[Pattern, List[str]]:
         activated_schemes.append(scheme)
         uri_regexes.append(re.escape(scheme) + r"(?:(?#{}))".format(path_regex_name))
 
+    # fmt: off
     regex = r"\b" + (
         triegex.Triegex(*uri_regexes)
         .to_regex()
         .replace(r"\b", "")
         .replace(r"|~^(?#match nothing)", "")
     )
+    # fmt: on
 
     log("debug", "Optimized URI matching regex (before expanding): {}".format(regex))
 
@@ -178,9 +180,7 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
-def view_last_typing_timestamp_val(
-    view: sublime.View, timestamp_s: Optional[float] = None
-) -> Optional[float]:
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[float] = None) -> Optional[float]:
     """
     @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
 
@@ -241,4 +241,4 @@ def is_view_too_large(view: Optional[sublime.View]) -> bool:
     @return True if the view is too large, False otherwise.
     """
 
-    return bool(view and view.size() > get_setting("large_file_threshold"))
+    return bool(view and len(view) > get_setting("large_file_threshold"))

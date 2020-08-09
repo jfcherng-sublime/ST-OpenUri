@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.12] - 2020-08-09
+
+### Fixed
+- Prevent from frequently calling `sublime.load_settings()`.
+
+
 ## [6.2.11] - 2020-06-14
 
 ### Fixed

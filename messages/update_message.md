@@ -1,7 +1,7 @@
 OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
-## [6.2.11] - 2020-06-14
+## [6.2.12] - 2020-08-09
 
 ### Fixed
-- Delete phantoms when plugin unloaded.
+- Prevent from frequently calling `sublime.load_settings()`.

@@ -28,6 +28,7 @@ def set_up() -> None:
         init_images()
         set_is_dirty_for_all_views(True)
 
+    global_set("settings", get_settings_object())
     global_set("logger", init_plugin_logger())
     global_set("renderer_thread", RendererThread())
     plugin_settings_listener()

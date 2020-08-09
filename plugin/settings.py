@@ -5,7 +5,6 @@ import sys
 import tempfile
 import time
 from typing import Any, Dict, Optional
-from .utils import dotted_get
 from .log import log
 
 
@@ -130,7 +129,7 @@ def get_settings_file() -> str:
 
 def get_settings_object() -> sublime.Settings:
     """
-    @brief Get the plugin settings object.
+    @brief Get the plugin settings object. This function will call `sublime.load_settings()`.
 
     @return The settings object.
     """
@@ -148,7 +147,9 @@ def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
     @return The setting's value.
     """
 
-    return dotted_get(get_settings_object(), dotted, default)
+    from .Globals import global_get
+
+    return global_get("settings.{}".format(dotted), default)
 
 
 def get_timestamp() -> float:

@@ -12,6 +12,9 @@ class Globals:
 
     HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
 
+    # the plugin settings object
+    settings = None  # type: sublime.Settings
+
     # the logger to log messages
     logger = None  # type: logging.Logger
 

@@ -6,6 +6,8 @@ from .image_processing import get_colored_image_base64_by_region
 from .PhatomSetsManager import PhatomSetsManager
 from .settings import get_package_name
 
+ST_VERSION = int(sublime.version())
+
 PHANTOM_TEMPLATE = """
 <body id="open-uri-phantom">
     <style>
@@ -66,14 +68,16 @@ def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str
 
 
 def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.Phantom:
-    # Calculate the point to insert the phantom.
-    #
-    # Usually it's exact at the end of the URI, but if the next char is a quotation mark,
-    # there can be a problem on breaking "scope brackets" highlighting in BracketHilighter.
-    # In that case, we shift the position until the next char is not a quotation mark.
     phantom_point = uri_region.end()
-    while view.substr(phantom_point) in "'\"`":
-        phantom_point += 1
+
+    if ST_VERSION < 4000:
+        # Re-calculate the point to insert the phantom.
+        #
+        # Usually it's exact at the end of the URI, but if the next char is a quotation mark,
+        # there can be a problem on breaking "scope brackets" highlighting in BracketHilighter.
+        # In that case, we shift the position until the next char is not a quotation mark.
+        while view.substr(phantom_point) in "'\"`":
+            phantom_point += 1
 
     return sublime.Phantom(
         sublime.Region(phantom_point),

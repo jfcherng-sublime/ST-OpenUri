@@ -88,5 +88,4 @@ def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.P
 
 
 def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> List[sublime.Phantom]:
-
     return [new_uri_phantom(view, r) for r in uri_regions]

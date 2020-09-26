@@ -197,7 +197,7 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[flo
     return None
 
 
-def view_is_dirty_val(view: sublime.View, is_dirty: Optional[float] = None) -> Optional[bool]:
+def view_is_dirty_val(view: sublime.View, is_dirty: Optional[bool] = None) -> Optional[bool]:
     """
     @brief Set/Get the is_dirty of the current view
 

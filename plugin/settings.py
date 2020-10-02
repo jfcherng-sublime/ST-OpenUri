@@ -81,7 +81,7 @@ def get_image_info(img_name: str) -> Dict[str, Any]:
     try:
         img_bytes = sublime.load_binary_resource(img_path)
     except IOError:
-        img_bytes = b''
+        img_bytes = b""
         log("error", "Resource not found: " + img_path)
 
     img_base64 = base64.b64encode(img_bytes).decode()

@@ -1,3 +1,4 @@
+import html
 import sublime
 from typing import Iterable, List
 from .functions import open_uri_with_browser
@@ -59,7 +60,7 @@ def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str
     img = global_get("images.phantom")
 
     return PHANTOM_TEMPLATE.format(
-        uri=view.substr(uri_region),
+        uri=html.escape(view.substr(uri_region), quote=True),
         mime=img["mime"],
         ratio_wh=img["ratio_wh"],
         base64=get_colored_image_base64_by_region("phantom", uri_region),

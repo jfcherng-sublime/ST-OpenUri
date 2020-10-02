@@ -5,8 +5,7 @@ from .Globals import global_get
 from .image_processing import get_colored_image_base64_by_region
 from .PhatomSetsManager import PhatomSetsManager
 from .settings import get_package_name
-
-ST_VERSION = int(sublime.version())
+from .st_features import HAS_BH_SCOPED_BRACKETS_BUG
 
 PHANTOM_TEMPLATE = """
 <body id="open-uri-phantom">
@@ -70,7 +69,7 @@ def generate_phantom_html(view: sublime.View, uri_region: sublime.Region) -> str
 def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.Phantom:
     phantom_point = uri_region.end()
 
-    if ST_VERSION < 4000:
+    if HAS_BH_SCOPED_BRACKETS_BUG:
         # Re-calculate the point to insert the phantom.
         #
         # Usually it's exact at the end of the URI, but if the next char is a quotation mark,

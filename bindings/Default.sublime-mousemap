@@ -1,7 +1,5 @@
 [{
     "button": "button2",
-    "count": 1,
-    "modifiers": ["ctrl"],
-    "command": "open_uri_from_cursors",
-    "press_command": "drag_select",
+    "modifiers": ["alt"],
+    "command": "open_context_url",
 }]

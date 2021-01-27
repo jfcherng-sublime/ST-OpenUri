@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 
+## [6.2.15] - 2021-01-27
+
+### Fixed
+- Replace `open_uri_from_cursors` with `open_context_url` in mousemap.
+
 ## [6.2.14] - 2020-10-02
 
 ### Fixed

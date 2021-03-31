@@ -14,6 +14,7 @@ images/FontAwesome/*.svg export-ignore
 mkdocs.yml export-ignore
 mypy.ini export-ignore
 pyproject.toml export-ignore
+pyrightconfig.json export-ignore
 requirements.txt export-ignore
 scripts/ export-ignore
 stubs/ export-ignore

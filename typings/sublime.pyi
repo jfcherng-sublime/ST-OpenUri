@@ -1,6 +1,6 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 #
-# ST version: 4095
+# ST version: 4099
 
 from typing import (
     Any,
@@ -64,12 +64,15 @@ HOVER_MARGIN: int = 3
 ENCODED_POSITION: int = 1
 TRANSIENT: int = 4
 FORCE_GROUP: int = 8
-ADD_TO_SELECTION_SEMI_TRANSIENT: int = 16
+# Only valid with ADD_TO_SELECTION or REPLACE_MRU
+SEMI_TRANSIENT: int = 16
 ADD_TO_SELECTION: int = 32
+REPLACE_MRU = 64
 IGNORECASE: int = 2
 LITERAL: int = 1
 MONOSPACE_FONT: int = 1
 KEEP_OPEN_ON_FOCUS_LOST: int = 2
+WANT_EVENT: int = 4
 
 HTML: int = 1
 COOPERATE_WITH_AUTO_COMPLETE: int = 2
@@ -187,7 +190,7 @@ def platform() -> str:
 
 
 def arch() -> str:
-    """ Returns the CPU architecture, which may be "x32" or "x64" """
+    """ Returns the CPU architecture, which may be "x32", "x64" or "arm64" """
     ...
 
 
@@ -242,21 +245,31 @@ def message_dialog(msg: str) -> None:
     ...
 
 
-def ok_cancel_dialog(msg: str, ok_title: str = "") -> int:
+def ok_cancel_dialog(msg: str, ok_title: str = "", title: str = "") -> int:
     """
-    Displays an <kbd>ok</kbd> <kbd>cancel</kbd> question dialog to the user
-    If `ok_title` is provided, this may be used as the text on the <kbd>ok</kbd> button.
+    Show a popup dialog with an "ok" and "cancel" button.
 
-    Returns `True` if the user presses the <kbd>ok</kbd> button
+    - `msg`: The message to show in the dialog.
+    - `ok_title`: Optional replacement string for the "ok" button.
+    - `title`: Optional title for the dialog. Note Linux and macOS do not have
+                 a title in their dialog.
+
+    Returns `True` if the user presses the `ok` button
     """
     ...
 
 
-def yes_no_cancel_dialog(msg: str, yes_title: str = "", no_title: str = "") -> int:
+def yes_no_cancel_dialog(msg: str, yes_title: str = "", no_title: str = "", title: str = "") -> int:
     """
-    Displays a <kbd>yes</kbd> <kbd>no</kbd> <kbd>cancel</kbd> question dialog to the user
+    Displays a `yes` `no` `cancel` question dialog to the user
     If `yes_title` and/or `no_title` are provided, they will be used as the
     text on the corresponding buttons on some platforms.
+
+    - `msg`: The message to show in the dialog.
+    - `yes_title`: Optional replacement string for the "yes" button.
+    - `no_title`: Optional replacement string for the "no" button.
+    - `title`: Optional title for the dialog. Note Linux and macOS do not have
+                 a title in their dialog.
 
     Returns `DIALOG_YES`, `DIALOG_NO` or `DIALOG_CANCEL`
     """
@@ -387,7 +400,7 @@ def set_clipboard(text: str) -> None:
     ...
 
 
-def log_commands(flag: bool) -> None:
+def log_commands(flag: Optional[bool] = None) -> None:
     """
     Controls command logging. If enabled, all commands run from key bindings
     and the menu will be logged to the console
@@ -395,7 +408,16 @@ def log_commands(flag: bool) -> None:
     ...
 
 
-def log_input(flag: bool) -> None:
+def get_log_commands() -> bool:
+    """
+    Returns whether `log_commands()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_input(flag: Optional[bool] = None) -> None:
     """
     Enables or disables input logging. This is useful to find the names of
     certain keys on the keyboard
@@ -403,14 +425,32 @@ def log_input(flag: bool) -> None:
     ...
 
 
-def log_fps(flag: bool) -> None:
+def get_log_input() -> bool:
+    """
+    Returns whether `log_input()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_fps(flag: Optional[bool] = None) -> None:
     """
     Enables or disables fps logging.
     """
     ...
 
 
-def log_result_regex(flag: bool) -> None:
+def get_log_fps() -> bool:
+    """
+    Returns whether `log_fps()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_result_regex(flag: Optional[bool] = None) -> None:
     """
     Enables or disables result regex logging. This is useful when trying to
     debug `file_regex` and `line_regex` in build systems
@@ -418,20 +458,63 @@ def log_result_regex(flag: bool) -> None:
     ...
 
 
-def log_indexing(flag: bool) -> None:
-    ...
-
-
-def log_build_systems(flag: bool) -> None:
-    ...
-
-
-def log_control_tree(flag: bool) -> None:
+def get_log_result_regex() -> bool:
     """
-    When enabled, clicking with <kbd>Ctrl</kbd>+<kbd>Alt</kbd>
+    Returns whether `log_result_regex()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_indexing(flag: Optional[bool] = None) -> None:
+    ...
+
+
+def get_log_indexing() -> bool:
+    """
+    Returns whether `log_indexing()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_build_systems(flag: Optional[bool] = None) -> None:
+    ...
+
+
+def get_log_build_systems() -> bool:
+    """
+    Returns whether `log_build_systems()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def log_control_tree(flag: Optional[bool] = None) -> None:
+    """
+    When enabled, clicking with `Ctrl`+`Alt`
     will log the control tree under the mouse to the console.
 
     @version ST(>=4064)
+    """
+    ...
+
+
+def get_log_control_tree() -> bool:
+    """
+    Returns whether `log_control_tree()` is enabled or not.
+
+    @version ST(>=4099)
+    """
+    ...
+
+
+def ui_info() -> Dict[str, Any]:
+    """
+    Gets the UI information such as theme/color-scheme palette.
     """
     ...
 
@@ -836,12 +919,13 @@ class Window:
         * `items` may be a list of strings, or a list of string lists
         In the latter case, each entry in the quick panel will show multiple rows.
 
-        * `on_select` will be called once, with the index of the selected item
-        If the quick panel was cancelled, `on_select` will be called with an
-        argument of `-1`.
+        * `on_select` is called when the the quick panel is finished, and should
+        accept a single integer, specifying which item was selected, or `-1` for
+        `none`. If flags includes `WANT_EVENT`, `on_select` should accept a second
+        parameter, which will be a dict with the key "modifier_keys" giving
+        access to keyboard modifiers pressed when the item was selected..
 
-        * `flags` is a bitwise OR of `MONOSPACE_FONT`
-        and `KEEP_OPEN_ON_FOCUS_LOST`
+        * `flags` is a bitwise OR of `MONOSPACE_FONT`, `KEEP_OPEN_ON_FOCUS_LOST` and `WANT_EVENT`
 
         * `on_highlighted`, if given, will be called every time the highlighted item in the quick panel is changed
         """
@@ -2683,8 +2767,8 @@ class ListInputItem:
         self,
         text: str,
         value: Any,
-        details = "",
-        annotation = "",
+        details: str = "",
+        annotation: str = "",
         kind: StCompletionKind = KIND_AMBIGUOUS,
     ) -> None:
         ...

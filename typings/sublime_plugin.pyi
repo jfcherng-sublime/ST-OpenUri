@@ -1,6 +1,6 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 #
-# ST version: 4095
+# ST version: 4099
 
 from importlib.machinery import ModuleSpec
 from types import ModuleType
@@ -664,6 +664,9 @@ class CommandInputHandler:
         ...
 
     def confirm_(self, v: str) -> None:
+        ...
+
+    def want_event(self) -> bool:
         ...
 
 

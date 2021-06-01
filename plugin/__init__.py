@@ -14,7 +14,7 @@ from .utils import is_view_normal_ready
 
 
 def set_up() -> None:
-    """ plugin_loaded """
+    """plugin_loaded"""
 
     def plugin_settings_listener() -> None:
         apply_user_log_level(global_get("logger"))
@@ -38,7 +38,7 @@ def set_up() -> None:
 
 
 def tear_down() -> None:
-    """ plugin_unloaded """
+    """plugin_unloaded"""
 
     get_settings_object().clear_on_change(get_package_name())
     global_get("renderer_thread").cancel()

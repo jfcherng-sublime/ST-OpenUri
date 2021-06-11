@@ -16,7 +16,6 @@ class OpenUri(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         super().__init__(view)
 
-        self.view = view
         init_phantom_set(self.view)
         view_last_typing_timestamp_val(self.view, 0)
 

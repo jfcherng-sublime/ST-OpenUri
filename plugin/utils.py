@@ -247,3 +247,8 @@ def is_regions_intersected(region_1: sublime.Region, region_2: sublime.Region, a
 
 def is_view_normal_ready(view: Optional[sublime.View]) -> bool:
     return bool(view and not view.settings().get("is_widget") and not view.is_loading())
+
+
+def is_transient_view(view: sublime.View) -> bool:
+    # @see https://forum.sublimetext.com/t/is-view-transient-preview-method/3247/2
+    return view.window().get_view_index(view)[1] == -1

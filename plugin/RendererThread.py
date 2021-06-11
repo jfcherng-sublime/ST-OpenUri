@@ -6,7 +6,7 @@ from .phantom_set import erase_phantom_set, update_phantom_set
 from .region_drawing import draw_uri_regions, erase_uri_regions
 from .RepeatingTimer import RepeatingTimer
 from .settings import get_setting, get_setting_show_open_button
-from .utils import is_view_normal_ready, view_find_all_fast
+from .utils import is_transient_view, is_view_normal_ready, view_find_all_fast
 
 
 class RendererThread(RepeatingTimer):
@@ -25,6 +25,9 @@ class RendererThread(RepeatingTimer):
         assert isinstance(view, sublime.View)
 
         if not view_is_dirty_val(view) or is_view_typing(view):
+            return
+
+        if is_transient_view(view) and not get_setting("work_for_transient_view"):
             return
 
         if is_view_too_large(view):

@@ -20,6 +20,8 @@
     "show_open_button": "always",
     // if the file is too large, this setting will be used as the fallback setting of "show_open_button"
     "show_open_button_fallback": "hover",
+    // should this plugin works for transient view such as "Go to Anywhere" preview?
+    "work_for_transient_view": false,
     // if the file size is larger than the given one, it will uses "show_open_button_fallback" as the fallback mode
     "large_file_threshold": 1000000, // 1MB
     // the period (in millisecond) that consecutive modifications are treated as typing

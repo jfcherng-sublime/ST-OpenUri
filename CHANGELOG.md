@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.3.0] - 2021-06-11
+
+Added
+
+- Add setting: `work_for_transient_view`
+
+  This setting controls whether this plugin should work for a transient view
+  such as file preview via "Goto Anything".
+
 ## [6.2.16] - 2021-06-11
 
 Fixed

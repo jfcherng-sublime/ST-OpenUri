@@ -18,7 +18,6 @@ class OpenUri(sublime_plugin.ViewEventListener):
 
         self.view = view
         init_phantom_set(self.view)
-        view_is_dirty_val(self.view, True)
         view_last_typing_timestamp_val(self.view, 0)
 
     def on_pre_close(self) -> None:

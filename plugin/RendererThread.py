@@ -1,6 +1,4 @@
 import sublime
-import traceback
-from typing import Optional
 from .functions import is_view_too_large, is_view_typing, view_is_dirty_val
 from .Globals import global_get
 from .log import log
@@ -19,40 +17,28 @@ class RendererThread(RepeatingTimer):
         self.is_rendering = False
 
     def _check_current_view(self) -> None:
-        if self.is_rendering:
+        view = sublime.active_window().active_view()
+
+        if self.is_rendering or not is_view_normal_ready(view):
+            return
+
+        assert isinstance(view, sublime.View)
+
+        if not view_is_dirty_val(view) or is_view_typing(view):
+            return
+
+        if is_view_too_large(view):
+            self._clean_up_phantom_set(view)
+            self._clean_up_uri_regions(view)
+            view_is_dirty_val(view, False)
             return
 
         self.is_rendering = True
 
-        view = sublime.active_window().active_view()
-
-        try:
-            if is_view_normal_ready(view) and is_view_too_large(view):
-                assert isinstance(view, sublime.View)
-
-                self._clean_up_phantom_set(view)
-                self._clean_up_uri_regions(view)
-                view_is_dirty_val(view, False)
-
-            if self._need_detect_uris_globally(view):
-                assert isinstance(view, sublime.View)
-
-                self._detect_uris_globally(view)
-                view_is_dirty_val(view, False)
-        # do not let an Exception terminates the rendering thread
-        # we just print out the traceback information to the console this time
-        except Exception:
-            log("error", traceback.format_exc())
+        self._detect_uris_globally(view)
+        view_is_dirty_val(view, False)
 
         self.is_rendering = False
-
-    def _need_detect_uris_globally(self, view: Optional[sublime.View]) -> bool:
-        if not is_view_normal_ready(view):
-            return False
-
-        assert isinstance(view, sublime.View)
-
-        return bool(view_is_dirty_val(view) and not is_view_typing(view) and not is_view_too_large(view))
 
     def _detect_uris_globally(self, view: sublime.View) -> None:
         uri_regions = view_find_all_fast(view, global_get("uri_regex_obj"))

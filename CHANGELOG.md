@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [6.2.16] - 2021-06-11
+
+Fixed
+
+- Plugin is not working for transient view. (#5)
 
 ## [6.2.15] - 2021-01-27
 

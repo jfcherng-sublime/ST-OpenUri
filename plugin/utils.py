@@ -250,5 +250,6 @@ def is_view_normal_ready(view: Optional[sublime.View]) -> bool:
 
 
 def is_transient_view(view: sublime.View) -> bool:
+    w = view.window()
     # @see https://forum.sublimetext.com/t/is-view-transient-preview-method/3247/2
-    return view.window().get_view_index(view)[1] == -1
+    return w.get_view_index(view)[1] == -1 if w else True

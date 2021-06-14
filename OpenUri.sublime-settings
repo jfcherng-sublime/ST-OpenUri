@@ -10,7 +10,9 @@
     //     - "DEBUG_LOW" (for developer, even more detailed than DEBUG)
     "log_level": "INFO",
     // browser used to open a URI. leave this empty to use a default browser.
-    // available values could be found on https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
+    // available values could be found on
+    //     - ST3: https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
+    //     - ST4: https://docs.python.org/3.8/library/webbrowser.html#webbrowser.get
     "browser": "",
     // when to show a phantom/popup button beside a URI?
     // values can be
@@ -62,7 +64,7 @@
         "scope": "string",
         // icon in the gutter: "dot", "circle", "bookmark" or empty string for nothing
         "icon": "",
-        // @see https://www.sublimetext.com/docs/3/api_reference.html
+        // @see https://www.sublimetext.com/docs/api_reference.html
         //
         // sublime.DRAW_EMPTY = 1
         // sublime.HIDE_ON_MINIMAP = 2

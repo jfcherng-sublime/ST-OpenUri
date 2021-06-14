@@ -1,11 +1,11 @@
+from .log import log
+from typing import Any, Dict, Optional
 import base64
 import os
 import sublime
 import sys
 import tempfile
 import time
-from typing import Any, Dict, Optional
-from .log import log
 
 
 def get_package_name() -> str:

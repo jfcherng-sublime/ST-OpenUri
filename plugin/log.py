@@ -1,5 +1,5 @@
-import logging
 from .Globals import global_get
+import logging
 
 LOG_FORMAT = "[%(name)s][%(levelname)s] %(message)s"
 LOG_LEVEL_DEFAULT = "INFO"

@@ -1,12 +1,19 @@
-import sublime
-from .functions import is_view_too_large, is_view_typing, view_is_dirty_val
+from .functions import is_view_too_large
+from .functions import is_view_typing
+from .functions import view_is_dirty_val
 from .Globals import global_get
 from .log import log
-from .phantom_set import erase_phantom_set, update_phantom_set
-from .region_drawing import draw_uri_regions, erase_uri_regions
+from .phantom_set import erase_phantom_set
+from .phantom_set import update_phantom_set
+from .region_drawing import draw_uri_regions
+from .region_drawing import erase_uri_regions
 from .RepeatingTimer import RepeatingTimer
-from .settings import get_setting, get_setting_show_open_button
-from .utils import is_transient_view, is_view_normal_ready, view_find_all_fast
+from .settings import get_setting
+from .settings import get_setting_show_open_button
+from .utils import is_transient_view
+from .utils import is_view_normal_ready
+from .utils import view_find_all_fast
+import sublime
 
 
 class RendererThread(RepeatingTimer):

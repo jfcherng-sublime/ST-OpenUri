@@ -1,8 +1,9 @@
+from .utils import dotted_get
+from .utils import dotted_set
+from typing import Any, Dict, List, Optional, Pattern
 import logging
 import sublime
 import threading
-from typing import Any, Dict, List, Optional, Pattern
-from .utils import dotted_get, dotted_set
 
 
 class Globals:

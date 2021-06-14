@@ -1,16 +1,18 @@
-import sublime
-from .functions import compile_uri_regex, view_is_dirty_val
-from .Globals import global_get, global_set
-from .log import apply_user_log_level, init_plugin_logger, log
+from .functions import compile_uri_regex
+from .functions import view_is_dirty_val
+from .Globals import global_get
+from .Globals import global_set
+from .log import apply_user_log_level
+from .log import init_plugin_logger
+from .log import log
 from .PhatomSetsManager import PhatomSetsManager
 from .RendererThread import RendererThread
-from .settings import (
-    get_image_info,
-    get_package_name,
-    get_setting_renderer_interval,
-    get_settings_object,
-)
+from .settings import get_image_info
+from .settings import get_package_name
+from .settings import get_setting_renderer_interval
+from .settings import get_settings_object
 from .utils import is_view_normal_ready
+import sublime
 
 
 def set_up() -> None:

@@ -1,20 +1,19 @@
-import re
-import sublime
-import webbrowser
-import urllib.parse as urllib_parse
-from typing import cast, Iterable, List, Tuple, Optional, Pattern
 from .Globals import global_get
 from .libs import triegex
 from .log import log
-from .settings import get_setting, get_timestamp
+from .settings import get_setting
+from .settings import get_timestamp
 from .st_types import RegionLike
-from .utils import (
-    is_regions_intersected,
-    region_expand,
-    region_into_st_region_form,
-    region_shift,
-    simplify_intersected_regions,
-)
+from .utils import is_regions_intersected
+from .utils import region_expand
+from .utils import region_into_st_region_form
+from .utils import region_shift
+from .utils import simplify_intersected_regions
+from typing import cast, Iterable, List, Tuple, Optional, Pattern
+import re
+import sublime
+import urllib.parse as urllib_parse
+import webbrowser
 
 
 def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:

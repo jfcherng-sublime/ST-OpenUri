@@ -1,5 +1,5 @@
-import sublime
 from typing import Dict, Iterable, Optional
+import sublime
 
 
 class PhatomSetsManager:

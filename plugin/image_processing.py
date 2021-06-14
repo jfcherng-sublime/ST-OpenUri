@@ -1,12 +1,13 @@
+from .Globals import global_get
+from .Globals import global_set
+from .libs import png
+from .settings import get_image_color
+from .utils import simple_decorator
+from typing import ByteString, List
 import base64
 import io
 import re
 import sublime
-from typing import ByteString, List
-from .Globals import global_get, global_set
-from .libs import png
-from .settings import get_image_color
-from .utils import simple_decorator
 
 
 def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:

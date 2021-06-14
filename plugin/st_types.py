@@ -1,5 +1,5 @@
-import sublime
 from typing import List, Tuple, Union
+import sublime
 
 RegionLike = Union[
     sublime.Region,

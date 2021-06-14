@@ -1,6 +1,6 @@
-import sublime
-from typing import Iterable
 from .settings import get_setting
+from typing import Iterable
+import sublime
 
 
 def erase_uri_regions(view: sublime.View) -> None:

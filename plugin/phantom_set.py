@@ -1,12 +1,12 @@
-import html
-import sublime
-from typing import Iterable, List
 from .functions import open_uri_with_browser
 from .Globals import global_get
 from .image_processing import get_colored_image_base64_by_region
 from .PhatomSetsManager import PhatomSetsManager
 from .settings import get_package_name
 from .st_features import HAS_BH_SCOPED_BRACKETS_BUG
+from typing import Iterable, List
+import html
+import sublime
 
 PHANTOM_TEMPLATE = """
 <body id="open-uri-phantom">

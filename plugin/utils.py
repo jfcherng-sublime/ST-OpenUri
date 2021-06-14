@@ -1,7 +1,7 @@
+from .st_types import RegionLike
+from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
 import functools
 import sublime
-from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
-from .st_types import RegionLike
 
 
 def simple_decorator(decorator: Callable) -> Callable:

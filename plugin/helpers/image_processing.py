@@ -1,6 +1,6 @@
+from ..libs import png
 from .Globals import global_get
 from .Globals import global_set
-from .libs import png
 from .settings import get_image_color
 from .utils import simple_decorator
 from typing import ByteString, List

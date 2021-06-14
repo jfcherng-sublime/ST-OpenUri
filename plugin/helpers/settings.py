@@ -70,7 +70,7 @@ def get_image_info(img_name: str) -> Dict[str, Any]:
     @return The image information.
     """
 
-    from .libs import imagesize
+    from ..libs import imagesize
 
     img_path = get_image_path(img_name)
     img_ext = os.path.splitext(img_path)[1]

@@ -1,7 +1,7 @@
-from ..functions import find_uri_regions_by_region
-from ..functions import find_uri_regions_by_regions
-from ..functions import open_uri_with_browser
-from ..settings import get_setting
+from .helpers.functions import find_uri_regions_by_region
+from .helpers.functions import find_uri_regions_by_regions
+from .helpers.functions import open_uri_with_browser
+from .helpers.settings import get_setting
 import sublime
 import sublime_plugin
 

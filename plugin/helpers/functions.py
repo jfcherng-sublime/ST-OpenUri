@@ -1,5 +1,5 @@
+from ..libs import triegex
 from .Globals import global_get
-from .libs import triegex
 from .log import log
 from .settings import get_setting
 from .settings import get_timestamp

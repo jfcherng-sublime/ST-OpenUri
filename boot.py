@@ -1,7 +1,7 @@
 from .plugin import set_up
 from .plugin import tear_down
-from .plugin.sublime_text.OpenUri import *
-from .plugin.sublime_text.OpenUriCommands import *
+from .plugin.OpenUri import *
+from .plugin.OpenUriCommands import *
 import sublime
 
 

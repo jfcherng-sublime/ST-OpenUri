@@ -1,6 +1,6 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 #
-# ST version: 4100
+# ST version: 4107
 
 from typing import (
     Any,
@@ -33,8 +33,8 @@ T_Layout = TypedDict(
     },
 )
 
-StCallback0 = Callable[[], None]
-StCallback1 = Callable[[T], None]
+StCallback0 = Callable[[], Any]
+StCallback1 = Callable[[T], Any]
 StCompletion = Union[str, List[str], Tuple[str, str], "CompletionItem"]
 StCompletionNormalized = Tuple[
     str,  # trigger
@@ -48,11 +48,12 @@ StCompletionNormalized = Tuple[
     int,  # kind
 ]
 StCompletionKind = Tuple[int, str, str]
+StDip = float
 StLocation = Tuple[str, str, Tuple[int, int]]
 StPoint = int
 StStr = str  # alias in case we have a variable named as "str"
 StValue = Union[dict, list, str, int, float, bool, None]
-StVector = Tuple[float, float]
+StVector = Tuple[StDip, StDip]
 
 # -------- #
 # ST codes #
@@ -561,7 +562,7 @@ def encode_value(val: StValue, pretty: bool = ...) -> str:
     ...
 
 
-def decode_value(data: str) -> StValue:
+def decode_value(data: str) -> Any:
     """
     Decodes a JSON string into an object.
     If `data` is invalid, a `ValueError` will be thrown
@@ -985,7 +986,7 @@ class Window:
         """Returns name of the currently opened project file, if any"""
         ...
 
-    def project_data(self) -> Optional[Dict[str, StValue]]:
+    def project_data(self) -> Optional[Dict[str, Any]]:
         """
         Returns the project data associated with the current window
         The data is in the same format as the contents of a _.sublime-project_ file
@@ -1994,11 +1995,11 @@ class View:
         """Converts window coordinates to a text point"""
         ...
 
-    def line_height(self) -> float:
+    def line_height(self) -> StDip:
         """Returns the height of a line in layout coordinates"""
         ...
 
-    def em_width(self) -> float:
+    def em_width(self) -> StDip:
         """Returns the em-width of the current font in layout coordinates"""
         ...
 
@@ -2371,7 +2372,7 @@ class Settings:
     def __repr__(self) -> str:
         ...
 
-    def to_dict(self) -> Dict[str, StValue]:
+    def to_dict(self) -> Dict[str, Any]:
         """
         Return the settings as a dict. This is not very fast.
 

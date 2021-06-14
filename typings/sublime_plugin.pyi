@@ -1,6 +1,6 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 #
-# ST version: 4100
+# ST version: 4107
 
 from importlib.machinery import ModuleSpec
 from types import ModuleType
@@ -47,8 +47,8 @@ T_Layout = TypedDict(
 
 InputType = TypeVar("InputType")
 
-StCallback0 = Callable[[], None]
-StCallback1 = Callable[[T], None]
+StCallback0 = Callable[[], Any]
+StCallback1 = Callable[[T], Any]
 StCompletion = Union[str, List[str], Tuple[str, str], sublime.CompletionItem]
 StCompletionNormalized = Tuple[
     str,  # trigger
@@ -62,11 +62,12 @@ StCompletionNormalized = Tuple[
     int,  # kind
 ]
 StCompletionKind = Tuple[int, str, str]
+StDip = float
 StLocation = Tuple[str, str, Tuple[int, int]]
 StPoint = int
 StStr = str  # alias in case we have a variable named as "str"
 StValue = Union[dict, list, str, int, float, bool, None]
-StVector = Tuple[float, float]
+StVector = Tuple[StDip, StDip]
 
 # -------- #
 # ST codes #

@@ -51,7 +51,7 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
         )
 
 
-def compile_uri_regex() -> Tuple[Pattern, List[str]]:
+def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
     """
     @brief Get the compiled regex object for matching URIs.
 
@@ -72,7 +72,8 @@ def compile_uri_regex() -> Tuple[Pattern, List[str]]:
             log(
                 "warning",
                 'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex}'.format(
-                    scheme=scheme, path_regex=path_regex_name
+                    scheme=scheme,
+                    path_regex=path_regex_name,
                 ),
             )
             continue
@@ -84,7 +85,7 @@ def compile_uri_regex() -> Tuple[Pattern, List[str]]:
     regex = r"\b" + (
         triegex.Triegex(*uri_regexes)
         .to_regex()
-        .replace(r"\b", "")
+        .replace(r"\b", "")  # type: ignore
         .replace(r"|~^(?#match nothing)", "")
     )
     # fmt: on
@@ -100,6 +101,7 @@ def compile_uri_regex() -> Tuple[Pattern, List[str]]:
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
     except Exception as e:
+        regex_obj = None
         log(
             "critical",
             "Cannot compile regex `{regex}` because `{reason}`. "

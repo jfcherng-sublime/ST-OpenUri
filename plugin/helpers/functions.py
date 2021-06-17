@@ -98,10 +98,10 @@ def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
 
     log("debug", "Optimized URI matching regex: {}".format(regex))
 
+    regex_obj = None
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
     except Exception as e:
-        regex_obj = None
         log(
             "critical",
             "Cannot compile regex `{regex}` because `{reason}`. "
@@ -138,15 +138,10 @@ def find_uri_regions_by_regions(
     @return Found URI regions
     """
 
-    st_regions = sorted(map(region_into_st_region_form, regions))  # type: List[sublime.Region]
+    st_regions = sorted(map(region_into_st_region_form, regions))
 
     search_regions = simplify_intersected_regions(
-        (
-            # fmt: off
-            cast(sublime.Region, region_expand(region, search_radius))
-            for region in st_regions
-            # fmt: on
-        ),
+        (cast(sublime.Region, region_expand(region, search_radius)) for region in st_regions),
         True,
     )
 

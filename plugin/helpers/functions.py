@@ -9,7 +9,7 @@ from .utils import region_expand
 from .utils import region_into_st_region_form
 from .utils import region_shift
 from .utils import simplify_intersected_regions
-from typing import cast, Iterable, List, Tuple, Optional, Pattern
+from typing import Any, Dict, Iterable, List, Tuple, Optional, Pattern, cast
 import re
 import sublime
 import urllib.parse as urllib_parse
@@ -24,13 +24,13 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
     @param browser The browser
     """
 
-    parsedUri = urllib_parse.urlparse(uri)
+    parsed_uri = urllib_parse.urlparse(uri)
 
-    log("debug", "Parsed URI: {parsedUri}".format(parsedUri=parsedUri))
+    log("debug", "Parsed URI: {parsed_uri}".format(parsed_uri=parsed_uri))
 
     # decode URL-encoded "file" scheme such as
     # "file:///D:/%E6%B8%AC%E8%A9%A6.html" -> "file:///D:/測試.html"
-    if parsedUri.scheme == "file":
+    if parsed_uri.scheme == "file":
         uri = urllib_parse.unquote(uri)
 
     if not browser:
@@ -58,8 +58,8 @@ def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
     @return (compiled regex object, activated schemes)
     """
 
-    detect_schemes = get_setting("detect_schemes")
-    uri_path_regexes = get_setting("uri_path_regexes")
+    detect_schemes = get_setting("detect_schemes")  # type: Dict[str, Dict[str, Any]]
+    uri_path_regexes = get_setting("uri_path_regexes")  # type: Dict[str, str]
 
     activated_schemes = []
     uri_regexes = []
@@ -67,7 +67,7 @@ def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
         if not scheme_settings.get("enabled", False):
             continue
 
-        path_regex_name = scheme_settings.get("path_regex", "@default")
+        path_regex_name = scheme_settings.get("path_regex", "@default")  # type: str
         if path_regex_name not in uri_path_regexes:
             log(
                 "warning",

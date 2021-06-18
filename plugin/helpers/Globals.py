@@ -26,10 +26,6 @@ class Globals:
     uri_regex_obj = None  # type: Pattern
 
     images = {
-        "@cache": {
-            # cached base64 string for colored images
-            # "{img_name}@{rgba_color_code}": base64 encoded image resource,
-        },
         # image informations
         # key/value structure is
         #     - "base64": "",

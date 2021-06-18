@@ -133,12 +133,10 @@ def region_expand(region: RegionLike, expansion: Union[int, List[int]]) -> Regio
     if isinstance(region, sublime.Region):
         return sublime.Region(region.begin() - expansion[0], region.end() + expansion[1])
 
-    # fmt: off
     return [
         min(region[0], region[-1]) - expansion[0],
         max(region[0], region[-1]) + expansion[1],
     ]
-    # fmt: on
 
 
 def region_into_list_form(region: RegionLike, sort_result: bool = False) -> List[int]:

@@ -48,8 +48,6 @@ def tear_down() -> None:
 
 
 def init_images() -> None:
-    global_set("images.@cache", {})
-
     for img_name in global_get("images").keys():
         if img_name.startswith("@"):
             continue

@@ -1,15 +1,16 @@
 from ..libs import png
 from .Globals import global_get
-from .Globals import global_set
 from .settings import get_image_color
 from .utils import simple_decorator
-from typing import ByteString, List
+from functools import lru_cache
+from typing import List, Sequence
 import base64
 import io
 import re
 import sublime
 
 
+@lru_cache()
 def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     """
     @brief Get the colored image in base64 string by RGBA color code.
@@ -20,21 +21,13 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     @return The image base64 string
     """
 
-    cache_key = "{name};{color}".format(name=img_name, color=rgba_code)
-
     if not rgba_code:
         return global_get("images.%s.base64" % img_name)
 
-    cached = "images.@cache.%s" % cache_key
+    img_bytes = global_get("images.%s.bytes" % img_name)  # type: bytes
+    img_bytes = change_png_bytes_color(img_bytes, rgba_code)
 
-    if global_get(cached, None) is None:
-        img_bytes = global_get("images.%s.bytes" % img_name)
-        img_bytes = change_png_bytes_color(img_bytes, rgba_code)
-        img_base64 = base64.b64encode(img_bytes).decode()
-
-        global_set(cached, img_base64)
-
-    return global_get(cached)
+    return base64.b64encode(img_bytes).decode()
 
 
 def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) -> str:
@@ -50,7 +43,8 @@ def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) ->
     return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
 
 
-def change_png_bytes_color(img_bytes: ByteString, rgba_code: str) -> ByteString:
+@lru_cache()
+def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     """
     @brief Change all colors in the PNG bytes to the new color.
 
@@ -66,7 +60,7 @@ def change_png_bytes_color(img_bytes: ByteString, rgba_code: str) -> ByteString:
     if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    def render_pixel(rgba_src: List[int], rgba_dst: List[int], invert_gray: bool = False) -> List[int]:
+    def render_pixel(rgba_src: Sequence[int], rgba_dst: Sequence[int], invert_gray: bool = False) -> List[int]:
         gray = calculate_gray(rgba_src)
         if invert_gray:
             gray = 0xFF - gray
@@ -96,7 +90,7 @@ def change_png_bytes_color(img_bytes: ByteString, rgba_code: str) -> ByteString:
     return buf.getvalue()
 
 
-def calculate_gray(rgb: List[int]) -> int:
+def calculate_gray(rgb: Sequence[int]) -> int:
     """
     @brief Calculate the gray scale of a color.
     @see   https://atlaboratary.blogspot.com/2013/08/rgb-g-rey-l-gray-r0.html
@@ -109,7 +103,7 @@ def calculate_gray(rgb: List[int]) -> int:
     return int(rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
 
 
-def is_img_light(img_bytes: ByteString) -> bool:
+def is_img_light(img_bytes: bytes) -> bool:
     """
     @brief Determine if image is light colored.
 
@@ -125,7 +119,7 @@ def is_img_light(img_bytes: ByteString) -> bool:
         for i in range(0, len(row), 4):
             gray_sum += calculate_gray(row[i : i + 4])
 
-    return (gray_sum << 1) > 0xFF * w * h
+    return (gray_sum >> 7) > w * h
 
 
 def add_alpha_to_rgb(color_code: str) -> str:

@@ -35,7 +35,7 @@ T_Layout = TypedDict(
 
 StCallback0 = Callable[[], Any]
 StCallback1 = Callable[[T], Any]
-StCompletion = Union[str, List[str], Tuple[str, str], "CompletionItem"]
+StCompletion = Union[str, Sequence[str], Tuple[str, str], "CompletionItem"]
 StCompletionNormalized = Tuple[
     str,  # trigger
     str,  # annotation
@@ -281,8 +281,8 @@ def yes_no_cancel_dialog(msg: str, yes_title: str = "", no_title: str = "", titl
 
 
 def open_dialog(
-    callback: Callable[[Optional[Union[str, List[str]]]], None],
-    file_types: List[Tuple[str, List[str]]] = [],
+    callback: Callable[[Optional[Union[str, Sequence[str]]]], None],
+    file_types: Sequence[Tuple[str, Sequence[str]]] = [],
     directory: Optional[str] = None,
     multi_select: bool = False,
     allow_folders: bool = False,
@@ -308,7 +308,7 @@ def open_dialog(
 
 def save_dialog(
     callback: Callable[[Optional[str]], None],
-    file_types: List[Tuple[str, List[str]]] = [],
+    file_types: Sequence[Tuple[str, Sequence[str]]] = [],
     directory: Optional[str] = None,
     name: Optional[str] = None,
     extension: Optional[str] = None,
@@ -331,7 +331,7 @@ def save_dialog(
 
 
 def select_folder_dialog(
-    callback: Callable[[Optional[Union[str, List[str]]]], None],
+    callback: Callable[[Optional[Union[str, Sequence[str]]]], None],
     directory: Optional[str] = None,
     multi_select: bool = False,
 ) -> None:
@@ -1695,7 +1695,7 @@ class View:
         pattern: str,
         flags: int = 0,
         fmt: Optional[str] = None,
-        extractions: Optional[List[str]] = None,
+        extractions: Optional[Sequence[str]] = None,
     ) -> List[Region]:
         """
         Returns all (non-overlapping) regions matching the regex `pattern`
@@ -2011,22 +2011,22 @@ class View:
         """Gets folded regions in the view"""
         ...
 
-    def fold(self, x: Union[Region, List[Region]]) -> bool:
+    def fold(self, x: Union[Region, Sequence[Region]]) -> bool:
         """Folds the given regions, returning False if they were already folded"""
         ...
 
-    def unfold(self, x: Union[Region, List[Region]]) -> List[Region]:
+    def unfold(self, x: Union[Region, Sequence[Region]]) -> List[Region]:
         """Unfolds all text in the region, returning the unfolded regions"""
         ...
 
     def add_regions(
         self,
         key: str,
-        regions: List[Region],
+        regions: Sequence[Region],
         scope: str = "",
         icon: str = "",
         flags: int = 0,
-        annotations: List[str] = [],
+        annotations: Sequence[str] = [],
         annotation_color: str = "",
         on_navigate: Optional[StCallback1[str]] = None,
         on_close: Optional[StCallback0] = None,
@@ -2101,7 +2101,7 @@ class View:
     def query_phantom(self, pid: int) -> List[Tuple[int, int]]:
         ...
 
-    def query_phantoms(self, pids: List[int]) -> List[Tuple[int, int]]:
+    def query_phantoms(self, pids: Sequence[int]) -> List[Tuple[int, int]]:
         ...
 
     def assign_syntax(self, syntax: Union[str, "Syntax"]) -> None:
@@ -2283,7 +2283,7 @@ class View:
 
     def export_to_html(
         self,
-        regions: Optional[Union[Region, List[Region]]] = None,
+        regions: Optional[Union[Region, Sequence[Region]]] = None,
         minihtml: bool = False,
         enclosing_tags: bool = False,
         font_size: bool = True,
@@ -2546,7 +2546,7 @@ class CompletionList:
     completions: List[StCompletion]
     flags: int
 
-    def __init__(self, completions: List[StCompletion] = None, flags: int = 0) -> None:
+    def __init__(self, completions: Sequence[StCompletion] = None, flags: int = 0) -> None:
         """
         ---
 
@@ -2573,7 +2573,7 @@ class CompletionList:
     def _set_target(self, target: Optional[Any]) -> None:
         ...
 
-    def set_completions(self, completions: List[StCompletion], flags: int = 0) -> None:
+    def set_completions(self, completions: Sequence[StCompletion], flags: int = 0) -> None:
         """
         Sets the list of completions, allowing the list to be displayed to the user.
 

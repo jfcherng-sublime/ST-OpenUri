@@ -49,7 +49,7 @@ InputType = TypeVar("InputType")
 
 StCallback0 = Callable[[], Any]
 StCallback1 = Callable[[T], Any]
-StCompletion = Union[str, List[str], Tuple[str, str], sublime.CompletionItem]
+StCompletion = Union[str, Sequence[str], Tuple[str, str], sublime.CompletionItem]
 StCompletionNormalized = Tuple[
     str,  # trigger
     str,  # annotation
@@ -505,7 +505,7 @@ def on_query_context(view_id: int, key: str, operator: str, operand: StValue, ma
     ...
 
 
-def normalise_completion(c: Union[sublime.CompletionItem, str, List[str]]) -> StCompletionNormalized:
+def normalise_completion(c: Union[sublime.CompletionItem, str, Sequence[str]]) -> StCompletionNormalized:
     ...
 
 
@@ -521,14 +521,14 @@ class MultiCompletionList:
 
     def completions_ready(
         self,
-        completions: Iterable[Union[sublime.CompletionItem, str, List[str]]],
+        completions: Iterable[Union[sublime.CompletionItem, str, Sequence[str]]],
         flags: int,
     ) -> None:
         ...
 
 
 def on_query_completions(
-    view_id: int, req_id: int, prefix: str, locations: List[StPoint]
+    view_id: int, req_id: int, prefix: str, locations: Sequence[StPoint]
 ) -> Union[None, List[StCompletion], Tuple[List[StCompletion], int]]:
     ...
 

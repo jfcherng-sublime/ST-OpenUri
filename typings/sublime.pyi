@@ -11,6 +11,7 @@ from typing import (
     List,
     Literal,
     Optional,
+    Reversible,
     Sequence,
     Tuple,
     TypeVar,
@@ -35,7 +36,7 @@ T_Layout = TypedDict(
 
 StCallback0 = Callable[[], Any]
 StCallback1 = Callable[[T], Any]
-StCompletion = Union[str, Sequence[str], Tuple[str, str], "CompletionItem"]
+StCompletion = Union[str, Sequence[str], Tuple[str, str], CompletionItem]
 StCompletionNormalized = Tuple[
     str,  # trigger
     str,  # annotation
@@ -52,7 +53,7 @@ StDip = float
 StLocation = Tuple[str, str, Tuple[int, int]]
 StPoint = int
 StStr = str  # alias in case we have a variable named as "str"
-StValue = Union[dict, list, str, int, float, bool, None]
+StValue = Union[dict, list, tuple, str, int, float, bool, None]
 StVector = Tuple[StDip, StDip]
 
 # -------- #
@@ -554,7 +555,7 @@ def find_resources(pattern: str) -> List[str]:
     ...
 
 
-def encode_value(val: StValue, pretty: bool = ...) -> str:
+def encode_value(val: Any, pretty: bool = ...) -> str:
     """
     Encode a JSON compatible value into a string representation
     If `pretty` is set to `True`, the string will include newlines and indentation
@@ -583,7 +584,7 @@ def expand_variables(val: T_ExpandableVar, variables: Dict[str, str]) -> T_Expan
     ...
 
 
-def load_settings(base_name: str) -> "Settings":
+def load_settings(base_name: str) -> Settings:
     """
     Loads the named settings. The name should include a file name and extension,
     but not a path The packages will be searched for files matching the
@@ -616,12 +617,12 @@ def set_timeout_async(f: StCallback0, timeout_ms: float = 0) -> None:
     ...
 
 
-def active_window() -> "Window":
+def active_window() -> Window:
     """Returns the most recently used window"""
     ...
 
 
-def windows() -> List["Window"]:
+def windows() -> List[Window]:
     """Returns a list of all the open windows"""
     ...
 
@@ -638,8 +639,8 @@ class Window:
     """This class represents windows and provides an interface of methods to interact with them"""
 
     window_id: int
-    settings_object: Optional["Settings"]
-    template_settings_object: Optional["Settings"]
+    settings_object: Optional[Settings]
+    template_settings_object: Optional[Settings]
 
     def __init__(self, id: int) -> None:
         ...
@@ -671,15 +672,15 @@ class Window:
         """Platform specific window handle, only returns a meaningful result under Windows"""
         ...
 
-    def active_sheet(self) -> "Optional[Sheet]":
+    def active_sheet(self) -> Optional[Sheet]:
         """Returns the currently focused sheet"""
         ...
 
-    def active_view(self) -> Optional["View"]:
+    def active_view(self) -> Optional[View]:
         """Returns the currently edited view"""
         ...
 
-    def new_html_sheet(self, name: str, contents: str, flags: int = 0, group: int = -1) -> "Sheet":
+    def new_html_sheet(self, name: str, contents: str, flags: int = 0, group: int = -1) -> Sheet:
         """
         Constructs a sheet with HTML contents rendered using minihtml.
 
@@ -706,14 +707,14 @@ class Window:
         """
         ...
 
-    def new_file(self, flags: int = 0, syntax: str = "") -> "View":
+    def new_file(self, flags: int = 0, syntax: str = "") -> View:
         """
         Creates a new file, The returned view will be empty, and its
         `is_loaded()` method will return `True`. Flags must be either `0` or `TRANSIENT`
         """
         ...
 
-    def open_file(self, fname: str, flags: int = 0, group: int = -1) -> "View":
+    def open_file(self, fname: str, flags: int = 0, group: int = -1) -> View:
         """
         Opens the named file, and returns the corresponding view. If the file is
         already opened, it will be brought to the front. Note that as file
@@ -739,7 +740,7 @@ class Window:
         """
         ...
 
-    def find_open_file(self, fname: str) -> Optional["View"]:
+    def find_open_file(self, fname: str) -> Optional[View]:
         """
         Finds the named file in the list of open files, and returns the
         corresponding `View`, or `None` if no such file is open
@@ -758,15 +759,15 @@ class Window:
         """Makes the given group active"""
         ...
 
-    def focus_sheet(self, sheet: "Sheet") -> None:
+    def focus_sheet(self, sheet: Sheet) -> None:
         """Switches to the given `sheet`"""
         ...
 
-    def focus_view(self, view: "View") -> None:
+    def focus_view(self, view: View) -> None:
         """Switches to the given `view`"""
         ...
 
-    def select_sheets(self, sheets: "Iterable[Sheet]") -> None:
+    def select_sheets(self, sheets: Iterable[Sheet]) -> None:
         ...
 
     def bring_to_front(self) -> None:
@@ -777,63 +778,63 @@ class Window:
         """
         ...
 
-    def get_sheet_index(self, sheet: "Sheet") -> Tuple[int, int]:
+    def get_sheet_index(self, sheet: Sheet) -> Tuple[int, int]:
         """
         Returns the group, and index within the group of the `sheet`
         Returns (-1, -1) if not found
         """
         ...
 
-    def get_view_index(self, view: "View") -> Tuple[int, int]:
+    def get_view_index(self, view: View) -> Tuple[int, int]:
         """
         Returns the group, and index within the group of the `view`
         Returns (-1, -1) if not found
         """
         ...
 
-    def set_sheet_index(self, sheet: "Sheet", group: int, idx: int) -> None:
+    def set_sheet_index(self, sheet: Sheet, group: int, idx: int) -> None:
         """Moves the `sheet` to the given `group` and index"""
         ...
 
-    def set_view_index(self, view: "View", group: int, idx: int) -> None:
+    def set_view_index(self, view: View, group: int, idx: int) -> None:
         """Moves the `view` to the given `group` and index"""
         ...
 
-    def sheets(self) -> "List[Sheet]":
+    def sheets(self) -> List[Sheet]:
         """Returns all open sheets in the window"""
         ...
 
-    def views(self, *, include_transient: bool = False) -> "List[View]":
+    def views(self, *, include_transient: bool = False) -> List[View]:
         """Returns all open views in the window"""
         ...
 
-    def selected_sheets(self) -> "List[Sheet]":
+    def selected_sheets(self) -> List[Sheet]:
         ...
 
-    def selected_sheets_in_group(self, group: int) -> "List[Sheet]":
+    def selected_sheets_in_group(self, group: int) -> List[Sheet]:
         ...
 
-    def active_sheet_in_group(self, group: int) -> "Optional[Sheet]":
+    def active_sheet_in_group(self, group: int) -> Optional[Sheet]:
         """Returns the currently focused sheet in the given `group`"""
         ...
 
-    def active_view_in_group(self, group: int) -> Optional["View"]:
+    def active_view_in_group(self, group: int) -> Optional[View]:
         """Returns the currently edited view in the given `group`"""
         ...
 
-    def sheets_in_group(self, group: int) -> "List[Sheet]":
+    def sheets_in_group(self, group: int) -> List[Sheet]:
         """Returns all open sheets in the given `group`"""
         ...
 
-    def views_in_group(self, group: int) -> "List[View]":
+    def views_in_group(self, group: int) -> List[View]:
         """Returns all open views in the given `group`"""
         ...
 
-    def transient_sheet_in_group(self, group: int) -> "Optional[Sheet]":
+    def transient_sheet_in_group(self, group: int) -> Optional[Sheet]:
         """Returns the transient `Sheet` in the given `group` if any"""
         ...
 
-    def transient_view_in_group(self, group: int) -> Optional["View"]:
+    def transient_view_in_group(self, group: int) -> Optional[View]:
         """Returns the transient `View` in the given `group` if any"""
         ...
 
@@ -851,7 +852,7 @@ class Window:
         """Changes the tile-based panel layout of view groups"""
         ...
 
-    def create_output_panel(self, name: str, unlisted: bool = False) -> "View":
+    def create_output_panel(self, name: str, unlisted: bool = False) -> View:
         """
         Returns the view associated with the named output panel, creating it if required
         The output panel can be shown by running the _show_panel_ window command,
@@ -862,7 +863,7 @@ class Window:
         """
         ...
 
-    def find_output_panel(self, name: str) -> Optional["View"]:
+    def find_output_panel(self, name: str) -> Optional[View]:
         """
         Returns the view associated with the named output panel, or `None` if
         the output panel does not exist
@@ -888,7 +889,7 @@ class Window:
         """
         ...
 
-    def get_output_panel(self, name: str) -> "View":
+    def get_output_panel(self, name: str) -> View:
         """
         @deprecated use `create_output_panel()` instead
         """
@@ -900,20 +901,20 @@ class Window:
         initial_text: str,
         on_done: Optional[StCallback1[str]],
         on_change: Optional[StCallback1[str]],
-        on_cancel: StCallback0,
-    ) -> "View":
+        on_cancel: Optional[StCallback0],
+    ) -> View:
         """
         Shows the input panel, to collect a line of input from the user
         `on_done` and `on_change`, if not `None`, should both be functions
         that expect a single string argument
-        `on_cancel` should be a function that expects no arguments
+        `on_cancel` should be `None` or a function that expects no arguments
         The view used for the input widget is returned
         """
         ...
 
     def show_quick_panel(
         self,
-        items: Sequence[Union["QuickPanelItem", str, Sequence[str]]],
+        items: Sequence[Union[QuickPanelItem, str, Sequence[str]]],
         on_select: StCallback1[int],
         flags: int = 0,
         selected_index: int = -1,
@@ -993,7 +994,7 @@ class Window:
         """
         ...
 
-    def set_project_data(self, v: Dict[str, StValue]) -> None:
+    def set_project_data(self, v: Dict[str, Any]) -> None:
         """
         Updates the project data associated with the current window
         If the window is associated with a _.sublime-project_ file, the project
@@ -1010,11 +1011,11 @@ class Window:
         """
         ...
 
-    def settings(self) -> "Settings":
+    def settings(self) -> Settings:
         """Per-window settings, the contents are persisted in the session"""
         ...
 
-    def template_settings(self) -> "Settings":
+    def template_settings(self) -> Settings:
         """
         Per-window settings that are persisted in the session, and duplicated
         into new windows
@@ -1028,7 +1029,7 @@ class Window:
         type: int = SYMBOL_TYPE_ANY,
         kind_id: int = KIND_ID_AMBIGUOUS,
         kind_letter: str = "",
-    ) -> "List[SymbolLocation]":
+    ) -> List[SymbolLocation]:
         """
         :param sym:
             A unicode string of a symbol name
@@ -1148,10 +1149,10 @@ class Region:
     def __eq__(self, rhs: Any) -> bool:
         ...
 
-    def __lt__(self, rhs: "Region") -> bool:
+    def __lt__(self, rhs: Region) -> bool:
         ...
 
-    def __contains__(self, v: Union["Region", StPoint]) -> bool:
+    def __contains__(self, v: Union[Region, StPoint]) -> bool:
         ...
 
     def to_tuple(self) -> Tuple[StPoint, StPoint]:
@@ -1184,22 +1185,22 @@ class Region:
         """Returns the number of characters spanned by the region"""
         ...
 
-    def contains(self, x: Union["Region", StPoint]) -> bool:
+    def contains(self, x: Union[Region, StPoint]) -> bool:
         """
         If `x` is a region, returns `True` if it's a subset
         If `x` is a point, returns `True` if `begin() <= x <= end()`
         """
         ...
 
-    def cover(self, rhs: "Region") -> "Region":
+    def cover(self, rhs: Region) -> Region:
         """Returns a `Region` spanning both this and the given regions"""
         ...
 
-    def intersection(self, rhs: "Region") -> "Region":
+    def intersection(self, rhs: Region) -> Region:
         """Returns the set intersection of the two regions"""
         ...
 
-    def intersects(self, rhs: "Region") -> bool:
+    def intersects(self, rhs: Region) -> bool:
         """
         Returns `True` if `self == rhs` or both include one or more
         positions in common
@@ -1245,7 +1246,7 @@ class TextChange:
         ...
 
 
-class Selection:
+class Selection(Reversible):
     """
     Maintains a set of Regions, ensuring that none overlap
     The regions are kept in sorted order
@@ -1271,7 +1272,7 @@ class Selection:
     def __eq__(self, rhs: Any) -> bool:
         ...
 
-    def __lt__(self, rhs: "Selection") -> bool:
+    def __lt__(self, rhs: Selection) -> bool:
         ...
 
     def __bool__(self) -> bool:
@@ -1281,6 +1282,9 @@ class Selection:
         ...
 
     def __repr__(self) -> str:
+        ...
+
+    def __reversed__(self) -> Iterator[Region]:
         ...
 
     def is_valid(self) -> bool:
@@ -1315,7 +1319,7 @@ class Selection:
         ...
 
 
-def make_sheet(sheet_id: int) -> "Sheet":
+def make_sheet(sheet_id: int) -> Sheet:
     """Create a `Sheet` object with the given ID"""
 
 
@@ -1350,7 +1354,7 @@ class Sheet:
         """
         ...
 
-    def view(self) -> Optional["View"]:
+    def view(self) -> Optional[View]:
         """
         Returns the view contained within the sheet. May be `None` if the
         sheet is an image preview, or the view has been closed
@@ -1424,7 +1428,7 @@ class View:
 
     view_id: int
     selection: Selection
-    settings_object: "Settings"
+    settings_object: Settings
 
     def __init__(self, id: int) -> None:
         ...
@@ -1452,7 +1456,7 @@ class View:
         """Returns a number that uniquely identifies the buffer underlying this view"""
         ...
 
-    def buffer(self) -> "Buffer":
+    def buffer(self) -> Buffer:
         """Returns the Buffer object which is associated with this view"""
         ...
 
@@ -1460,7 +1464,7 @@ class View:
         """Returns the sheet ID of this view"""
         ...
 
-    def sheet(self) -> "Sheet":
+    def sheet(self) -> Sheet:
         """Return a Sheet object of this view"""
         ...
 
@@ -1511,7 +1515,7 @@ class View:
         """
         ...
 
-    def clones(self) -> List["View"]:
+    def clones(self) -> List[View]:
         """Gets a list of all the other views with the same buffer."""
         ...
 
@@ -1706,7 +1710,7 @@ class View:
         """
         ...
 
-    def settings(self) -> "Settings":
+    def settings(self) -> Settings:
         """
         Returns a reference to the view's settings object. Any changes to this
         settings object will be private to this view
@@ -2104,7 +2108,7 @@ class View:
     def query_phantoms(self, pids: Sequence[int]) -> List[Tuple[int, int]]:
         ...
 
-    def assign_syntax(self, syntax: Union[str, "Syntax"]) -> None:
+    def assign_syntax(self, syntax: Union[str, Syntax]) -> None:
         """
         Sets the syntax for this view.
 
@@ -2112,13 +2116,13 @@ class View:
         """
         ...
 
-    def set_syntax_file(self, syntax: Union[str, "Syntax"]) -> None:
+    def set_syntax_file(self, syntax: Union[str, Syntax]) -> None:
         """
         @deprecated use `assign_syntax()` instead
         """
         ...
 
-    def syntax(self) -> Optional["Syntax"]:
+    def syntax(self) -> Optional[Syntax]:
         """Get the syntax used by the view. May be None."""
         ...
 
@@ -2138,11 +2142,11 @@ class View:
     def indexed_references(self) -> List[Tuple[Region, str]]:
         ...
 
-    def symbol_regions(self) -> List["SymbolRegion"]:
+    def symbol_regions(self) -> List[SymbolRegion]:
         """Returns a list of sublime.SymbolRegion() objects for the symbols in this view"""
         ...
 
-    def indexed_symbol_regions(self, type: int = SYMBOL_TYPE_ANY) -> List["SymbolRegion"]:
+    def indexed_symbol_regions(self, type: int = SYMBOL_TYPE_ANY) -> List[SymbolRegion]:
         """
         :param type:
             The type of symbol to return. One of the values:
@@ -2182,7 +2186,9 @@ class View:
         ...
 
     def command_history(
-        self, delta: int, modifying_only: bool = False
+        self,
+        delta: int,
+        modifying_only: bool = False,
     ) -> Tuple[Optional[str], Optional[Dict[str, Any]], int]:
         """
         Returns the command name, command arguments, and repeat count for the
@@ -2314,7 +2320,7 @@ class View:
         ...
 
 
-def _buffers() -> List["Buffer"]:
+def _buffers() -> List[Buffer]:
     """Returns all available Buffer objects"""
     ...
 
@@ -2360,7 +2366,7 @@ class Settings:
         # when casting the returned value. So we probably just use "Any"...
         ...
 
-    def __setitem__(self, key: str, value: StValue) -> None:
+    def __setitem__(self, key: str, value: Any) -> None:
         ...
 
     def __delitem__(self, key: str) -> None:
@@ -2380,7 +2386,7 @@ class Settings:
         """
         ...
 
-    def setdefault(self, key: str, value: StValue) -> Any:
+    def setdefault(self, key: str, value: Any) -> Any:
         """
         Returns the value of the item with the specified key.
 
@@ -2404,7 +2410,7 @@ class Settings:
         """
         ...
 
-    def get(self, key: str, default: Optional[StValue] = None) -> Any:
+    def get(self, key: str, default: Optional[Any] = None) -> Any:
         """
         Returns the named setting, or `default` if it's not defined
         If not passed, `default` will have a value of `None`
@@ -2420,7 +2426,7 @@ class Settings:
         """
         ...
 
-    def set(self, key: str, value: StValue) -> None:
+    def set(self, key: str, value: Any) -> None:
         """Sets the named setting. Only primitive types, lists, and dicts are accepted"""
         ...
 
@@ -2633,7 +2639,7 @@ class CompletionItem:
         annotation: str = "",
         kind: StCompletionKind = KIND_SNIPPET,
         details: str = "",
-    ) -> "CompletionItem":
+    ) -> CompletionItem:
         """
         ---
 
@@ -2658,7 +2664,7 @@ class CompletionItem:
         annotation: str = "",
         kind: StCompletionKind = KIND_AMBIGUOUS,
         details: str = "",
-    ) -> "CompletionItem":
+    ) -> CompletionItem:
         """
         ---
 
@@ -2676,7 +2682,7 @@ class CompletionItem:
         ...
 
 
-def list_syntaxes() -> List["Syntax"]:
+def list_syntaxes() -> List[Syntax]:
     """
     Returns a list of Syntaxes for all known syntaxes.
 
@@ -2685,7 +2691,7 @@ def list_syntaxes() -> List["Syntax"]:
     ...
 
 
-def syntax_from_path(path: str) -> Optional["Syntax"]:
+def syntax_from_path(path: str) -> Optional[Syntax]:
     """
     Get the syntax for a specific path.
 
@@ -2694,7 +2700,7 @@ def syntax_from_path(path: str) -> Optional["Syntax"]:
     ...
 
 
-def find_syntax_by_name(name: str) -> List["Syntax"]:
+def find_syntax_by_name(name: str) -> List[Syntax]:
     """
     Find syntaxes with the specified name. Name must match exactly.
 
@@ -2703,7 +2709,7 @@ def find_syntax_by_name(name: str) -> List["Syntax"]:
     ...
 
 
-def find_syntax_by_scope(scope: str) -> List["Syntax"]:
+def find_syntax_by_scope(scope: str) -> List[Syntax]:
     """
     Find syntaxes with the specified scope. Scope must match exactly.
 
@@ -2712,7 +2718,7 @@ def find_syntax_by_scope(scope: str) -> List["Syntax"]:
     ...
 
 
-def find_syntax_for_file(path: str, first_line: str = "") -> Optional["Syntax"]:
+def find_syntax_for_file(path: str, first_line: str = "") -> Optional[Syntax]:
     """
     Returns the path to the syntax that will be used when opening a file with the name fname.
     The `first_line` of file contents may also be provided if available.
@@ -2740,14 +2746,14 @@ class Syntax:
 
 class QuickPanelItem:
     trigger: str
-    details: str
+    details: Union[str, Sequence[str]]
     annotation: str
     kind: StCompletionKind
 
     def __init__(
         self,
         trigger: str,
-        details: str = "",
+        details: Union[str, Sequence[str]] = "",
         annotation: str = "",
         kind: StCompletionKind = KIND_AMBIGUOUS,
     ) -> None:
@@ -2764,7 +2770,14 @@ class SymbolRegion:
     type: int
     kind: StCompletionKind
 
-    def __init__(self, name: str, region: Region, syntax: Syntax, type: int, kind: StCompletionKind) -> None:
+    def __init__(
+        self,
+        name: str,
+        region: Region,
+        syntax: Syntax,
+        type: int,
+        kind: StCompletionKind,
+    ) -> None:
         ...
 
     def __repr__(self) -> str:
@@ -2802,7 +2815,14 @@ class SymbolLocation:
     kind: StCompletionKind
 
     def __init__(
-        self, path: str, display_name: str, row: int, col: int, syntax: Syntax, type: int, kind: StCompletionKind
+        self,
+        path: str,
+        display_name: str,
+        row: int,
+        col: int,
+        syntax: Syntax,
+        type: int,
+        kind: StCompletionKind,
     ) -> None:
         ...
 

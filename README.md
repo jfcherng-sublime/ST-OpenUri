@@ -1,45 +1,29 @@
 # ST-OpenUri
 
-[![Required ST Build](https://img.shields.io/badge/ST-3118+-orange.svg?style=flat-square&logo=sublime-text)](https://www.sublimetext.com)
-[![Travis (.org) branch](https://img.shields.io/travis/jfcherng-sublime/ST-OpenUri/master?style=flat-square)](https://travis-ci.org/jfcherng-sublime/ST-OpenUri)
+[![Required ST Build](https://img.shields.io/badge/ST-4105+-orange.svg?style=flat-square&logo=sublime-text)](https://www.sublimetext.com)
+[![GitHub Actions](https://img.shields.io/github/workflow/status/jfcherng-sublime/ST-OpenUri/Python?style=flat-square)](https://github.com/jfcherng-sublime/ST-OpenUri/actions)
 [![Package Control](https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square)](https://packagecontrol.io/packages/OpenUri)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/tags)
-[![Project license](https://img.shields.io/github/license/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/blob/master/LICENSE)
+[![Project license](https://img.shields.io/github/license/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/blob/st4/LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/stargazers)
 [![Donate to this project using Paypal](https://img.shields.io/badge/paypal-donate-blue.svg?style=flat-square&logo=paypal)](https://www.paypal.me/jfcherng/5usd)
 
 Finally! A performant and highly customizable URI-opening plugin comes.
 
-![screenshot](https://raw.githubusercontent.com/jfcherng-sublime/ST-OpenUri/master/docs/screenshot.png)
+![screenshot](https://raw.githubusercontent.com/jfcherng-sublime/ST-OpenUri/st4/docs/screenshot.png)
 
 `OpenUri` is a Sublime Text plugin which provides an easy access to URIs (mostly URLs)
 in a file by clicking on a phantom, the popup or key/mouse bindings.
 
-## Bug fix for `PhantomSet` in ST 3
-
-If you are using ST 4, just ignore this section.
-
-The official `PhantomSet` implementation in Sublime Text 3 is [buggy](https://github.com/SublimeTextIssues/Core/issues/2897#issuecomment-514868381).
-You can fix it by overwriting it with [a patched sublime.py](https://gist.github.com/jfcherng/0ea38bd05a8875be1a40f30b5b9f784c).
-Remember, backup `sublime.py` before patching it.
-
-- On Windows: `C:\Program Files\Sublime Text 3\sublime.py`
-- On Linux: `/opt/sublime_text/sublime.py`
-- On Mac OSX: `/Applications/Sublime Text.app/Contents/MacOS/sublime.py`
-
 ## Installation
 
-This plugin is available on Package Control by the name of [OpenUri](https://packagecontrol.io/packages/OpenUri).
-
-Note that this plugin only supports ST >= 3118 because of Phantom API.
-
-💡 You may also be interested in my other plugins: https://packagecontrol.io/search/jfcherng
+This plugin is available on [Package Control][package-control] by the name of [OpenUri][openuri].
 
 ## Settings
 
 To edit settings, go to `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
 
-I try to make the [settings file](https://github.com/jfcherng-sublime/ST-OpenUri/blob/master/OpenUri.sublime-settings)
+I try to make the [settings file](https://github.com/jfcherng-sublime/ST-OpenUri/blob/st4/OpenUri.sublime-settings)
 self-explanatory. But if you still have questions, feel free to open an issue.
 
 ## Default Bindings
@@ -75,3 +59,6 @@ These commands are always available no matter what `show_open_button` is or how 
 | open_uri_from_view      | Open URIs from the current view   |
 | select_uri_from_cursors | Select URIs from cursors          |
 | select_uri_from_view    | Select URIs from the current view |
+
+[openuri]: https://packagecontrol.io/packages/OpenUri
+[package-control]: https://packagecontrol.io

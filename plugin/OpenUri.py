@@ -32,7 +32,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if hover_zone != sublime.HOVER_TEXT:
-            uri_regions = []  # type: List[sublime.Region]
+            uri_regions: List[sublime.Region] = []
         else:
             uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
 

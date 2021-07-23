@@ -44,9 +44,9 @@
     // colors which used to color corresponding images
     // values can be
     //     - "" (empty string, use the original color of the image)
-    //     - "@scope" (use the same color with the corresponding URI's, require ST >= 3170)
-    //     - "@scope_inverted" (use the inverted color of the corresponding URI's, require ST >= 3170)
-    //     - ST's scope (use the color of the scope, require ST >= 3170)
+    //     - "@scope" (use the same color with the corresponding URI's)
+    //     - "@scope_inverted" (use the inverted color of the corresponding URI's)
+    //     - ST's scope (use the color of the scope)
     //     - color code in the form of "#RGB", "#RRGGBB" or "#RRGGBBAA"
     "image_colors": {
         "phantom": "#fa8c00",

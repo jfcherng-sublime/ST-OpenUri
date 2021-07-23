@@ -1,17 +1,17 @@
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 import threading
 
 
 class RepeatingTimer:
-    def __init__(self, interval_ms: int, func: Callable, *args, **kwargs) -> None:
+    def __init__(self, interval_ms: int, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.interval_s = interval_ms / 1000
         self.func = func
         self.args = args
         self.kwargs = kwargs
-        self.timer = None  # type: Optional[threading.Timer]
+        self.timer: Optional[threading.Timer] = None
         self.is_running = False
 
-    def set_func(self, func: Callable, *args, **kwargs) -> None:
+    def set_func(self, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.func = func
         self.args = args
         self.kwargs = kwargs

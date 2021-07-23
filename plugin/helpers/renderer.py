@@ -1,17 +1,17 @@
 from .functions import is_view_too_large
 from .functions import is_view_typing
 from .functions import view_is_dirty_val
-from .Globals import global_get
 from .log import log
 from .phantom_set import erase_phantom_set
 from .phantom_set import update_phantom_set
 from .region_drawing import draw_uri_regions
 from .region_drawing import erase_uri_regions
-from .RepeatingTimer import RepeatingTimer
 from .settings import get_setting
 from .settings import get_setting_show_open_button
+from .shared import global_get
+from .timer import RepeatingTimer
+from .utils import is_processable_view
 from .utils import is_transient_view
-from .utils import is_view_normal_ready
 from .utils import view_find_all_fast
 import sublime
 
@@ -24,17 +24,14 @@ class RendererThread(RepeatingTimer):
         self.is_rendering = False
 
     def _check_current_view(self) -> None:
-        view = sublime.active_window().active_view()
-
-        if self.is_rendering or not is_view_normal_ready(view):
-            return
-
-        assert isinstance(view, sublime.View)
-
-        if not view_is_dirty_val(view) or is_view_typing(view):
-            return
-
-        if is_transient_view(view) and not get_setting("work_for_transient_view"):
+        if (
+            self.is_rendering
+            or not (view := sublime.active_window().active_view())
+            or not is_processable_view(view)
+            or not view_is_dirty_val(view)
+            or is_view_typing(view)
+            or (is_transient_view(view) and not get_setting("work_for_transient_view"))
+        ):
             return
 
         if is_view_too_large(view):

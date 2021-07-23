@@ -1,7 +1,8 @@
 from .functions import open_uri_with_browser
-from .Globals import global_get
 from .image_processing import get_colored_image_base64_by_region
 from .settings import get_setting
+from .shared import global_get
+from .types import ImageDict
 import sublime
 
 POPUP_TEMPLATE = """
@@ -19,11 +20,11 @@ POPUP_TEMPLATE = """
 
 
 def generate_popup_html(view: sublime.View, uri_region: sublime.Region) -> str:
-    img = global_get("images.popup")
+    img: ImageDict = global_get("images.popup")
     base_size = 2.5
 
     return POPUP_TEMPLATE.format(
-        uri=view.substr(uri_region),
+        uri=sublime.html_format_command(view.substr(uri_region)),
         mime=img["mime"],
         w=base_size * img["ratio_wh"],
         h=base_size,

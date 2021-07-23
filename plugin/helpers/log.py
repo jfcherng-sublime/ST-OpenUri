@@ -1,4 +1,4 @@
-from .Globals import global_get
+from .shared import global_get
 import logging
 
 LOG_FORMAT = "[%(name)s][%(levelname)s] %(message)s"
@@ -12,7 +12,7 @@ def init_plugin_logger() -> logging.Logger:
     @return The initiated plugin logger.
     """
 
-    from .settings import get_package_name
+    from .constant import PLUGIN_NAME
 
     def set_logger_hander(logger: logging.Logger) -> None:
         # remove all existing log handlers
@@ -25,7 +25,7 @@ def init_plugin_logger() -> logging.Logger:
 
     logging.addLevelName(5, "DEBUG_LOW")
     logging.addLevelName(1001, "NOTHING")
-    logger = logging.getLogger(get_package_name())
+    logger = logging.getLogger(PLUGIN_NAME)
     logger.propagate = False  # prevent appear multiple same log messages
     set_logger_hander(logger)
 
@@ -44,16 +44,12 @@ def apply_user_log_level(logger: logging.Logger) -> None:
     log_level = get_setting("log_level").upper()
 
     if not isinstance(logging.getLevelName(log_level), int):
-        logger.warning(
-            'Unknown "log_level": {log_level} (assumed "{default}")'.format(
-                log_level=log_level, default=LOG_LEVEL_DEFAULT
-            )
-        )
+        logger.warning(f'Unknown "log_level": {log_level} (assumed "{LOG_LEVEL_DEFAULT}")')
         log_level = LOG_LEVEL_DEFAULT
 
     # temporary set to INFO level for logging log_level changed
     logger.setLevel("INFO")
-    logger.info("Set log level: {}".format(log_level))
+    logger.info(f"Set log level: {log_level}")
     logger.setLevel(log_level)
 
 
@@ -69,7 +65,7 @@ def log(level: str, msg: str) -> None:
     level_int = logging.getLevelName(level_upper)
 
     if not isinstance(level_int, int):
-        raise ValueError('Unknown log level "{level}" whose message is: {msg}'.format(level=level, msg=msg))
+        raise ValueError(f'Unknown log level "{level}" whose message is: {msg}')
 
     global_get("logger").log(level_int, msg)
 
@@ -83,6 +79,6 @@ def msg(msg: str) -> str:
     @return The plugin message.
     """
 
-    from .settings import get_package_name
+    from .constant import PLUGIN_NAME
 
-    return "[{plugin}] {msg}".format(plugin=get_package_name(), msg=msg)
+    return f"[{PLUGIN_NAME}] {msg}"

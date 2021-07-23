@@ -23,31 +23,31 @@ This plugin is available on [Package Control][package-control] by the name of [O
 
 To edit settings, go to `Preferences` » `Package Settings` » `OpenUri` » `Settings`.
 
-I try to make the [settings file](https://github.com/jfcherng-sublime/ST-OpenUri/blob/st4/OpenUri.sublime-settings)
-self-explanatory. But if you still have questions, feel free to open an issue.
+I try to make the [settings file][settings-file] self-explanatory.
+But if you still have questions, feel free to open an issue.
 
-## Default Bindings
+## Bindings
 
-### Key Binding
+### Key Bindings
 
-- <kbd>Alt + o</kbd>, <kbd>Alt + u</kbd>:
-  Open URIs from (multiple) cursors. `o, u` is mnemonic for `Open, URI`.
+- Open URIs from (multiple) cursors:
+  <kbd>Alt + o</kbd>, <kbd>Alt + u</kbd>
+  (`o, u` is mnemonic for `Open, URI`)
 
-### Mouse Binding
+### Mouse Bindings
 
-- <kbd>Ctrl + Right Click</kbd>: Open the clicked URI. (`open_context_url`)
+There is no mouse binding but you can add one if you need.
 
-### How to disable default bindings
-
-If you do not want those default key/mouse bindings, you can use an empty one to overwrite them.
-Or if you want to change them, you can use a non-empty one.
-
-Here I take the default mouse binding as an example.
-
-1. Go to `Preferences` » `Browser Packages...`.
-1. Create file `OpenUri/bindings/Default.sublime-mousemap` (and its parent directories if necessary).
-1. Fill `Default.sublime-mousemap` with `[]`.
-   Then this `Default.sublime-mousemap` will overwrite this plugin's.
+```js
+[
+    // open URL via: alt + right click
+    {
+        button: 'button2',
+        modifiers: ['alt'],
+        command: 'open_context_url',
+    },
+]
+```
 
 ## Commands
 
@@ -62,3 +62,4 @@ These commands are always available no matter what `show_open_button` is or how 
 
 [openuri]: https://packagecontrol.io/packages/OpenUri
 [package-control]: https://packagecontrol.io
+[settings-file]: https://github.com/jfcherng-sublime/ST-OpenUri/blob/st4/OpenUri.sublime-settings

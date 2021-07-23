@@ -1,6 +1,6 @@
 from ..libs import png
-from .Globals import global_get
 from .settings import get_image_color
+from .shared import global_get
 from .utils import simple_decorator
 from functools import lru_cache
 from typing import List, Sequence
@@ -10,7 +10,7 @@ import re
 import sublime
 
 
-@lru_cache()
+@lru_cache
 def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     """
     @brief Get the colored image in base64 string by RGBA color code.
@@ -22,9 +22,9 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
     """
 
     if not rgba_code:
-        return global_get("images.%s.base64" % img_name)
+        return global_get(f"images.{img_name}.base64")
 
-    img_bytes = global_get("images.%s.bytes" % img_name)  # type: bytes
+    img_bytes: bytes = global_get(f"images.{img_name}.bytes")
     img_bytes = change_png_bytes_color(img_bytes, rgba_code)
 
     return base64.b64encode(img_bytes).decode()
@@ -43,7 +43,7 @@ def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) ->
     return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
 
 
-@lru_cache()
+@lru_cache
 def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     """
     @brief Change all colors in the PNG bytes to the new color.
@@ -77,9 +77,9 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     rgba_dst = [int(rgba_code[i : i + 2], 16) for i in range(1, 9, 2)]
     w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
-    rows_dst = []
+    rows_dst: List[List[int]] = []
     for row_src in rows_src:
-        row_dst = []
+        row_dst: List[int] = []
         for i in range(0, len(row_src), 4):
             row_dst.extend(render_pixel(row_src[i : i + 4], rgba_dst, invert_gray))
         rows_dst.append(row_dst)
@@ -144,7 +144,7 @@ def add_alpha_to_rgb(color_code: str) -> str:
 
 
 @simple_decorator(add_alpha_to_rgb)
-def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(0, 0)) -> str:
+def color_code_to_rgba(color_code: str, region: sublime.Region) -> str:
     """
     @brief Convert user settings color code into #RRGGBBAA form
 
@@ -157,11 +157,9 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
     if not color_code:
         return ""
 
-    view = sublime.active_window().active_view()
-
     # "color_code" is a scope?
     if not color_code.startswith("#"):
-        if view and global_get("HAS_API_VIEW_STYLE_FOR_SCOPE"):
+        if view := sublime.active_window().active_view():
             # "color" is guaranteed to be #RRGGBB or #RRGGBBAA
             color = view.style_for_scope(view.scope_name(region.end() - 1)).get("foreground", "")
 
@@ -173,7 +171,6 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
                 rgba_int = int((color + "ff")[1:9], 16)
                 # invert RRGGBB, remain AA, strip "0x" prefix from hex and prepend 0s until 8 chars
                 return "#" + hex((~rgba_int & 0xFFFFFF00) | (rgba_int & 0xFF))[2:].zfill(8)
-
         return ""
 
     # now color code must starts with "#"
@@ -181,6 +178,6 @@ def color_code_to_rgba(color_code: str, region: sublime.Region = sublime.Region(
 
     # RGB, RRGGBB, RRGGBBAA are legal
     if len(rgb) in [3, 6, 8] and re.match(r"[0-9a-fA-F]+$", rgb):
-        return "#" + rgb
+        return f"#{rgb}"
 
     return ""

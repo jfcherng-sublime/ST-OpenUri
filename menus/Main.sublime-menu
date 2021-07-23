@@ -1,53 +1,74 @@
-[{
-    "id": "selection",
-    "children": [{
-        "caption": "OpenUri",
-        "children": [{
-            "caption": "Open URIs from Cursors",
-            "command": "open_uri_from_cursors",
-        }, {
-            "caption": "Open URIs from the Current View",
-            "command": "open_uri_from_view",
-        }, {
-            "caption": "Select URIs from Cursors",
-            "command": "select_uri_from_cursors",
-        }, {
-            "caption": "Select URIs from the Current View",
-            "command": "select_uri_from_view",
-        }],
-    }],
-}, {
-    "id": "preferences",
-    "children": [{
-        "id": "package-settings",
-        "children": [{
-            "caption": "OpenUri",
-            "children": [{
-                "caption": "-",
-            }, {
-                "caption": "Settings",
-                "command": "edit_settings",
-                "args": {
-                    "base_file": "${packages}/OpenUri/OpenUri.sublime-settings",
-                    "default": "{\n\t$0\n}\n",
-                },
-            }, {
-                "caption": "-",
-            }, {
-                "caption": "README",
-                "command": "open_file",
-                "args": {
-                    "file": "${packages}/OpenUri/README.md",
-                },
-            }, {
-                "caption": "CHANGELOG",
-                "command": "open_file",
-                "args": {
-                    "file": "${packages}/OpenUri/CHANGELOG.md",
-                },
-            }, {
-                "caption": "-",
-            }],
-        }],
-    }],
-}]
+[
+    {
+        "id": "selection",
+        "children": [
+            {
+                "caption": "OpenUri",
+                "children": [
+                    {
+                        "caption": "Open URIs from Cursors",
+                        "command": "open_uri_from_cursors"
+                    },
+                    {
+                        "caption": "Open URIs from the Current View",
+                        "command": "open_uri_from_view"
+                    },
+                    {
+                        "caption": "Select URIs from Cursors",
+                        "command": "select_uri_from_cursors"
+                    },
+                    {
+                        "caption": "Select URIs from the Current View",
+                        "command": "select_uri_from_view"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "preferences",
+        "children": [
+            {
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "OpenUri",
+                        "children": [
+                            {
+                                "caption": "-"
+                            },
+                            {
+                                "caption": "Settings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/OpenUri/OpenUri.sublime-settings",
+                                    "default": "{\n\t$0\n}\n"
+                                }
+                            },
+                            {
+                                "caption": "-"
+                            },
+                            {
+                                "caption": "README",
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/OpenUri/README.md"
+                                }
+                            },
+                            {
+                                "caption": "CHANGELOG",
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/OpenUri/CHANGELOG.md"
+                                }
+                            },
+                            {
+                                "caption": "-"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

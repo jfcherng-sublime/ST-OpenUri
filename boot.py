@@ -1,7 +1,7 @@
 from .plugin import set_up
 from .plugin import tear_down
-from .plugin.OpenUri import *
-from .plugin.OpenUriCommands import *
+from .plugin.OpenUri import *  # noqa: F401, F403
+from .plugin.OpenUriCommands import *  # noqa: F401, F403
 import sublime
 
 

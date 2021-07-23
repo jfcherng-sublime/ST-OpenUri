@@ -1,40 +1,20 @@
+from .constant import PLUGIN_NAME
+from .constant import SETTINGS_FILE_NAME
 from .log import log
+from .types import ImageDict
 from typing import Any, Dict, Optional
 import base64
 import os
 import sublime
-import sys
 import tempfile
 import time
-
-
-def get_package_name() -> str:
-    """
-    @brief Getsthe package name.
-
-    @return The package name.
-    """
-
-    # __package__ will be "THE_PLUGIN_NAME.plugin" under this folder structure
-    # anyway, the top module should always be the plugin name
-    return __package__.partition(".")[0]
-
-
-def get_package_path() -> str:
-    """
-    @brief Gets the package path.
-
-    @return The package path.
-    """
-
-    return "Packages/" + get_package_name()
 
 
 def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, Any]:
     variables = {
         "home": os.path.expanduser("~"),
-        "package_name": get_package_name(),
-        "package_path": get_package_path(),
+        "package_name": PLUGIN_NAME,
+        "package_path": f"Packages/{PLUGIN_NAME}",
         "temp_dir": tempfile.gettempdir(),
     }
 
@@ -53,15 +33,13 @@ def get_image_path(img_name: str) -> str:
     @return The image resource path.
     """
 
-    img_path = get_setting("image_files")[img_name]
-
-    # assert for potential dev code typos
-    assert isinstance(img_path, str)
-
-    return sublime.expand_variables(img_path, get_expanding_variables(sublime.active_window()))
+    return sublime.expand_variables(
+        get_setting("image_files")[img_name],
+        get_expanding_variables(sublime.active_window()),
+    )
 
 
-def get_image_info(img_name: str) -> Dict[str, Any]:
+def get_image_info(img_name: str) -> ImageDict:
     """
     @brief Get image informations of an image from plugin settings.
 
@@ -82,7 +60,7 @@ def get_image_info(img_name: str) -> Dict[str, Any]:
         img_bytes = sublime.load_binary_resource(img_path)
     except IOError:
         img_bytes = b""
-        log("error", "Resource not found: " + img_path)
+        log("error", f"Resource not found: {img_path}")
 
     img_base64 = base64.b64encode(img_bytes).decode()
     img_w, img_h = imagesize.get_from_bytes(img_bytes)
@@ -110,22 +88,7 @@ def get_image_color(img_name: str, region: sublime.Region) -> str:
 
     from .image_processing import color_code_to_rgba
 
-    img_color = get_setting("image_colors")[img_name]
-
-    # assert for potential dev code typos
-    assert isinstance(img_color, str)
-
-    return color_code_to_rgba(img_color, region)
-
-
-def get_settings_file() -> str:
-    """
-    @brief Get the settings file name.
-
-    @return The settings file name.
-    """
-
-    return get_package_name() + ".sublime-settings"
+    return color_code_to_rgba(get_setting("image_colors")[img_name], region)
 
 
 def get_settings_object() -> sublime.Settings:
@@ -135,7 +98,7 @@ def get_settings_object() -> sublime.Settings:
     @return The settings object.
     """
 
-    return sublime.load_settings(get_settings_file())
+    return sublime.load_settings(SETTINGS_FILE_NAME)
 
 
 def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
@@ -148,9 +111,9 @@ def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
     @return The setting's value.
     """
 
-    from .Globals import global_get
+    from .shared import global_get
 
-    return global_get("settings.{}".format(dotted), default)
+    return global_get(f"settings.{dotted}", default)
 
 
 def get_timestamp() -> float:
@@ -170,10 +133,8 @@ def get_setting_renderer_interval() -> int:
     @return The renderer interval.
     """
 
-    interval = get_setting("renderer_interval", 250)
-
-    if interval < 0:
-        interval = sys.maxsize
+    if (interval := get_setting("renderer_interval", 250)) < 0:
+        interval = float("inf")
 
     # a minimum for not crashing the system accidentally
     return int(max(30, interval))

@@ -1,4 +1,4 @@
-from .st_types import RegionLike
+from .types import RegionLike
 from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
 import functools
 import sublime
@@ -121,7 +121,7 @@ def region_expand(region: RegionLike, expansion: Union[int, List[int]]) -> Regio
         expansion = [int(expansion)] * 2
 
     if len(expansion) == 0:
-        raise ValueError("Invalid expansion: {}".format(expansion))
+        raise ValueError(f"Invalid expansion: {expansion}")
 
     if len(expansion) == 1:
         # do not modify the input variable by "expansion *= 2"
@@ -192,7 +192,8 @@ def region_into_st_region_form(region: RegionLike, sort_result: bool = False) ->
 
 
 def simplify_intersected_regions(
-    regions: Iterable[sublime.Region], allow_boundary: bool = False
+    regions: Iterable[sublime.Region],
+    allow_boundary: bool = False,
 ) -> List[sublime.Region]:
     """
     @brief Simplify intersected regions by merging them to reduce numbers of regions.
@@ -203,7 +204,7 @@ def simplify_intersected_regions(
     @return Simplified regions
     """
 
-    merged_regions = []  #  type: List[sublime.Region]
+    merged_regions: List[sublime.Region] = []
     for region in sorted(regions):
         if not merged_regions:
             merged_regions.append(region)
@@ -220,7 +221,11 @@ def simplify_intersected_regions(
     return merged_regions
 
 
-def is_regions_intersected(region_1: sublime.Region, region_2: sublime.Region, allow_boundary: bool = False) -> bool:
+def is_regions_intersected(
+    region_1: sublime.Region,
+    region_2: sublime.Region,
+    allow_boundary: bool = False,
+) -> bool:
     """
     @brief Check whether two regions are intersected.
 
@@ -243,11 +248,14 @@ def is_regions_intersected(region_1: sublime.Region, region_2: sublime.Region, a
     return region_1.intersects(region_2)
 
 
-def is_view_normal_ready(view: Optional[sublime.View]) -> bool:
-    return bool(view and not view.settings().get("is_widget") and not view.is_loading())
+def is_processable_view(view: sublime.View) -> bool:
+    return not view.element() and view.is_valid() and not view.is_loading()
 
 
 def is_transient_view(view: sublime.View) -> bool:
-    w = view.window()
+    # @see https://github.com/sublimehq/sublime_text/issues/4444
+    # workaround for a transient view have no window right after it's loaded
+    if not (window := view.window()):
+        return True
     # @see https://forum.sublimetext.com/t/is-view-transient-preview-method/3247/2
-    return w.get_view_index(view)[1] == -1 if w else True
+    return window.get_view_index(view)[1] == -1

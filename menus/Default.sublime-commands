@@ -1,13 +1,18 @@
-[{
-    "caption": "OpenUri: Open URIs from Cursors",
-    "command": "open_uri_from_cursors",
-}, {
-    "caption": "OpenUri: Open URIs from the Current View",
-    "command": "open_uri_from_view",
-}, {
-    "caption": "OpenUri: Select URIs from Cursors",
-    "command": "select_uri_from_cursors",
-}, {
-    "caption": "OpenUri: Select URIs from the Current View",
-    "command": "select_uri_from_view",
-}]
+[
+    {
+        "caption": "OpenUri: Open URIs from Cursors",
+        "command": "open_uri_from_cursors"
+    },
+    {
+        "caption": "OpenUri: Open URIs from the Current View",
+        "command": "open_uri_from_view"
+    },
+    {
+        "caption": "OpenUri: Select URIs from Cursors",
+        "command": "select_uri_from_cursors"
+    },
+    {
+        "caption": "OpenUri: Select URIs from the Current View",
+        "command": "select_uri_from_view"
+    }
+]

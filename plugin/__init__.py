@@ -1,17 +1,17 @@
+from .helpers.constant import PLUGIN_NAME
 from .helpers.functions import compile_uri_regex
 from .helpers.functions import view_is_dirty_val
-from .helpers.Globals import global_get
-from .helpers.Globals import global_set
 from .helpers.log import apply_user_log_level
 from .helpers.log import init_plugin_logger
 from .helpers.log import log
-from .helpers.PhatomSetsManager import PhatomSetsManager
-from .helpers.RendererThread import RendererThread
+from .helpers.phatom_sets_manager import PhatomSetsManager
+from .helpers.renderer import RendererThread
 from .helpers.settings import get_image_info
-from .helpers.settings import get_package_name
 from .helpers.settings import get_setting_renderer_interval
 from .helpers.settings import get_settings_object
-from .helpers.utils import is_view_normal_ready
+from .helpers.shared import global_get
+from .helpers.shared import global_set
+from .helpers.utils import is_processable_view
 import sublime
 
 
@@ -25,7 +25,7 @@ def set_up() -> None:
         uri_regex_obj, activated_schemes = compile_uri_regex()
         global_set("activated_schemes", activated_schemes)
         global_set("uri_regex_obj", uri_regex_obj)
-        log("info", "Activated schemes: {}".format(activated_schemes))
+        log("info", f"Activated schemes: {activated_schemes}")
 
         init_images()
         set_is_dirty_for_all_views(True)
@@ -35,24 +35,22 @@ def set_up() -> None:
     global_set("renderer_thread", RendererThread())
     plugin_settings_listener()
 
-    get_settings_object().add_on_change(get_package_name(), plugin_settings_listener)
+    global_get("settings").add_on_change(PLUGIN_NAME, plugin_settings_listener)
     global_get("renderer_thread").start()
 
 
 def tear_down() -> None:
     """plugin_unloaded"""
 
-    get_settings_object().clear_on_change(get_package_name())
+    global_get("settings").clear_on_change(PLUGIN_NAME)
     global_get("renderer_thread").cancel()
     PhatomSetsManager.clear()
 
 
 def init_images() -> None:
     for img_name in global_get("images").keys():
-        if img_name.startswith("@"):
-            continue
-
-        global_set("images.%s" % img_name, get_image_info(img_name))
+        if not img_name.startswith("@"):
+            global_set(f"images.{img_name}", get_image_info(img_name))
 
 
 def set_is_dirty_for_all_views(is_dirty: bool) -> None:
@@ -64,5 +62,5 @@ def set_is_dirty_for_all_views(is_dirty: bool) -> None:
 
     for w in sublime.windows():
         for v in w.views():
-            if is_view_normal_ready(v):
+            if is_processable_view(v):
                 view_is_dirty_val(v, is_dirty)

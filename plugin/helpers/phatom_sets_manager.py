@@ -4,9 +4,9 @@ import sublime
 
 class PhatomSetsManager:
     # class-level (shared across objects)
-    _phantom_sets = {
+    _phantom_sets: Dict[str, sublime.PhantomSet] = {
         # phantom_set_id: PhantomSet object,
-    }  # type: Dict[str, sublime.PhantomSet]
+    }
 
     @classmethod
     def get_phantom_set(cls, phantom_set_id: str) -> Optional[sublime.PhantomSet]:
@@ -32,7 +32,6 @@ class PhatomSetsManager:
 
     @classmethod
     def clear(cls) -> None:
-        for phantom_set_id in list(cls._phantom_sets.keys()):
+        for phantom_set_id in cls._phantom_sets.keys():
             cls.delete_phantom_set(phantom_set_id)
-
         cls._phantom_sets = {}

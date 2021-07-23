@@ -1,9 +1,9 @@
 from ..libs import triegex
-from .Globals import global_get
 from .log import log
 from .settings import get_setting
 from .settings import get_timestamp
-from .st_types import RegionLike
+from .shared import global_get
+from .types import RegionLike
 from .utils import is_regions_intersected
 from .utils import region_expand
 from .utils import region_into_st_region_form
@@ -26,7 +26,7 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
 
     parsed_uri = urllib_parse.urlparse(uri)
 
-    log("debug", "Parsed URI: {parsed_uri}".format(parsed_uri=parsed_uri))
+    log("debug", f"Parsed URI: {parsed_uri}")
 
     # decode URL-encoded "file" scheme such as
     # "file:///D:/%E6%B8%AC%E8%A9%A6.html" -> "file:///D:/測試.html"
@@ -44,45 +44,35 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
         # https://docs.python.org/3.3/library/webbrowser.html#webbrowser.get
         webbrowser.get(browser).open(uri, autoraise=True)
     except Exception as e:
-        log(
-            "critical",
-            'Failed to open browser "{browser}" to "{uri}" '
-            "because {reason}".format(browser=browser, uri=uri, reason=e),
-        )
+        log("critical", f'Failed to open browser "{browser}" to "{uri}" because {e}')
 
 
-def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
+def compile_uri_regex() -> Tuple[Optional[Pattern[str]], Tuple[str, ...]]:
     """
     @brief Get the compiled regex object for matching URIs.
 
     @return (compiled regex object, activated schemes)
     """
 
-    detect_schemes = get_setting("detect_schemes")  # type: Dict[str, Dict[str, Any]]
-    uri_path_regexes = get_setting("uri_path_regexes")  # type: Dict[str, str]
+    detect_schemes: Dict[str, Dict[str, Any]] = get_setting("detect_schemes")
+    uri_path_regexes: Dict[str, str] = get_setting("uri_path_regexes")
 
-    activated_schemes = []
-    uri_regexes = []
+    activated_schemes: List[str] = []
+    uri_regexes: List[str] = []
     for scheme, scheme_settings in detect_schemes.items():
         if not scheme_settings.get("enabled", False):
             continue
 
-        path_regex_name = scheme_settings.get("path_regex", "@default")  # type: str
+        path_regex_name: str = scheme_settings.get("path_regex", "@default")
         if path_regex_name not in uri_path_regexes:
-            log(
-                "warning",
-                'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex}'.format(
-                    scheme=scheme,
-                    path_regex=path_regex_name,
-                ),
-            )
+            log("warning", f'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex_name}')
             continue
 
         activated_schemes.append(scheme)
-        uri_regexes.append(re.escape(scheme) + r"(?:(?#{}))".format(path_regex_name))
+        uri_regexes.append(re.escape(scheme) + rf"(?:(?#{path_regex_name}))")
 
     # fmt: off
-    regex = r"\b" + (
+    regex: str = r"\b" + (
         triegex.Triegex(*uri_regexes)
         .to_regex()
         .replace(r"\b", "")  # type: ignore
@@ -90,29 +80,29 @@ def compile_uri_regex() -> Tuple[Optional[Pattern], List[str]]:
     )
     # fmt: on
 
-    log("debug", "Optimized URI matching regex (before expanding): {}".format(regex))
+    log("debug", f"Optimized URI matching regex (before expanding): {regex}")
 
     # expand path regexes by their names
     for path_regex_name, path_regex in uri_path_regexes.items():
-        regex = regex.replace(r"(?#{})".format(path_regex_name), path_regex)
+        regex = regex.replace(rf"(?#{path_regex_name})", path_regex)
 
-    log("debug", "Optimized URI matching regex: {}".format(regex))
+    log("debug", f"Optimized URI matching regex: {regex}")
 
     regex_obj = None
     try:
         regex_obj = re.compile(regex, re.IGNORECASE)
     except Exception as e:
         log(
-            "critical",
-            "Cannot compile regex `{regex}` because `{reason}`. "
-            'Please check "uri_path_regex" in plugin settings.'.format(regex=regex, reason=e),
+            "critical", f'Cannot compile regex `{regex}` because {e}. Please check "uri_path_regex" in plugin settings.'
         )
 
-    return regex_obj, sorted(activated_schemes)
+    return regex_obj, tuple(sorted(activated_schemes))
 
 
 def find_uri_regions_by_region(
-    view: sublime.View, region: RegionLike, search_radius: int = 200
+    view: sublime.View,
+    region: RegionLike,
+    search_radius: int = 200,
 ) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by the region
@@ -123,11 +113,13 @@ def find_uri_regions_by_region(
     @return Found URI regions
     """
 
-    return find_uri_regions_by_regions(view, [region], search_radius)
+    return find_uri_regions_by_regions(view, (region,), search_radius)
 
 
 def find_uri_regions_by_regions(
-    view: sublime.View, regions: Iterable[RegionLike], search_radius: int = 200
+    view: sublime.View,
+    regions: Iterable[RegionLike],
+    search_radius: int = 200,
 ) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by regions
@@ -145,7 +137,7 @@ def find_uri_regions_by_regions(
         True,
     )
 
-    uri_regions = []  # type: List[sublime.Region]
+    uri_regions: List[sublime.Region] = []
     for region in search_regions:
         coordinate_bias = max(0, region.begin())
 
@@ -158,7 +150,7 @@ def find_uri_regions_by_regions(
     # only pick up "uri_region"s that are intersected with "st_regions"
     # note that both "st_regions" and "uri_regions" are guaranteed sorted here
     regions_idx = 0
-    uri_regions_intersected = []  # type: List[sublime.Region]
+    uri_regions_intersected: List[sublime.Region] = []
 
     for uri_region in uri_regions:
         for idx in range(regions_idx, len(st_regions)):
@@ -187,7 +179,7 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[flo
     """
 
     if timestamp_s is None:
-        return cast(float, view.settings().get("OUIB_last_update_timestamp", 0.0))
+        return float(view.settings().get("OUIB_last_update_timestamp", 0))
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
     return None
@@ -216,25 +208,22 @@ def is_view_typing(view: sublime.View) -> bool:
 
     @param view The view
 
-    @return True if the view is typing, False otherwise.
+    @return `True` if the view is typing, `False` otherwise.
     """
 
     now_s = get_timestamp()
-    last_typing_s = view_last_typing_timestamp_val(view)
-
-    if not last_typing_s:
-        last_typing_s = 0
+    last_typing_s = view_last_typing_timestamp_val(view) or 0
 
     return (now_s - last_typing_s) * 1000 < get_setting("typing_period")
 
 
-def is_view_too_large(view: Optional[sublime.View]) -> bool:
+def is_view_too_large(view: sublime.View) -> bool:
     """
-    @brief Determine if the view is too large. Note that size will be 0 if the view is loading.
+    @brief Determine if the view is too large. Note that size will be `0` if the view is loading.
 
     @param view The view
 
-    @return True if the view is too large, False otherwise.
+    @return `True` if the view is too large, `False` otherwise.
     """
 
-    return bool(view and len(view) > get_setting("large_file_threshold"))
+    return view.size() > get_setting("large_file_threshold")

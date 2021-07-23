@@ -1,31 +1,27 @@
 from .utils import dotted_get
 from .utils import dotted_set
-from typing import Any, Dict, List, Optional, Pattern
+from typing import Any, Dict, Optional, Pattern, Tuple
 import logging
 import sublime
 import threading
 
 
-class Globals:
-    """
-    @brief This class stores application-level global variables.
-    """
-
-    HAS_API_VIEW_STYLE_FOR_SCOPE = int(sublime.version()) >= 3170
+class G:
+    """This class stores application-level global variables."""
 
     # the plugin settings object
-    settings = None  # type: sublime.Settings
+    settings: Optional[sublime.Settings] = None
 
     # the logger to log messages
-    logger = None  # type: logging.Logger
+    logger: Optional[logging.Logger] = None
 
     # the background thread for managing phantoms for views
-    renderer_thread = None  # type: threading.Thread
+    renderer_thread: Optional[threading.Thread] = None
 
-    activated_schemes = []  # type: List[str]
-    uri_regex_obj = None  # type: Pattern
+    activated_schemes: Tuple[str, ...] = tuple()
+    uri_regex_obj: Optional[Pattern] = None
 
-    images = {
+    images: Dict[str, Any] = {
         # image informations
         # key/value structure is
         #     - "base64": "",
@@ -37,12 +33,12 @@ class Globals:
         #     - "size": (0, 0),
         "phantom": {},
         "popup": {},
-    }  # type: Dict[str, Any]
+    }
 
 
 def global_get(dotted: str, default: Optional[Any] = None) -> Any:
-    return dotted_get(Globals, dotted, default)
+    return dotted_get(G, dotted, default)
 
 
 def global_set(dotted: str, value: Any) -> None:
-    return dotted_set(Globals, dotted, value)
+    return dotted_set(G, dotted, value)

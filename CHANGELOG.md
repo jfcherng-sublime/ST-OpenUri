@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.0] - 2021-07-23
+
+- refactor: drop ST 3 support
+- refactor: default mouse binding has been removed
+
+  If you need the mouse binding, add
+
+  ```js
+  [
+    // open URL via: alt + right click
+    {
+      button: 'button2',
+      modifiers: ['alt'],
+      command: 'open_context_url',
+    },
+  ];
+  ```
+
+
 ## [6.4.1] - 2021-06-18
 
 - refactor: tidy codes

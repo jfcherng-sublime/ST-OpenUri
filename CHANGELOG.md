@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.1] - 2021-07-24
+
+- feat: check all foreground views for updating
+
+  Previously, OpenUri only checks the current activated view.
+  Since OpenUri also checks whether the view is dirty before perform a update,
+  I think this shouldn't be resource consuming.
+
 ## [7.0.0] - 2021-07-23
 
 - refactor: drop ST 3 support
@@ -17,9 +25,8 @@ All notable changes to this project will be documented in this file.
       modifiers: ['alt'],
       command: 'open_context_url',
     },
-  ];
+  ]
   ```
-
 
 ## [6.4.1] - 2021-06-18
 

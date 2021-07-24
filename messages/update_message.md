@@ -1,20 +1,10 @@
 OpenUri has been updated. To see the changelog, visit
 Preferences » Package Settings » OpenUri » CHANGELOG
 
-## [7.0.0] - 2021-07-23
+## [7.0.1] - 2021-07-24
 
-- refactor: drop ST 3 support
-- refactor: default mouse binding has been removed
+- feat: check all foreground views for updating
 
-  If you need the mouse binding, add
-
-  ```js
-  [
-      // open URL via: alt + right click
-      {
-          button: 'button2',
-          modifiers: ['alt'],
-          command: 'open_context_url',
-      },
-  ]
-  ```
+  Previously, OpenUri only checks the current activated view.
+  Since OpenUri also checks whether the view is dirty before perform a update,
+  I think this shouldn't be resource consuming.

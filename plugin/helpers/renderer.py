@@ -13,21 +13,36 @@ from .timer import RepeatingTimer
 from .utils import is_processable_view
 from .utils import is_transient_view
 from .utils import view_find_all_fast
+from typing import Generator
 import sublime
+
+
+def foreground_views() -> Generator[sublime.View, None, None]:
+    for window in sublime.windows():
+        for group_idx in range(window.num_groups()):
+            if view := window.active_view_in_group(group_idx):
+                yield view
 
 
 class RendererThread(RepeatingTimer):
     def __init__(self, interval_ms: int = 1000) -> None:
-        super().__init__(interval_ms, self._check_current_view)
+        super().__init__(interval_ms, self._update_foreground_views)
 
         # to prevent from overlapped processes when using a low interval
         self.is_rendering = False
 
-    def _check_current_view(self) -> None:
+    def _update_foreground_views(self) -> None:
+        if self.is_rendering:
+            return
+
+        self.is_rendering = True
+        for view in foreground_views():
+            self._update_view(view)
+        self.is_rendering = False
+
+    def _update_view(self, view: sublime.View) -> None:
         if (
-            self.is_rendering
-            or not (view := sublime.active_window().active_view())
-            or not is_processable_view(view)
+            not is_processable_view(view)
             or not view_is_dirty_val(view)
             or is_view_typing(view)
             or (is_transient_view(view) and not get_setting("work_for_transient_view"))
@@ -40,12 +55,8 @@ class RendererThread(RepeatingTimer):
             view_is_dirty_val(view, False)
             return
 
-        self.is_rendering = True
-
         self._detect_uris_globally(view)
         view_is_dirty_val(view, False)
-
-        self.is_rendering = False
 
     def _detect_uris_globally(self, view: sublime.View) -> None:
         uri_regions = view_find_all_fast(view, global_get("uri_regex_obj"))

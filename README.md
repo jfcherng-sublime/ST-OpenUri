@@ -38,6 +38,8 @@ But if you still have questions, feel free to open an issue.
 
 There is no mouse binding but you can add one if you need.
 
+Create `Packages/OpenUri/Default.sublime-mousemap` with the following content.
+
 ```js
 [
     // open URL via: alt + right click

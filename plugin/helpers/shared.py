@@ -19,7 +19,7 @@ class G:
     renderer_thread: Optional[threading.Thread] = None
 
     activated_schemes: Tuple[str, ...] = tuple()
-    uri_regex_obj: Optional[Pattern] = None
+    uri_regex_obj: Optional[Pattern[str]] = None
 
     images: Dict[str, Any] = {
         # image informations

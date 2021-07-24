@@ -143,7 +143,7 @@ def find_uri_regions_by_regions(
 
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
-            sublime.Region(*region_shift(m.span(), coordinate_bias))  # type: ignore
+            sublime.Region(*region_shift(m.span(), coordinate_bias))
             for m in global_get("uri_regex_obj").finditer(view.substr(region))
         )
 
@@ -162,7 +162,6 @@ def find_uri_regions_by_regions(
 
             if is_regions_intersected(uri_region, region, True):
                 uri_regions_intersected.append(uri_region)
-
                 break
 
     return uri_regions_intersected

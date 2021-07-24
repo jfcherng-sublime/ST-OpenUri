@@ -1,5 +1,5 @@
 from .types import RegionLike
-from typing import Any, Callable, Iterable, List, Optional, Pattern, Union
+from typing import Any, Callable, Generator, Iterable, List, Optional, Pattern, Sequence, Tuple, Union
 import functools
 import sublime
 
@@ -75,7 +75,10 @@ def dotted_set(var: Any, dotted: str, value: Any) -> None:
         setattr(var, last_key, value)
 
 
-def view_find_all_fast(view: sublime.View, regex_obj: Pattern) -> List[sublime.Region]:
+def view_find_all_fast(
+    view: sublime.View,
+    regex_obj: Pattern[str],
+) -> Generator[sublime.Region, None, None]:
     """
     @brief A faster/simpler implementation of View.find_all().
 
@@ -85,10 +88,10 @@ def view_find_all_fast(view: sublime.View, regex_obj: Pattern) -> List[sublime.R
     @return Found regions
     """
 
-    return [sublime.Region(*m.span()) for m in regex_obj.finditer(view.substr(sublime.Region(0, len(view))))]
+    return (sublime.Region(*m.span()) for m in regex_obj.finditer(view.substr(sublime.Region(0, len(view)))))
 
 
-def region_shift(region: RegionLike, shift: int) -> RegionLike:
+def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], sublime.Region]:
     """
     @brief Shift the region by given amount.
 
@@ -98,16 +101,19 @@ def region_shift(region: RegionLike, shift: int) -> RegionLike:
     @return the shifted region
     """
 
-    if isinstance(region, (int, float)):
-        return region + shift
+    if isinstance(region, int):
+        return (region + shift, region + shift)
 
     if isinstance(region, sublime.Region):
         return sublime.Region(region.a + shift, region.b + shift)
 
-    return [region[0] + shift, region[-1] + shift]
+    return (region[0] + shift, region[-1] + shift)
 
 
-def region_expand(region: RegionLike, expansion: Union[int, List[int]]) -> RegionLike:
+def region_expand(
+    region: RegionLike,
+    expansion: Union[int, Tuple[int, int], List[int]],
+) -> Union[Tuple[int, int], sublime.Region]:
     """
     @brief Expand the region by given amount.
 
@@ -117,54 +123,41 @@ def region_expand(region: RegionLike, expansion: Union[int, List[int]]) -> Regio
     @return the expanded region
     """
 
-    if isinstance(expansion, (int, float)):
-        expansion = [int(expansion)] * 2
+    if isinstance(expansion, int):
+        expansion = (expansion, expansion)
 
-    if len(expansion) == 0:
-        raise ValueError(f"Invalid expansion: {expansion}")
-
-    if len(expansion) == 1:
-        # do not modify the input variable by "expansion *= 2"
-        expansion = [expansion[0]] * 2
-
-    if isinstance(region, (int, float)):
-        return [region - expansion[0], region + expansion[1]]
+    if isinstance(region, int):
+        return (region - expansion[0], region + expansion[1])
 
     if isinstance(region, sublime.Region):
-        return sublime.Region(region.begin() - expansion[0], region.end() + expansion[1])
+        return sublime.Region(region.a - expansion[0], region.b + expansion[1])
 
-    return [
-        min(region[0], region[-1]) - expansion[0],
-        max(region[0], region[-1]) + expansion[1],
-    ]
+    return (region[0] - expansion[0], region[-1] + expansion[1])
 
 
-def region_into_list_form(region: RegionLike, sort_result: bool = False) -> List[int]:
+def region_into_tuple_form(region: RegionLike, sort_result: bool = False) -> Tuple[int, int]:
     """
-    @brief Convert the "region" into list form
+    @brief Convert the "region" into tuple form
 
     @param region      The region
     @param sort_result Sort the region
 
-    @return the "region" in list form
+    @return the "region" in tuple form
     """
 
+    seq: Sequence[int]
+
     if isinstance(region, sublime.Region):
-        region = [region.a, region.b]
-    elif isinstance(region, (int, float)):
-        region = [int(region)] * 2
-    elif isinstance(region, Iterable) and not isinstance(region, list):
-        region = list(region)
+        seq = (region.a, region.b)
+    elif isinstance(region, int):
+        seq = (region, region)
+    elif isinstance(region, Iterable):
+        seq = tuple(region)[:2]
 
-    assert isinstance(region, list)
+    if sort_result:
+        seq = sorted(seq)
 
-    if not region:
-        raise ValueError("region must not be empty.")
-
-    if len(region) > 0:
-        region = [region[0], region[-1]]
-
-    return sorted(region) if sort_result else region
+    return (seq[0], seq[-1])
 
 
 def region_into_st_region_form(region: RegionLike, sort_result: bool = False) -> sublime.Region:
@@ -177,18 +170,17 @@ def region_into_st_region_form(region: RegionLike, sort_result: bool = False) ->
     @return the "region" in ST's region form
     """
 
-    if isinstance(region, (int, float)):
-        region = [int(region)] * 2
-    elif isinstance(region, Iterable) and not isinstance(region, list):
-        region = list(region)
+    seq: Sequence[int]
 
-    if isinstance(region, list) and not region:
-        raise ValueError("region must not be empty.")
+    if isinstance(region, int):
+        seq = (region, region)
+    elif isinstance(region, Iterable):
+        seq = tuple(region)[:2]
 
-    if not isinstance(region, sublime.Region):
-        region = sublime.Region(region[0], region[-1])
+    if sort_result:
+        seq = sorted(seq)
 
-    return sublime.Region(region.begin(), region.end()) if sort_result else region
+    return sublime.Region(seq[0], seq[-1])
 
 
 def simplify_intersected_regions(
@@ -208,7 +200,6 @@ def simplify_intersected_regions(
     for region in sorted(regions):
         if not merged_regions:
             merged_regions.append(region)
-
             continue
 
         region_prev = merged_regions[-1]
@@ -258,4 +249,4 @@ def is_transient_view(view: sublime.View) -> bool:
     if not (window := view.window()):
         return True
     # @see https://forum.sublimetext.com/t/is-view-transient-preview-method/3247/2
-    return window.get_view_index(view)[1] == -1
+    return view == window.transient_view_in_group(window.active_group())

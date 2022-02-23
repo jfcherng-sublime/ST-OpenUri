@@ -30,6 +30,8 @@
     // the interval (in millisecond) for checking whether to render the current view
     // 500 means the background thread will check the current view should be re-rendered or not, every 500ms
     "renderer_interval": 500,
+    // scope selectors used to expand regions of URIs
+    "expand_uri_regions_selectors": ["markup.underline.link"],
     // the text HTML used in the hovering popup
     "popup_text_html": "<span>Open this URI</span>",
     // images used in this plugin (only supports PNG format)

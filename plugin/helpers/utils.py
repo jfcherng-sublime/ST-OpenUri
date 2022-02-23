@@ -78,17 +78,30 @@ def dotted_set(var: Any, dotted: str, value: Any) -> None:
 def view_find_all_fast(
     view: sublime.View,
     regex_obj: Pattern[str],
+    expand_selectors: Iterable[str] = tuple(),
 ) -> Generator[sublime.Region, None, None]:
     """
     @brief A faster/simpler implementation of View.find_all().
 
-    @param view             the View object
-    @param regex_obj        the compiled regex object
+    @param view               the View object
+    @param regex_obj          the compiled regex object
+    @param expand_selector    the selectors used to expand result regions
 
-    @return Found regions
+    @return A generator for found regions
     """
 
-    return (sublime.Region(*m.span()) for m in regex_obj.finditer(view.substr(sublime.Region(0, len(view)))))
+    if isinstance(expand_selectors, str):
+        expand_selectors = (expand_selectors,)
+
+    for m in regex_obj.finditer(view.substr(sublime.Region(0, len(view)))):
+        r = sublime.Region(*m.span())
+        for selector in expand_selectors:
+            if not view.match_selector(r.a, selector):
+                continue
+            while view.match_selector(r.b, selector):
+                r.b += 1
+            break
+        yield r
 
 
 def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], sublime.Region]:

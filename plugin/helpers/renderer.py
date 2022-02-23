@@ -59,7 +59,13 @@ class RendererThread(RepeatingTimer):
         view_is_dirty_val(view, False)
 
     def _detect_uris_globally(self, view: sublime.View) -> None:
-        uri_regions = tuple(view_find_all_fast(view, global_get("uri_regex_obj")))
+        uri_regions = tuple(
+            view_find_all_fast(
+                view,
+                global_get("uri_regex_obj"),
+                get_setting("expand_uri_regions_selectors"),
+            )
+        )
 
         # handle Phantoms
         if get_setting_show_open_button(view) == "always":

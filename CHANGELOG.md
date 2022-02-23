@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.2] - 2022-02-23
+
+- fix: URI ends with "." in markdown image/link context (#8)
+
+  This fix also introduces a new setting: `expand_uri_regions_selectors`
+
 ## [7.0.1] - 2021-07-24
 
 - feat: check all foreground views for updating

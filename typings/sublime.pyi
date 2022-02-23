@@ -1,5 +1,5 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
-# ST version: 4123
+# ST version: 4127
 
 from __future__ import annotations
 
@@ -1254,7 +1254,7 @@ class TextChange:
         ...
 
 
-class Selection(Reversible):
+class Selection(Reversible[Region]):
     """
     Maintains a set of Regions, ensuring that none overlap.
     The regions are kept in sorted order.
@@ -1425,6 +1425,22 @@ class HtmlSheet(Sheet):
 
     def set_contents(self, contents: str) -> None:
         """Sets the content of this `Sheet`."""
+        ...
+
+
+class ContextStackFrame:
+    """
+    @version ST(>=4127)
+    """
+
+    context_name: str
+    source_file: str
+    source_location: Tuple[int, int]
+
+    def __init__(self, context_name: str, source_file: str, source_location: Tuple[int, int]) -> None:
+        ...
+
+    def __repr__(self) -> str:
         ...
 
 
@@ -1752,7 +1768,7 @@ class View:
         """Returns the syntax scope name assigned to the character at the given point"""
         ...
 
-    def context_backtrace(self, pt: Point) -> List[str]:
+    def context_backtrace(self, pt: Point) -> List[ContextStackFrame]:
         """
         Returns a list of the contexts on the stack at the specified point.
 

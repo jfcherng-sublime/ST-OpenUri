@@ -1,5 +1,8 @@
 # This file is maintained on https://github.com/jfcherng-sublime/ST-API-stubs
 
+from __future__ import annotations
+
+# __future__ must be the first import
 from typing import (
     Any,
     Callable,
@@ -44,6 +47,21 @@ CompletionNormalized = Tuple[
 
 Location = Tuple[str, str, Tuple[int, int]]
 Vector = Tuple[Dip, Dip]
+
+
+class EventDict(TypedDict):
+    x: float
+    y: float
+    modifier_keys: EventModifierKeysDict
+
+
+class EventModifierKeysDict(TypedDict, total=False):
+    primary: bool
+    ctrl: bool
+    alt: bool
+    altgr: bool
+    shift: bool
+    super: bool
 
 
 class Layout(TypedDict):

@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 # __future__ must be the first import
-from _sublime_typing import AnyCallable, Completion, CompletionNormalized, Point
+from _sublime_typing import AnyCallable, Completion, CompletionNormalized, EventDict, Point
 from importlib.machinery import ModuleSpec
 from types import ModuleType
 from typing import (
@@ -34,7 +34,7 @@ import threading
 # types #
 # ----- #
 
-InputType = TypeVar("InputType")
+InputType = TypeVar("InputType", bound=Union[str, int, float, list, dict, tuple, None])
 ListItem = Union[str, Tuple[str, InputType]]
 
 # -------- #
@@ -637,7 +637,7 @@ class CommandInputHandler(Generic[InputType]):
         ...
 
     @overload
-    def confirm(self, arg: InputType, event: Dict) -> None:
+    def confirm(self, arg: InputType, event: EventDict) -> None:
         """Called when the input is accepted, after the user has pressed enter and the text has been validated."""
         ...
 

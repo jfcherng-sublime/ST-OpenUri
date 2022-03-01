@@ -4,11 +4,11 @@ from .settings import get_setting
 from .settings import get_timestamp
 from .shared import global_get
 from .types import RegionLike
+from .utils import convert_to_st_region
 from .utils import is_regions_intersected
+from .utils import merge_regions
 from .utils import region_expand
-from .utils import region_into_st_region_form
 from .utils import region_shift
-from .utils import simplify_intersected_regions
 from typing import Any, Dict, Iterable, List, Tuple, Optional, Pattern, overload
 import re
 import sublime
@@ -130,22 +130,22 @@ def find_uri_regions_by_regions(
     @return Found URI regions
     """
 
-    search_radius = int(search_radius or get_setting("uri_search_radius"))
-    st_regions = sorted(region_into_st_region_form(region, sort_result=True) for region in regions)
-
-    search_regions = simplify_intersected_regions(
-        (cast(sublime.Region, region_expand(region, search_radius)) for region in st_regions),
+    st_regions = sorted(convert_to_st_region(region, sort=True) for region in regions)
+    search_regions = merge_regions(
+        (
+            # ...
+            region_expand(st_region, int(search_radius or get_setting("uri_search_radius")))
+            for st_region in st_regions
+        ),
         True,
     )
 
     uri_regions: List[sublime.Region] = []
-    for region in search_regions:
-        coordinate_bias = max(0, region.begin())
-
+    for search_region in search_regions:
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
-            sublime.Region(*region_shift(m.span(), coordinate_bias))
-            for m in global_get("uri_regex_obj").finditer(view.substr(region))
+            sublime.Region(*region_shift(m.span(), max(0, search_region.a)))
+            for m in global_get("uri_regex_obj").finditer(view.substr(search_region))
         )
 
     # only pick up "uri_region"s that are intersected with "st_regions"
@@ -158,7 +158,7 @@ def find_uri_regions_by_regions(
             region = st_regions[idx]
 
             # later "uri_region" is always even larger so this "idx" is useless since now
-            if uri_region.begin() > region.end():
+            if uri_region.a > region.b:
                 regions_idx = idx + 1
 
             if is_regions_intersected(uri_region, region, True):

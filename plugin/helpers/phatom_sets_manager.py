@@ -23,12 +23,12 @@ class PhatomSetsManager:
     @classmethod
     def erase_phantom_set(cls, phantom_set_id: str) -> None:
         if phantom_set_id in cls._phantom_sets:
-            cls._phantom_sets[phantom_set_id].update([])
+            cls._phantom_sets[phantom_set_id].update(tuple())
 
     @classmethod
     def update_phantom_set(cls, phantom_set_id: str, phantoms: Iterable[sublime.Phantom]) -> None:
         if phantom_set_id in cls._phantom_sets:
-            cls._phantom_sets[phantom_set_id].update(list(phantoms))
+            cls._phantom_sets[phantom_set_id].update(tuple(phantoms))
 
     @classmethod
     def clear(cls) -> None:

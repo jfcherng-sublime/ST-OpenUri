@@ -10,7 +10,7 @@ import tempfile
 import time
 
 
-def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, Any]:
+def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:
     variables = {
         "home": os.path.expanduser("~"),
         "package_name": PLUGIN_NAME,
@@ -143,10 +143,9 @@ def get_setting_renderer_interval() -> int:
 def get_setting_show_open_button(view: sublime.View) -> str:
     from .functions import is_view_too_large
 
-    # fmt: off
     return get_setting(
+        # ...
         "show_open_button_fallback"
         if not view.is_loading() and is_view_too_large(view)
         else "show_open_button"
     )
-    # fmt: on

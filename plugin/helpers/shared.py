@@ -21,7 +21,7 @@ class G:
     activated_schemes: Tuple[str, ...] = tuple()
     uri_regex_obj: Optional[Pattern[str]] = None
 
-    images: Dict[str, Any] = {
+    images: Dict[str, Dict[str, Any]] = {
         # image informations
         # key/value structure is
         #     - "base64": "",

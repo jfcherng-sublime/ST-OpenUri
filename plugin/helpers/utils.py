@@ -16,20 +16,19 @@ from typing import (
 )
 import sublime
 
-AnyCallableS = TypeVar("AnyCallableS", bound=Callable[..., Any])
-AnyCallableT = TypeVar("AnyCallableT", bound=Callable[..., Any])
+AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
 
 
-def simple_decorator(decorator: Callable) -> Callable[[AnyCallableS], AnyCallableS]:
+def simple_decorator(decorator: Callable) -> Callable[[AnyCallable], AnyCallable]:
     """
     @brief A decorator that turns a function into a decorator.
     """
 
-    def wrapper(decoratee: AnyCallableT) -> AnyCallableT:
+    def wrapper(decoratee: AnyCallable) -> AnyCallable:
         def wrapped(*args, **kwargs) -> Any:
             return decorator(decoratee(*args, **kwargs))
 
-        return cast(AnyCallableT, wrapped)
+        return cast(AnyCallable, wrapped)
 
     return wrapper
 
@@ -188,12 +187,12 @@ def region_expand(
     return (region[0] - expansion[0], region[-1] + expansion[1])
 
 
-def region_into_tuple_form(region: RegionLike, sort_result: bool = False) -> Tuple[int, int]:
+def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> Tuple[int, int]:
     """
-    @brief Convert the "region" into tuple form
+    @brief Convert the "region" into its tuple form
 
-    @param region      The region
-    @param sort_result Sort the region
+    @param region The region
+    @param sort   Sort the region
 
     @return the "region" in tuple form
     """
@@ -207,18 +206,18 @@ def region_into_tuple_form(region: RegionLike, sort_result: bool = False) -> Tup
     elif isinstance(region, Iterable):
         seq = tuple(region)[:2]
 
-    if sort_result:
+    if sort:
         seq = sorted(seq)
 
     return (seq[0], seq[-1])
 
 
-def region_into_st_region_form(region: RegionLike, sort_result: bool = False) -> sublime.Region:
+def convert_to_st_region(region: RegionLike, sort: bool = False) -> sublime.Region:
     """
-    @brief Convert the "region" into ST's region form
+    @brief Convert the "region" into its ST region form
 
-    @param region      The region
-    @param sort_result Sort the region
+    @param region The region
+    @param sort   Sort the region
 
     @return the "region" in ST's region form
     """
@@ -230,23 +229,20 @@ def region_into_st_region_form(region: RegionLike, sort_result: bool = False) ->
     elif isinstance(region, Iterable):
         seq = tuple(region)[:2]
 
-    if sort_result:
+    if sort:
         seq = sorted(seq)
 
     return sublime.Region(seq[0], seq[-1])
 
 
-def simplify_intersected_regions(
-    regions: Iterable[sublime.Region],
-    allow_boundary: bool = False,
-) -> List[sublime.Region]:
+def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = False) -> List[sublime.Region]:
     """
-    @brief Simplify intersected regions by merging them to reduce numbers of regions.
+    @brief Merge intersected regions to reduce numbers of regions.
 
     @param regions        The regions, whose `region.a <= region.b`
     @param allow_boundary Treat boundary contact as intersected
 
-    @return Simplified regions
+    @return Merged regions
     """
 
     merged_regions: List[sublime.Region] = []
@@ -263,26 +259,22 @@ def simplify_intersected_regions(
     return merged_regions
 
 
-def is_regions_intersected(
-    region_1: sublime.Region,
-    region_2: sublime.Region,
-    allow_boundary: bool = False,
-) -> bool:
+def is_regions_intersected(region1: sublime.Region, region2: sublime.Region, allow_boundary: bool = False) -> bool:
     """
-    @brief Check whether two regions are intersected.
+    @brief Determinates whether two regions are intersected.
 
-    @param region_1       The 1st region
-    @param region_2       The 2nd region
+    @param region1        The 1st region
+    @param region2        The 2nd region
     @param allow_boundary Treat boundary contact as intersected
 
     @return True if intersected, False otherwise.
     """
 
-    return allow_boundary and bool(set(region_1.to_tuple()) & set(region_2.to_tuple())) or region_1.intersects(region_2)
+    return region1.intersects(region2) or (allow_boundary and bool(set(region1.to_tuple()) & set(region2.to_tuple())))
 
 
 def is_processable_view(view: sublime.View) -> bool:
-    return not view.element() and view.is_valid() and not view.is_loading()
+    return view.is_valid() and not view.is_loading() and not view.element()
 
 
 def is_transient_view(view: sublime.View) -> bool:

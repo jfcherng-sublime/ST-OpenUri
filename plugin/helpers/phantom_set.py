@@ -4,7 +4,7 @@ from .image_processing import get_colored_image_base64_by_region
 from .phatom_sets_manager import PhatomSetsManager
 from .shared import global_get
 from .types import ImageDict
-from typing import Iterable, List
+from typing import Iterable, Tuple
 import sublime
 
 PHANTOM_TEMPLATE = """
@@ -67,5 +67,5 @@ def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.P
     )
 
 
-def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> List[sublime.Phantom]:
-    return [new_uri_phantom(view, r) for r in uri_regions]
+def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> Tuple[sublime.Phantom, ...]:
+    return tuple(new_uri_phantom(view, r) for r in uri_regions)

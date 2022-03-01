@@ -20,6 +20,17 @@
                         "caption": "-"
                     },
                     {
+                        "caption": "Copy URIs from Cursors",
+                        "command": "copy_uri_from_cursors"
+                    },
+                    {
+                        "caption": "Copy URIs from the Current View",
+                        "command": "copy_uri_from_view"
+                    },
+                    {
+                        "caption": "-"
+                    },
+                    {
                         "caption": "Select URIs from Cursors",
                         "command": "select_uri_from_cursors"
                     },

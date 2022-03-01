@@ -102,7 +102,7 @@ def compile_uri_regex() -> Tuple[Optional[Pattern[str]], Tuple[str, ...]]:
 def find_uri_regions_by_region(
     view: sublime.View,
     region: RegionLike,
-    search_radius: int = 200,
+    search_radius: Optional[int] = None,
 ) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by the region
@@ -119,7 +119,7 @@ def find_uri_regions_by_region(
 def find_uri_regions_by_regions(
     view: sublime.View,
     regions: Iterable[RegionLike],
-    search_radius: int = 200,
+    search_radius: Optional[int] = None,
 ) -> List[sublime.Region]:
     """
     @brief Found intersected URI regions from view by regions
@@ -130,6 +130,7 @@ def find_uri_regions_by_regions(
     @return Found URI regions
     """
 
+    search_radius = int(search_radius or get_setting("uri_search_radius"))
     st_regions = sorted(map(region_into_st_region_form, regions))
 
     search_regions = simplify_intersected_regions(

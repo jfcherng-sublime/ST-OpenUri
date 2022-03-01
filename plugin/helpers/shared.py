@@ -36,6 +36,10 @@ class G:
     }
 
 
+def is_plugin_ready() -> bool:
+    return bool(G.settings and G.uri_regex_obj)
+
+
 def global_get(dotted: str, default: Optional[Any] = None) -> Any:
     return dotted_get(G, dotted, default)
 

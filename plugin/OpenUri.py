@@ -34,7 +34,7 @@ class OpenUri(sublime_plugin.ViewEventListener):
         if hover_zone != sublime.HOVER_TEXT:
             uri_regions: List[sublime.Region] = []
         else:
-            uri_regions = find_uri_regions_by_region(self.view, point, get_setting("uri_search_radius"))
+            uri_regions = find_uri_regions_by_region(self.view, point)
 
         if uri_regions and get_setting_show_open_button(self.view) == "hover":
             show_popup(self.view, uri_regions[0], point)

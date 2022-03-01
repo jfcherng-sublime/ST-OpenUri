@@ -7,6 +7,10 @@
         "command": "copy_uri_from_context_menu"
     },
     {
+        "caption": "Copy All URIs",
+        "command": "copy_uri_from_view"
+    },
+    {
         "caption": "-",
         "id": "selection"
     },

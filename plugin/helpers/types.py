@@ -45,3 +45,4 @@ class UriSource(enum.Enum):
     CONTEXT_MENU = enum.auto()
     CURSORS = enum.auto()
     FILE = enum.auto()
+    NONE = enum.auto()

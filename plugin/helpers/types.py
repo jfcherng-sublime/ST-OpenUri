@@ -1,4 +1,5 @@
 from typing import List, Tuple, TypedDict, Union
+import enum
 import sublime
 
 RegionLike = Union[
@@ -20,3 +21,8 @@ class ImageDict(TypedDict):
     path: str
     ratio_wh: float
     size: Tuple[int, int]
+
+
+class UriSource(enum.Enum):
+    CURSORS = enum.auto()
+    FILE = enum.auto()

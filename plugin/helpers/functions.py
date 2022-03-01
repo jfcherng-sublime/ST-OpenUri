@@ -9,7 +9,7 @@ from .utils import region_expand
 from .utils import region_into_st_region_form
 from .utils import region_shift
 from .utils import simplify_intersected_regions
-from typing import Any, Dict, Iterable, List, Tuple, Optional, Pattern, cast
+from typing import Any, Dict, Iterable, List, Tuple, Optional, Pattern, overload
 import re
 import sublime
 import urllib.parse as urllib_parse
@@ -168,6 +168,16 @@ def find_uri_regions_by_regions(
     return uri_regions_intersected
 
 
+@overload
+def view_last_typing_timestamp_val(view: sublime.View) -> float:
+    ...
+
+
+@overload
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None:
+    ...
+
+
 def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[float] = None) -> Optional[float]:
     """
     @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
@@ -183,6 +193,16 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[flo
 
     view.settings().set("OUIB_last_update_timestamp", timestamp_s)
     return None
+
+
+@overload
+def view_is_dirty_val(view: sublime.View) -> bool:
+    ...
+
+
+@overload
+def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
+    ...
 
 
 def view_is_dirty_val(view: sublime.View, is_dirty: Optional[bool] = None) -> Optional[bool]:

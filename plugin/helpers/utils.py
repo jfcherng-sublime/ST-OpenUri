@@ -1,23 +1,37 @@
 from .types import RegionLike
-from typing import Any, Callable, Generator, Iterable, List, Optional, Pattern, Sequence, Tuple, Union
-import functools
+from typing import (
+    Any,
+    Callable,
+    Generator,
+    Iterable,
+    List,
+    Optional,
+    Pattern,
+    Sequence,
+    Tuple,
+    TypeVar,
+    Union,
+    cast,
+    overload,
+)
 import sublime
 
+AnyCallableS = TypeVar("AnyCallableS", bound=Callable[..., Any])
+AnyCallableT = TypeVar("AnyCallableT", bound=Callable[..., Any])
 
-def simple_decorator(decorator: Callable) -> Callable:
+
+def simple_decorator(decorator: Callable) -> Callable[[AnyCallableS], AnyCallableS]:
     """
     @brief A decorator that turns a function into a decorator.
     """
 
-    @functools.wraps(decorator)
-    def outer_wrapper(decoratee: Callable) -> Callable:
-        @functools.wraps(decoratee)
-        def wrapper(*args, **kwargs) -> Any:
+    def wrapper(decoratee: AnyCallableT) -> AnyCallableT:
+        def wrapped(*args, **kwargs) -> Any:
             return decorator(decoratee(*args, **kwargs))
 
-        return wrapper
+        return cast(AnyCallableT, wrapped)
 
-    return outer_wrapper
+    return wrapper
 
 
 def dotted_get(var: Any, dotted: str, default: Optional[Any] = None) -> Any:
@@ -104,6 +118,16 @@ def view_find_all_fast(
         yield r
 
 
+@overload
+def region_shift(region: sublime.Region, shift: int) -> sublime.Region:
+    ...
+
+
+@overload
+def region_shift(region: Union[int, List[int], Tuple[int, int]], shift: int) -> Tuple[int, int]:
+    ...
+
+
 def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], sublime.Region]:
     """
     @brief Shift the region by given amount.
@@ -123,9 +147,25 @@ def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], subli
     return (region[0] + shift, region[-1] + shift)
 
 
+@overload
+def region_expand(
+    region: sublime.Region,
+    expansion: Union[int, List[int], Tuple[int, int]],
+) -> sublime.Region:
+    ...
+
+
+@overload
+def region_expand(
+    region: Union[int, List[int], Tuple[int, int]],
+    expansion: Union[int, List[int], Tuple[int, int]],
+) -> Tuple[int, int]:
+    ...
+
+
 def region_expand(
     region: RegionLike,
-    expansion: Union[int, Tuple[int, int], List[int]],
+    expansion: Union[int, List[int], Tuple[int, int]],
 ) -> Union[Tuple[int, int], sublime.Region]:
     """
     @brief Expand the region by given amount.
@@ -203,7 +243,7 @@ def simplify_intersected_regions(
     """
     @brief Simplify intersected regions by merging them to reduce numbers of regions.
 
-    @param regions        Iterable[sublime.Region] The regions
+    @param regions        The regions, whose `region.a <= region.b`
     @param allow_boundary Treat boundary contact as intersected
 
     @return Simplified regions

@@ -1,0 +1,17 @@
+[
+    {
+        "caption": "-",
+        "id": "clipboard"
+    },
+    {
+        "command": "copy_uri_from_context_menu"
+    },
+    {
+        "caption": "-",
+        "id": "selection"
+    },
+    {
+        "caption": "Select All URIs",
+        "command": "select_uri_from_view"
+    }
+]

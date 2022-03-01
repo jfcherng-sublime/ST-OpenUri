@@ -59,6 +59,8 @@ These commands are always available no matter what `show_open_button` is or how 
 | ----------------------- | --------------------------------- |
 | open_uri_from_cursors   | Open URIs from cursors            |
 | open_uri_from_view      | Open URIs from the current view   |
+| copy_uri_from_cursors   | Copy URIs from cursors            |
+| copy_uri_from_view      | Copy URIs from the current view   |
 | select_uri_from_cursors | Select URIs from cursors          |
 | select_uri_from_view    | Select URIs from the current view |
 

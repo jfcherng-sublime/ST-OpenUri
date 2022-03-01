@@ -215,10 +215,8 @@ def simplify_intersected_regions(
             merged_regions.append(region)
             continue
 
-        region_prev = merged_regions[-1]
-
-        if is_regions_intersected(region_prev, region, allow_boundary):
-            merged_regions[-1] = sublime.Region(region_prev.begin(), region.end())
+        if is_regions_intersected(merged_regions[-1], region, allow_boundary):
+            merged_regions[-1].b = region.b
         else:
             merged_regions.append(region)
 
@@ -240,16 +238,7 @@ def is_regions_intersected(
     @return True if intersected, False otherwise.
     """
 
-    # treat boundary contact as intersected
-    if allow_boundary:
-        # left/right begin/end = l/r b/e
-        lb_, le_ = region_1.begin(), region_1.end()
-        rb_, re_ = region_2.begin(), region_2.end()
-
-        if lb_ == rb_ or lb_ == re_ or le_ == rb_ or le_ == re_:
-            return True
-
-    return region_1.intersects(region_2)
+    return allow_boundary and bool(set(region_1.to_tuple()) & set(region_2.to_tuple())) or region_1.intersects(region_2)
 
 
 def is_processable_view(view: sublime.View) -> bool:

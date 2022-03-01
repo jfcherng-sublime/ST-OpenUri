@@ -131,7 +131,7 @@ def find_uri_regions_by_regions(
     """
 
     search_radius = int(search_radius or get_setting("uri_search_radius"))
-    st_regions = sorted(map(region_into_st_region_form, regions))
+    st_regions = sorted(region_into_st_region_form(region, sort_result=True) for region in regions)
 
     search_regions = simplify_intersected_regions(
         (cast(sublime.Region, region_expand(region, search_radius)) for region in st_regions),

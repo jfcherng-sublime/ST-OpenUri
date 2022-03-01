@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.1] - 2022-03-01
+
+- fix: wrong result if selected region's `.b > .a`
+- chore: improve type annotations
+
 ## [7.1.0] - 2022-03-01
 
 - feat: add commands to copy URIs

@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.0] - 2022-03-01
+
+- feat: add commands to copy URIs
+- feat: copy/select URIs from context menu
+
 ## [7.0.2] - 2022-02-23
 
 - fix: URI ends with "." in markdown image/link context (#8)

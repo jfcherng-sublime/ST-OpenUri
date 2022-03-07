@@ -32,6 +32,6 @@ class PhatomSetsManager:
 
     @classmethod
     def clear(cls) -> None:
-        for phantom_set_id in cls._phantom_sets.keys():
+        for phantom_set_id in tuple(cls._phantom_sets.keys()):
             cls.delete_phantom_set(phantom_set_id)
         cls._phantom_sets = {}

@@ -1,13 +1,13 @@
-from .helpers.functions import find_uri_regions_by_region
-from .helpers.functions import view_is_dirty_val
-from .helpers.functions import view_last_typing_timestamp_val
-from .helpers.phantom_set import delete_phantom_set
-from .helpers.phantom_set import init_phantom_set
-from .helpers.popup import show_popup
-from .helpers.region_drawing import draw_uri_regions
-from .helpers.settings import get_setting
-from .helpers.settings import get_setting_show_open_button
-from .helpers.settings import get_timestamp
+from .functions import find_uri_regions_by_region
+from .functions import view_is_dirty_val
+from .functions import view_last_typing_timestamp_val
+from .phantom_set import delete_phantom_set
+from .phantom_set import init_phantom_set
+from .popup import show_popup
+from .region_drawing import draw_uri_regions
+from .settings import get_setting
+from .settings import get_setting_show_open_button
+from .settings import get_timestamp
 from typing import List
 import sublime
 import sublime_plugin

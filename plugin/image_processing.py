@@ -1,4 +1,4 @@
-from ..libs import png
+from .libs import png
 from .settings import get_image_color
 from .shared import global_get
 from .utils import simple_decorator

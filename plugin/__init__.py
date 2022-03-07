@@ -1,17 +1,17 @@
-from .helpers.constant import PLUGIN_NAME
-from .helpers.functions import compile_uri_regex
-from .helpers.functions import view_is_dirty_val
-from .helpers.log import apply_user_log_level
-from .helpers.log import init_plugin_logger
-from .helpers.log import log
-from .helpers.phatom_sets_manager import PhatomSetsManager
-from .helpers.renderer import RendererThread
-from .helpers.settings import get_image_info
-from .helpers.settings import get_setting_renderer_interval
-from .helpers.settings import get_settings_object
-from .helpers.shared import global_get
-from .helpers.shared import global_set
-from .helpers.utils import is_processable_view
+from .constant import PLUGIN_NAME
+from .functions import compile_uri_regex
+from .functions import view_is_dirty_val
+from .logger import apply_user_log_level
+from .logger import init_plugin_logger
+from .logger import log
+from .phatom_sets_manager import PhatomSetsManager
+from .renderer import RendererThread
+from .settings import get_image_info
+from .settings import get_setting_renderer_interval
+from .settings import get_settings_object
+from .shared import global_get
+from .shared import global_set
+from .utils import is_processable_view
 import sublime
 
 

@@ -1,7 +1,7 @@
-from .helpers.functions import find_uri_regions_by_regions
-from .helpers.functions import open_uri_with_browser
-from .helpers.shared import is_plugin_ready
-from .helpers.types import EventDict, RegionLike, UriSource
+from ..functions import find_uri_regions_by_regions
+from ..functions import open_uri_with_browser
+from ..shared import is_plugin_ready
+from ..types import EventDict, RegionLike, UriSource
 from abc import ABCMeta
 from typing import Iterable, List, Optional
 import sublime

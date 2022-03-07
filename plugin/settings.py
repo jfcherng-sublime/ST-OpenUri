@@ -1,6 +1,7 @@
 from .constant import PLUGIN_NAME
 from .constant import SETTINGS_FILE_NAME
-from .log import log
+from .libs import imagesize
+from .logger import log
 from .types import ImageDict
 from typing import Any, Dict, Optional
 import base64
@@ -47,9 +48,6 @@ def get_image_info(img_name: str) -> ImageDict:
 
     @return The image information.
     """
-
-    from ..libs import imagesize
-
     img_path = get_image_path(img_name)
     img_ext = os.path.splitext(img_path)[1]
     img_mime = "image/png"

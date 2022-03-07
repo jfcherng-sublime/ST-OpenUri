@@ -12,7 +12,7 @@ import time
 
 
 def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:
-    variables = {
+    variables: Dict[str, Any] = {
         "home": os.path.expanduser("~"),
         "package_name": PLUGIN_NAME,
         "package_path": f"Packages/{PLUGIN_NAME}",

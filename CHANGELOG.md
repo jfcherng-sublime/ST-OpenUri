@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.1.2] - 2022-03-07
+
+- fix: modules should be reloaded when update plugin
+- fix: RuntimeError: dictionary changed size during iteration
+- refactor: tweak directory structure
+
 ## [7.1.1] - 2022-03-01
 
 - fix: wrong result if selected region's `.b > .a`

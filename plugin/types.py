@@ -2,7 +2,6 @@ from __future__ import annotations
 
 # __future__ must be the first import
 from typing import List, Tuple, TypedDict, Union
-import enum
 import sublime
 
 RegionLike = Union[
@@ -39,10 +38,3 @@ class ImageDict(TypedDict):
     path: str
     ratio_wh: float
     size: Tuple[int, int]
-
-
-class UriSource(enum.Enum):
-    CONTEXT_MENU = enum.auto()
-    CURSORS = enum.auto()
-    FILE = enum.auto()
-    NONE = enum.auto()

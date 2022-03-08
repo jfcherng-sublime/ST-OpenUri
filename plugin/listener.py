@@ -13,7 +13,7 @@ import sublime
 import sublime_plugin
 
 
-class OpenUri(sublime_plugin.ViewEventListener):
+class OpenUriViewEventListener(sublime_plugin.ViewEventListener):
     def __init__(self, view: sublime.View) -> None:
         super().__init__(view)
 

@@ -1,30 +1,32 @@
-# Changelog
+# OpenUri Changelog
 
-All notable changes to this project will be documented in this file.
+## 7.1.3
 
-## [7.1.2] - 2022-03-07
+- refactor: simplify `boot.py`
+
+## 7.1.2
 
 - fix: modules should be reloaded when update plugin
 - fix: RuntimeError: dictionary changed size during iteration
 - refactor: tweak directory structure
 
-## [7.1.1] - 2022-03-01
+## 7.1.1
 
 - fix: wrong result if selected region's `.b > .a`
 - chore: improve type annotations
 
-## [7.1.0] - 2022-03-01
+## 7.1.0
 
 - feat: add commands to copy URIs
 - feat: copy/select URIs from context menu
 
-## [7.0.2] - 2022-02-23
+## 7.0.2
 
 - fix: URI ends with "." in markdown image/link context (#8)
 
   This fix also introduces a new setting: `expand_uri_regions_selectors`
 
-## [7.0.1] - 2021-07-24
+## 7.0.1
 
 - feat: check all foreground views for updating
 
@@ -32,7 +34,7 @@ All notable changes to this project will be documented in this file.
   Since OpenUri also checks whether the view is dirty before perform a update,
   I think this shouldn't be resource consuming.
 
-## [7.0.0] - 2021-07-23
+## 7.0.0
 
 - refactor: drop ST 3 support
 - refactor: default mouse binding has been removed
@@ -50,11 +52,11 @@ All notable changes to this project will be documented in this file.
   ]
   ```
 
-## [6.4.1] - 2021-06-18
+## 6.4.1
 
 - refactor: tidy codes
 
-## [6.4.0] - 2021-06-14
+## 6.4.0
 
 Added
 
@@ -84,7 +86,7 @@ Documentation
 
 - Update settings comments for recent ST 4 release
 
-## [6.3.0] - 2021-06-11
+## 6.3.0
 
 Added
 
@@ -93,43 +95,43 @@ Added
   This setting controls whether this plugin should work for a transient view
   such as file preview via "Goto Anything".
 
-## [6.2.16] - 2021-06-11
+## 6.2.16
 
 Fixed
 
 - Plugin is not working for transient view. (#5)
 
-## [6.2.15] - 2021-01-27
+## 6.2.15
 
 Fixed
 
 - Replace `open_uri_from_cursors` with `open_context_url` in mousemap.
 
-## [6.2.14] - 2020-10-02
+## 6.2.14
 
 Fixed
 
 - Phantom is not generated when there is `&` in the URI.
 
-## [6.2.13] - 2020-08-26
+## 6.2.13
 
 Fixed
 
 - As of ST 4, remove a phantom position workaround.
 
-## [6.2.12] - 2020-08-09
+## 6.2.12
 
 Fixed
 
 - Prevent from frequently calling `sublime.load_settings()`.
 
-## [6.2.11] - 2020-06-14
+## 6.2.11
 
 Fixed
 
 - Delete phantoms when plugin unloaded.
 
-## [6.2.10] - 2020-05-24
+## 6.2.10
 
 Fixed
 
@@ -138,13 +140,13 @@ Fixed
   Some color schemes such as Material Theme's have large
   unneeded padding for phantoms somehow.
 
-## [6.2.9] - 2020-04-09
+## 6.2.9
 
 Changed
 
 - Run with Python 3.8 in ST 4.
 
-## [6.2.8] - 2020-01-04
+## 6.2.8
 
 Changed
 
@@ -155,20 +157,20 @@ Fixed
 
 - `file://` scheme is not working for URL-encoded URIs.
 
-## [6.2.7] - 2019-09-02
+## 6.2.7
 
 Changed
 
 - Bound renderer interval with a minimum value.
   So if you accidentally use a tiny value like `0` will not causing ST unresponsive.
 
-## [6.2.6] - 2019-09-01
+## 6.2.6
 
 Added
 
 - Introduce `mypy` for static analysis.
 
-## [6.2.5] - 2019-08-31
+## 6.2.5
 
 Added
 
@@ -178,7 +180,7 @@ Changed
 
 - Make `get_package_name()` not hard-coded.
 
-## [6.2.4] - 2019-08-30
+## 6.2.4
 
 Changed
 
@@ -186,19 +188,19 @@ Changed
   Because the `Alt` key seems not working under Linux and I would like to
   provide a binding that hopefully works under all platform.
 
-## [6.2.3] - 2019-08-29
+## 6.2.3
 
 Fixed
 
 - Do not let exceptions terminate the rendering thread.
 
-## [6.2.2] - 2019-08-29
+## 6.2.2
 
 Fixed
 
 - Fix renderer thread crashes when viewing an image file with ST.
 
-## [6.2.1] - 2019-08-26
+## 6.2.1
 
 Changed
 
@@ -208,7 +210,7 @@ Fixed
 
 - Prevent from weird `phantom_set_id` KeyError.
 
-## [6.2.0] - 2019-08-26
+## 6.2.0
 
 Added
 
@@ -223,13 +225,13 @@ Fixed
 
 - Fix and remove workaround for `is_view_too_large()`.
 
-## [6.1.1] - 2019-08-21
+## 6.1.1
 
 Fixed
 
 - Optimize default URI regex for BBCode mismatches.
 
-## [6.1.0] - 2019-08-21
+## 6.1.0
 
 Added
 
@@ -244,14 +246,14 @@ Changed
 - Change default key binding to `alt+o`, `alt+u`.
 - Some minor mathematical optimizations.
 
-## [6.0.0] - 2019-08-21
+## 6.0.0
 
 Changed
 
 - Plugin has been renamed from `OpenUriInBrowser` to `OpenUri`.
 - `use_show_open_button_fallback_if_file_larger_than` defaults to `1MB`.
 
-## [5.7.0] - 2019-08-20
+## 5.7.0
 
 Added
 
@@ -267,7 +269,7 @@ Fixed
 
 - Fix scheme for `mailto:`.
 
-## [5.6.0] - 2019-08-19
+## 5.6.0
 
 Added
 
@@ -282,7 +284,7 @@ Fixed
 
 - Fix URL matching regex keeps getting compiled in `find_uri_regions_by_regions()`.
 
-## [5.5.0] - 2019-08-17
+## 5.5.0
 
 Added
 
@@ -300,7 +302,7 @@ Changed
   - `select_uri_from_cursor` -> `select_uri_from_cursors`
   - `select_uri` -> `select_uri_from_view`
 
-## [5.4.0] - 2019-08-16
+## 5.4.0
 
 Added
 
@@ -313,7 +315,7 @@ Changed
 - Change default "on_modified_typing_period" to 150.
 - Downscaling FontAwesome images to 48x48.
 
-## [5.3.0] - 2019-08-13
+## 5.3.0
 
 Added
 
@@ -331,7 +333,7 @@ Fixed
 - Fix phantom may break "scope brackets" `` ` `` for BracketHilighter.
 - Fix scaling ratio when using non-square images in phantoms.
 
-## [5.2.1] - 2019-08-11
+## 5.2.1
 
 Added
 
@@ -343,31 +345,31 @@ Fixed
 
 - `on_hover` now draws URI regions if `draw_uri_regions` is enabled.
 
-## [5.1.2] - 2019-08-10
+## 5.1.2
 
 Fixed
 
 - Fix that I misunderstand how `sublime.Settings.add_on_change()` works.
 
-## [5.1.1] - 2019-08-09
+## 5.1.1
 
 nits
 
-## [5.1.0] - 2019-08-07
+## 5.1.0
 
 Added
 
 - Add config the regex to match URI's path part. (`uri_path_regex`)
 - Add new schemes: `mms://` and `sftp://`.
 
-## [5.0.0] - 2019-08-04
+## 5.0.0
 
 Changed
 
 - The settings of `detect_schemes` is now plain text rather than regex.
   This allows the generated regex to be further optimized.
 
-## [4.1.0] - 2019-08-04
+## 4.1.0
 
 Added
 
@@ -377,31 +379,31 @@ Changed
 
 - Remove detection for websocket scheme.
 
-## [4.0.5] - 2019-08-03
+## 4.0.5
 
 Changed
 
 - Better phantom looking.
 
-## [4.0.4] - 2019-08-03
+## 4.0.4
 
 Changed
 
 - Change default "on_modified_typing_period" to 150.
 
-## [4.0.3] - 2019-08-03
+## 4.0.3
 
 Fixed
 
 - Fix circular import.
 
-## [4.0.2] - 2019-08-03
+## 4.0.2
 
 Changed
 
 - Cache the "new_window" image content in memory.
 
-## [4.0.1] - 2019-08-01
+## 4.0.1
 
 Changed
 
@@ -409,26 +411,26 @@ Changed
   `"on_hover": true` is the same with `"show_open_button": "hover"`.
   `"on_hover": false` is the same with `"show_open_button": "always"`.
 
-## [3.2.3] - 2019-07-30
+## 3.2.3
 
 Fixed
 
 - Fixed old phantoms are not removed after reloading plugin.
 
-## [3.2.2] - 2019-07-29
+## 3.2.2
 
 Added
 
 - Add commands: `select_uri` and `select_uri_from_cursor`.
 - Add some menus.
 
-## [3.1.0] - 2019-07-28
+## 3.1.0
 
 Added
 
 - Add config: `on_modified_typing_period`.
 
-## [3.0.3] - 2019-07-28
+## 3.0.3
 
 Changed
 
@@ -436,7 +438,7 @@ Changed
 - Command `open_url_in_browser_from_cursor` has been changed to `open_uri_in_browser_from_cursor`.
 - All other `URL`-related things have been renamed to `URI` if not mentioned here.
 
-## [2.0.4] - 2019-07-27
+## 2.0.4
 
 Added
 
@@ -449,37 +451,37 @@ Changed
 - Self-managed phantom set. Do not clear phantoms when a view is deactivated.
 - Use binary searching to find URLs which should be opened.
 
-## [1.2.7] - 2017-11-22
+## 1.2.7
 
 Added
 
 - User level settings.
 
-## [1.2.6] - 2017-11-18
+## 1.2.6
 
 Changed
 
 - Getting phantom icon from a function.
 
-## [1.2.5] - 2017-11-14
+## 1.2.5
 
 Changed
 
 - Fix to read phantom icon.
 
-## [1.2.4] - 2017-11-14
+## 1.2.4
 
 Changed
 
 - Fix to read phantom icon.
 
-## [1.2.3] - 2017-11-13
+## 1.2.3
 
 Changed
 
 - Fix settings file.
 
-## [1.2.2] - 2017-11-13
+## 1.2.2
 
 Added
 
@@ -490,14 +492,14 @@ Changed
 - Fix settings file.
 - Update README.md.
 
-## [1.2.1] - 2017-11-13
+## 1.2.1
 
 Changed
 
 - Remove firefox as default browser.
 - Update README.md.
 
-## [1.2.0] - 2017-11-12
+## 1.2.0
 
 Added
 
@@ -508,7 +510,7 @@ Removed
 
 - Support for opening files was removed as the usage is very limited.
 
-## [1.1.1] - 2017-07-26
+## 1.1.1
 
 Added
 
@@ -518,7 +520,7 @@ Fixed
 
 - Fix for URLs with special characters.
 
-## [1.1.0] - 2017-07-23
+## 1.1.0
 
 Added
 
@@ -530,7 +532,7 @@ Changed
 
 - Popup was replaced by phantom as suggested by @FichteFoll.
 
-## [1.0.0] - 2017-07-16
+## 1.0.0
 
 Added
 

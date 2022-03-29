@@ -1,3 +1,4 @@
+from .constant import ST_SUPPORT_EXPAND_TO_SCOPE
 from .types import RegionLike
 from typing import (
     Any,
@@ -95,27 +96,36 @@ def view_find_all(
     expand_selectors: Iterable[str] = tuple(),
 ) -> Generator[sublime.Region, None, None]:
     """
-    @brief A faster/simpler implementation of View.find_all().
+    @brief Find all content matching the regex and expand found regions with selectors.
 
     @param view               the View object
     @param regex_obj          the compiled regex object
-    @param expand_selector    the selectors used to expand result regions
+    @param expand_selector    the selectors used to expand found regions
 
     @return A generator for found regions
     """
+
+    def expand(region: sublime.Region) -> sublime.Region:
+        # still having a ST core bug: https://github.com/sublimehq/sublime_text/issues/5333
+        if ST_SUPPORT_EXPAND_TO_SCOPE:
+            return next(
+                filter(None, (view.expand_to_scope(region.a, selector) for selector in expand_selectors)),
+                region,
+            )
+
+        for selector in expand_selectors:
+            if not view.match_selector(region.a, selector):
+                continue
+            while view.match_selector(region.b, selector):
+                region.b += 1
+            break
+        return region
 
     if isinstance(expand_selectors, str):
         expand_selectors = (expand_selectors,)
 
     for m in regex_obj.finditer(view.substr(sublime.Region(0, len(view)))):
-        r = sublime.Region(*m.span())
-        for selector in expand_selectors:
-            if not view.match_selector(r.a, selector):
-                continue
-            while view.match_selector(r.b, selector):
-                r.b += 1
-            break
-        yield r
+        yield expand(sublime.Region(*m.span()))
 
 
 @overload

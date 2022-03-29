@@ -12,7 +12,7 @@ from .shared import global_get
 from .timer import RepeatingTimer
 from .utils import is_processable_view
 from .utils import is_transient_view
-from .utils import view_find_all_fast
+from .utils import view_find_all
 from typing import Generator
 import sublime
 
@@ -60,7 +60,7 @@ class RendererThread(RepeatingTimer):
 
     def _detect_uris_globally(self, view: sublime.View) -> None:
         uri_regions = tuple(
-            view_find_all_fast(
+            view_find_all(
                 view,
                 global_get("uri_regex_obj"),
                 get_setting("expand_uri_regions_selectors"),

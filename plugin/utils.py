@@ -14,6 +14,7 @@ from typing import (
     cast,
     overload,
 )
+import itertools
 import sublime
 
 AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
@@ -88,7 +89,7 @@ def dotted_set(var: Any, dotted: str, value: Any) -> None:
         setattr(var, last_key, value)
 
 
-def view_find_all_fast(
+def view_find_all(
     view: sublime.View,
     regex_obj: Pattern[str],
     expand_selectors: Iterable[str] = tuple(),
@@ -184,7 +185,7 @@ def region_expand(
     if isinstance(region, sublime.Region):
         return sublime.Region(region.a - expansion[0], region.b + expansion[1])
 
-    return (region[0] - expansion[0], region[-1] + expansion[1])
+    return (region[0] - expansion[0], region[-1] + expansion[-1])
 
 
 def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> Tuple[int, int]:
@@ -200,11 +201,11 @@ def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> Tuple[int
     seq: Sequence[int]
 
     if isinstance(region, sublime.Region):
-        seq = (region.a, region.b)
+        seq = region.to_tuple()
     elif isinstance(region, int):
         seq = (region, region)
     elif isinstance(region, Iterable):
-        seq = tuple(region)[:2]
+        seq = tuple(itertools.islice(region, 2))
 
     if sort:
         seq = sorted(seq)
@@ -222,17 +223,7 @@ def convert_to_st_region(region: RegionLike, sort: bool = False) -> sublime.Regi
     @return the "region" in ST's region form
     """
 
-    seq: Sequence[int]
-
-    if isinstance(region, int):
-        seq = (region, region)
-    elif isinstance(region, Iterable):
-        seq = tuple(region)[:2]
-
-    if sort:
-        seq = sorted(seq)
-
-    return sublime.Region(seq[0], seq[-1])
+    return sublime.Region(*convert_to_region_tuple(region, sort))
 
 
 def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = False) -> List[sublime.Region]:
@@ -270,7 +261,7 @@ def is_regions_intersected(region1: sublime.Region, region2: sublime.Region, all
     @return True if intersected, False otherwise.
     """
 
-    return region1.intersects(region2) or (allow_boundary and bool(set(region1.to_tuple()) & set(region2.to_tuple())))
+    return region1.intersects(region2) or (allow_boundary and len({*region1.to_tuple(), *region2.to_tuple()}) != 4)
 
 
 def is_processable_view(view: sublime.View) -> bool:

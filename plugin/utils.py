@@ -106,7 +106,6 @@ def view_find_all(
     """
 
     def expand(region: sublime.Region) -> sublime.Region:
-        # still having a ST core bug: https://github.com/sublimehq/sublime_text/issues/5333
         if ST_SUPPORT_EXPAND_TO_SCOPE:
             return next(
                 filter(None, (view.expand_to_scope(region.a, selector) for selector in expand_selectors)),

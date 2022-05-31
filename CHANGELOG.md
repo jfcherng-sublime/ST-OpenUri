@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 7.1.5
+
+- fix: wrong link in "Copy ..." context menu
+
 ## 7.1.4
 
 - refactor: for ST >= 4132, utilize `view.expand_to_scope` API

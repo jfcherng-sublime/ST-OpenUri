@@ -25,19 +25,17 @@ class AbstractUriCommand(sublime_plugin.TextCommand, metaclass=ABCMeta):
         return is_plugin_ready()
 
     def get_uri_regions(self, event: Optional[EventDict] = None) -> List[sublime.Region]:
-        regions: Iterable[RegionLike]
+        regions: Iterable[RegionLike] = tuple()
         if self.source == UriSource.NONE:
-            regions = tuple()
+            pass
         elif self.source == UriSource.CONTEXT_MENU:
             if event:
                 point = self.view.window_to_text((event["x"], event["y"]))
                 regions = ((point, point),)
-            else:
-                regions = tuple()
         elif self.source == UriSource.CURSORS:
             regions = self.view.sel()
         elif self.source == UriSource.FILE:
             regions = ((0, self.view.size()),)
         else:
-            raise RuntimeError
+            raise RuntimeError(f"Invalid UriSource type: {self.source}")
         return find_uri_regions_by_regions(self.view, regions)

@@ -269,8 +269,7 @@ def is_regions_intersected(region1: sublime.Region, region2: sublime.Region, all
 
     @return True if intersected, False otherwise.
     """
-
-    return region1.intersects(region2) or (allow_boundary and len({*region1.to_tuple(), *region2.to_tuple()}) != 4)
+    return region1.intersects(region2) or bool(allow_boundary and {*region1.to_tuple()} & {*region2.to_tuple()})
 
 
 def is_processable_view(view: sublime.View) -> bool:

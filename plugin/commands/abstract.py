@@ -29,7 +29,11 @@ class AbstractUriCommand(sublime_plugin.TextCommand, metaclass=ABCMeta):
         if self.source == UriSource.NONE:
             regions = tuple()
         elif self.source == UriSource.CONTEXT_MENU:
-            regions = (self.view.window_to_text((event["x"], event["y"])),) * 2 if event else tuple()
+            if event:
+                point = self.view.window_to_text((event["x"], event["y"]))
+                regions = ((point, point),)
+            else:
+                regions = tuple()
         elif self.source == UriSource.CURSORS:
             regions = self.view.sel()
         elif self.source == UriSource.FILE:

@@ -1,7 +1,7 @@
 from ..functions import find_uri_regions_by_regions
 from ..shared import is_plugin_ready
 from ..types import EventDict, RegionLike
-from abc import ABCMeta
+from abc import ABC
 from typing import Iterable, List, Optional
 import enum
 import sublime
@@ -15,7 +15,7 @@ class UriSource(enum.Enum):
     NONE = enum.auto()
 
 
-class AbstractUriCommand(sublime_plugin.TextCommand, metaclass=ABCMeta):
+class AbstractUriCommand(sublime_plugin.TextCommand, ABC):
     source = UriSource.NONE
 
     def is_enabled(self) -> bool:

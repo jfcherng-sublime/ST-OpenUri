@@ -1,14 +1,14 @@
 from ..types import EventDict
 from .abstract import AbstractUriCommand, UriSource
-from abc import ABCMeta
+from abc import ABC
 from typing import Iterable, Optional
 import sublime
 
 
-class AbstractCopyUriCommand(AbstractUriCommand, metaclass=ABCMeta):
+class AbstractCopyUriCommand(AbstractUriCommand, ABC):
     def run(
         self,
-        edit: sublime.Edit,
+        _: sublime.Edit,
         event: Optional[EventDict] = None,
         unique: bool = True,
         sort: bool = True,

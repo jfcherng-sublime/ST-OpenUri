@@ -1,12 +1,12 @@
 from ..types import EventDict
 from .abstract import AbstractUriCommand, UriSource
-from abc import ABCMeta
+from abc import ABC
 from typing import Optional
 import sublime
 
 
-class AbstractSelectUriCommand(AbstractUriCommand, metaclass=ABCMeta):
-    def run(self, edit: sublime.Edit, event: Optional[EventDict] = None) -> None:
+class AbstractSelectUriCommand(AbstractUriCommand, ABC):
+    def run(self, _: sublime.Edit, event: Optional[EventDict] = None) -> None:
         if uri_regions := self.get_uri_regions(event):
             sel = self.view.sel()
             sel.clear()

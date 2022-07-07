@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 7.2.0
+
+- feat: capture URLs starting with "www" without a scheme
+
 ## 7.1.5
 
 - fix: wrong link in "Copy ..." context menu

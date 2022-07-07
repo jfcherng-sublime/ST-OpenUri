@@ -60,7 +60,7 @@
         //     - "hover" (only when the URI is hovered)
         //     - "never" (never draw)
         "enabled": "never",
-        // the scope used to highlight URI regions (you may customize it with your theme)
+        // the scope used to highlight URI regions (you may customize it with your color scheme)
         "scope": "string",
         // icon in the gutter: "dot", "circle", "bookmark" or empty string for nothing
         "icon": "",

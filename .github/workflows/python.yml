@@ -46,7 +46,4 @@ jobs:
 
       - name: Do linting
         run: |
-          mypy -p plugin
-          flake8 .
-          black --check .
-          isort --check .
+          ./scripts/run_local_tests.sh

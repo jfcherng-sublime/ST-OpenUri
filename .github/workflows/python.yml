@@ -49,3 +49,4 @@ jobs:
           mypy -p plugin
           flake8 .
           black --check .
+          isort --check .

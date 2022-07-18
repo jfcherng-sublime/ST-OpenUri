@@ -1,5 +1,6 @@
-from .shared import global_get
 import logging
+
+from .shared import global_get
 
 LOG_FORMAT = "[%(name)s][%(levelname)s] %(message)s"
 LOG_LEVEL_DEFAULT = "INFO"

@@ -1,5 +1,4 @@
-from .constant import ST_SUPPORT_EXPAND_TO_SCOPE
-from .types import RegionLike
+import itertools
 from typing import (
     Any,
     Callable,
@@ -15,8 +14,11 @@ from typing import (
     cast,
     overload,
 )
-import itertools
+
 import sublime
+
+from .constant import ST_SUPPORT_EXPAND_TO_SCOPE
+from .types import RegionLike
 
 AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
 

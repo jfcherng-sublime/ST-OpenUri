@@ -1,14 +1,15 @@
-from .constant import PLUGIN_NAME
-from .constant import SETTINGS_FILE_NAME
+import base64
+import os
+import tempfile
+import time
+from typing import Any, Dict, Optional
+
+import sublime
+
+from .constant import PLUGIN_NAME, SETTINGS_FILE_NAME
 from .libs import imagesize
 from .logger import log
 from .types import ImageDict
-from typing import Any, Dict, Optional
-import base64
-import os
-import sublime
-import tempfile
-import time
 
 
 def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:

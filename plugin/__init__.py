@@ -1,28 +1,18 @@
-from .constant import PLUGIN_NAME
-from .functions import compile_uri_regex
-from .functions import view_is_dirty_val
-from .logger import apply_user_log_level
-from .logger import init_plugin_logger
-from .logger import log
-from .phatom_sets_manager import PhatomSetsManager
-from .renderer import RendererThread
-from .settings import get_image_info
-from .settings import get_setting_renderer_interval
-from .settings import get_settings_object
-from .shared import global_get
-from .shared import global_set
-from .utils import is_processable_view
 import sublime
 
 # import all listeners and commands
-from .commands.copy_uri import CopyUriFromContextMenuCommand
-from .commands.copy_uri import CopyUriFromCursorsCommand
-from .commands.copy_uri import CopyUriFromViewCommand
-from .commands.open_uri import OpenUriFromCursorsCommand
-from .commands.open_uri import OpenUriFromViewCommand
-from .commands.select_uri import SelectUriFromCursorsCommand
-from .commands.select_uri import SelectUriFromViewCommand
+from .commands.copy_uri import CopyUriFromContextMenuCommand, CopyUriFromCursorsCommand, CopyUriFromViewCommand
+from .commands.open_uri import OpenUriFromCursorsCommand, OpenUriFromViewCommand
+from .commands.select_uri import SelectUriFromCursorsCommand, SelectUriFromViewCommand
+from .constant import PLUGIN_NAME
+from .functions import compile_uri_regex, view_is_dirty_val
 from .listener import OpenUriViewEventListener
+from .logger import apply_user_log_level, init_plugin_logger, log
+from .phatom_sets_manager import PhatomSetsManager
+from .renderer import RendererThread
+from .settings import get_image_info, get_setting_renderer_interval, get_settings_object
+from .shared import global_get, global_set
+from .utils import is_processable_view
 
 __all__ = (
     # ST: core

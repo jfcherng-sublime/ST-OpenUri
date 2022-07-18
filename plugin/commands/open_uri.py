@@ -1,9 +1,11 @@
+from abc import ABC
+from typing import Optional
+
+import sublime
+
 from ..functions import open_uri_with_browser
 from ..types import EventDict
 from .abstract import AbstractUriCommand, UriSource
-from abc import ABC
-from typing import Optional
-import sublime
 
 
 class AbstractOpenUriCommand(AbstractUriCommand, ABC):

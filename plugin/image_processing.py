@@ -1,13 +1,15 @@
+import base64
+import io
+import re
+from functools import lru_cache
+from typing import List, Sequence
+
+import sublime
+
 from .libs import png
 from .settings import get_image_color
 from .shared import global_get
 from .utils import simple_decorator
-from functools import lru_cache
-from typing import List, Sequence
-import base64
-import io
-import re
-import sublime
 
 
 @lru_cache

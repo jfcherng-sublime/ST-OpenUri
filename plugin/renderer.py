@@ -1,20 +1,15 @@
-from .functions import is_view_too_large
-from .functions import is_view_typing
-from .functions import view_is_dirty_val
+from typing import Generator
+
+import sublime
+
+from .functions import is_view_too_large, is_view_typing, view_is_dirty_val
 from .logger import log
-from .phantom_set import erase_phantom_set
-from .phantom_set import update_phantom_set
-from .region_drawing import draw_uri_regions
-from .region_drawing import erase_uri_regions
-from .settings import get_setting
-from .settings import get_setting_show_open_button
+from .phantom_set import erase_phantom_set, update_phantom_set
+from .region_drawing import draw_uri_regions, erase_uri_regions
+from .settings import get_setting, get_setting_show_open_button
 from .shared import global_get
 from .timer import RepeatingTimer
-from .utils import is_processable_view
-from .utils import is_transient_view
-from .utils import view_find_all
-from typing import Generator
-import sublime
+from .utils import is_processable_view, is_transient_view, view_find_all
 
 
 def foreground_views() -> Generator[sublime.View, None, None]:

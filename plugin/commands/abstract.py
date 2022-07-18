@@ -1,11 +1,13 @@
+import enum
+from abc import ABC
+from typing import Iterable, List, Optional
+
+import sublime
+import sublime_plugin
+
 from ..functions import find_uri_regions_by_regions
 from ..shared import is_plugin_ready
 from ..types import EventDict, RegionLike
-from abc import ABC
-from typing import Iterable, List, Optional
-import enum
-import sublime
-import sublime_plugin
 
 
 class UriSource(enum.Enum):

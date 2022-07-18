@@ -1,5 +1,5 @@
-from typing import Callable, Optional
 import threading
+from typing import Callable, Optional
 
 
 class RepeatingTimer:

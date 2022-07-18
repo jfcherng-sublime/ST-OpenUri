@@ -1,8 +1,10 @@
-from ..types import EventDict
-from .abstract import AbstractUriCommand, UriSource
 from abc import ABC
 from typing import Optional
+
 import sublime
+
+from ..types import EventDict
+from .abstract import AbstractUriCommand, UriSource
 
 
 class AbstractSelectUriCommand(AbstractUriCommand, ABC):

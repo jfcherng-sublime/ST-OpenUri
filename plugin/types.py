@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-# __future__ must be the first import
 from typing import List, Tuple, TypedDict, Union
+
 import sublime
 
 RegionLike = Union[

@@ -1,8 +1,10 @@
-from .settings import get_setting
 from functools import reduce
 from operator import xor
 from typing import Iterable, Sequence, Union
+
 import sublime
+
+from .settings import get_setting
 
 
 def erase_uri_regions(view: sublime.View) -> None:

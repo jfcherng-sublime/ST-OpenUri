@@ -1,11 +1,13 @@
+from typing import Iterable, Tuple
+
+import sublime
+
 from .constant import PLUGIN_NAME
 from .functions import open_uri_with_browser
 from .image_processing import get_colored_image_base64_by_region
 from .phatom_sets_manager import PhatomSetsManager
 from .shared import global_get
 from .types import ImageDict
-from typing import Iterable, Tuple
-import sublime
 
 PHANTOM_TEMPLATE = """
 <body id="open-uri-phantom">

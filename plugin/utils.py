@@ -279,9 +279,4 @@ def is_processable_view(view: sublime.View) -> bool:
 
 
 def is_transient_view(view: sublime.View) -> bool:
-    # @see https://github.com/sublimehq/sublime_text/issues/4444
-    # workaround for a transient view have no window right after it's loaded
-    if not (window := view.window()):
-        return True
-    # @see https://forum.sublimetext.com/t/is-view-transient-preview-method/3247/2
-    return view == window.transient_view_in_group(window.active_group())
+    return sheet.is_transient() if view.is_valid() and (sheet := view.sheet()) else False

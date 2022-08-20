@@ -32,10 +32,6 @@ __all__ = (
 
 
 def plugin_loaded() -> None:
-    sublime.set_timeout_async(plugin_loaded_real)
-
-
-def plugin_loaded_real() -> None:
     global_set("settings", get_settings_object())
     global_set("logger", init_plugin_logger())
     global_set("renderer_thread", RendererThread())

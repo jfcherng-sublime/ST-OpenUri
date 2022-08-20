@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 7.2.1
+
+- fix: occasionally startup exception
+
 ## 7.2.0
 
 - feat: capture URLs starting with "www" without a scheme

@@ -1,7 +1,7 @@
 # ST-OpenUri
 
 [![Required ST Build](https://img.shields.io/badge/ST-4105+-orange.svg?style=flat-square&logo=sublime-text)](https://www.sublimetext.com)
-[![GitHub Actions](https://img.shields.io/github/workflow/status/jfcherng-sublime/ST-OpenUri/Python?style=flat-square)](https://github.com/jfcherng-sublime/ST-OpenUri/actions)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/jfcherng-sublime/ST-OpenUri/python.yml?branch=st4&style=flat-square)](https://github.com/jfcherng-sublime/ST-OpenUri/actions)
 [![Package Control](https://img.shields.io/packagecontrol/dt/OpenUri?style=flat-square)](https://packagecontrol.io/packages/OpenUri)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/tags)
 [![Project license](https://img.shields.io/github/license/jfcherng-sublime/ST-OpenUri?style=flat-square&logo=github)](https://github.com/jfcherng-sublime/ST-OpenUri/blob/st4/LICENSE)

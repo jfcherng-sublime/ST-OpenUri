@@ -12,8 +12,7 @@ def init_plugin_logger() -> logging.Logger:
 
     @return The initiated plugin logger.
     """
-
-    from .constant import PLUGIN_NAME
+    from .constants import PLUGIN_NAME
 
     def set_logger_hander(logger: logging.Logger) -> None:
         # remove all existing log handlers
@@ -39,7 +38,6 @@ def apply_user_log_level(logger: logging.Logger) -> None:
 
     @param logger The logger
     """
-
     from .settings import get_setting
 
     log_level = get_setting("log_level").upper()
@@ -61,7 +59,6 @@ def log(level: str, msg: str) -> None:
     @param level The log level
     @param msg   The message
     """
-
     level_upper = level.upper()
     level_int = logging.getLevelName(level_upper)
 
@@ -79,7 +76,6 @@ def msg(msg: str) -> str:
 
     @return The plugin message.
     """
-
-    from .constant import PLUGIN_NAME
+    from .constants import PLUGIN_NAME
 
     return f"[{PLUGIN_NAME}] {msg}"

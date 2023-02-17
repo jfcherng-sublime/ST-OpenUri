@@ -3,11 +3,12 @@ from typing import List
 import sublime
 import sublime_plugin
 
-from .functions import find_uri_regions_by_region, view_is_dirty_val, view_last_typing_timestamp_val
-from .phantom_set import delete_phantom_set, init_phantom_set
-from .popup import show_popup
-from .region_drawing import draw_uri_regions
-from .settings import get_setting, get_setting_show_open_button, get_timestamp
+from .helpers import find_uri_regions_by_region
+from .settings import get_setting, get_setting_show_open_button
+from .ui.phantom_set import delete_phantom_set, init_phantom_set
+from .ui.popup import show_popup
+from .ui.region_drawing import draw_uri_regions
+from .utils import get_timestamp, view_is_dirty_val, view_last_typing_timestamp_val
 
 
 class OpenUriViewEventListener(sublime_plugin.ViewEventListener):

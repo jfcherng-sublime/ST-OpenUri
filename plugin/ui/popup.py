@@ -1,10 +1,10 @@
 import sublime
 
-from .functions import open_uri_with_browser
-from .image_processing import get_colored_image_base64_by_region
-from .settings import get_setting
-from .shared import global_get
-from .types import ImageDict
+from ..helpers import open_uri_with_browser
+from ..settings import get_setting
+from ..shared import global_get
+from ..types import ImageDict
+from .image import get_colored_image_base64_by_region
 
 POPUP_TEMPLATE = """
 <body id="open-uri-popup">

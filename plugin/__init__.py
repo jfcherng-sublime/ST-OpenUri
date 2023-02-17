@@ -1,18 +1,16 @@
-import sublime
-
 # import all listeners and commands
 from .commands.copy_uri import CopyUriFromContextMenuCommand, CopyUriFromCursorsCommand, CopyUriFromViewCommand
 from .commands.open_uri import OpenUriFromCursorsCommand, OpenUriFromViewCommand
 from .commands.select_uri import SelectUriFromCursorsCommand, SelectUriFromViewCommand
-from .constant import PLUGIN_NAME
-from .functions import compile_uri_regex, view_is_dirty_val
+from .constants import PLUGIN_NAME
+from .helpers import compile_uri_regex
 from .listener import OpenUriViewEventListener
 from .logger import apply_user_log_level, init_plugin_logger, log
-from .phatom_sets_manager import PhatomSetsManager
 from .renderer import RendererThread
 from .settings import get_image_info, get_setting_renderer_interval, get_settings_object
 from .shared import global_get, global_set
-from .utils import is_processable_view
+from .ui.phatom_sets_manager import PhatomSetsManager
+from .utils import is_processable_view, list_all_views, view_is_dirty_val
 
 __all__ = (
     # ST: core
@@ -72,8 +70,6 @@ def _set_is_dirty_for_all_views(is_dirty: bool) -> None:
 
     @param is_dirty Indicate if views are dirty
     """
-
-    for w in sublime.windows():
-        for v in w.views():
-            if is_processable_view(v):
-                view_is_dirty_val(v, is_dirty)
+    for view in list_all_views():
+        if is_processable_view(view):
+            view_is_dirty_val(view, is_dirty)

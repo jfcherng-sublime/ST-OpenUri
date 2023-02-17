@@ -1,38 +1,44 @@
 import itertools
-from typing import (
-    Any,
-    Callable,
-    Generator,
-    Iterable,
-    List,
-    Optional,
-    Pattern,
-    Sequence,
-    Tuple,
-    TypeVar,
-    Union,
-    cast,
-    overload,
-)
+import time
+from typing import Any, Callable, Generator, Iterable, List, Optional, Pattern, Sequence, Tuple, Union, cast, overload
 
 import sublime
 
-from .constant import ST_SUPPORT_EXPAND_TO_SCOPE
-from .types import RegionLike
-
-AnyCallable = TypeVar("AnyCallable", bound=Callable[..., Any])
+from .constants import ST_SUPPORT_EXPAND_TO_SCOPE
+from .types import RegionLike, T_AnyCallable
 
 
-def simple_decorator(decorator: Callable) -> Callable[[AnyCallable], AnyCallable]:
-    """
-    @brief A decorator that turns a function into a decorator.
-    """
+def get_timestamp() -> float:
+    return time.time()
 
-    def wrapper(decoratee: AnyCallable) -> AnyCallable:
+
+def list_all_views(*, include_transient: bool = False) -> Generator[sublime.View, None, None]:
+    for window in sublime.windows():
+        yield from window.views(include_transient=include_transient)
+
+
+def list_background_views() -> Generator[sublime.View, None, None]:
+    foreground_views = set(list_foreground_views())
+    for view in list_all_views(include_transient=True):
+        if view not in foreground_views:
+            yield view
+
+
+def list_foreground_views() -> Generator[sublime.View, None, None]:
+    for window in sublime.windows():
+        for group_idx in range(window.num_groups()):
+            if view := window.active_view_in_group(group_idx):
+                yield view
+
+
+def simple_decorator(decorator: Callable) -> Callable[[T_AnyCallable], T_AnyCallable]:
+    """A decorator that turns a function into a decorator."""
+
+    def wrapper(decoratee: T_AnyCallable) -> T_AnyCallable:
         def wrapped(*args, **kwargs) -> Any:
             return decorator(decoratee(*args, **kwargs))
 
-        return cast(AnyCallable, wrapped)
+        return cast(T_AnyCallable, wrapped)
 
     return wrapper
 
@@ -47,7 +53,6 @@ def dotted_get(var: Any, dotted: str, default: Optional[Any] = None) -> Any:
 
     @return The value or the default if dotted not found
     """
-
     keys = dotted.split(".")
 
     try:
@@ -72,7 +77,6 @@ def dotted_set(var: Any, dotted: str, value: Any) -> None:
     @param dotted  The dotted
     @param default The default
     """
-
     keys = dotted.split(".")
     last_key = keys.pop()
 
@@ -130,6 +134,58 @@ def view_find_all(
 
 
 @overload
+def view_last_typing_timestamp_val(view: sublime.View) -> float:
+    ...
+
+
+@overload
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None:
+    ...
+
+
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[float] = None) -> Optional[float]:
+    """
+    @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
+
+    @param view        The view
+    @param timestamp_s The last timestamp (in sec)
+
+    @return None if the set mode, otherwise the value
+    """
+    if timestamp_s is None:
+        return float(view.settings().get("OUIB_last_update_timestamp", 0))
+
+    view.settings().set("OUIB_last_update_timestamp", timestamp_s)
+    return None
+
+
+@overload
+def view_is_dirty_val(view: sublime.View) -> bool:
+    ...
+
+
+@overload
+def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
+    ...
+
+
+def view_is_dirty_val(view: sublime.View, is_dirty: Optional[bool] = None) -> Optional[bool]:
+    """
+    @brief Set/Get the is_dirty of the current view
+
+    @param view     The view
+    @param is_dirty Indicates if dirty
+
+    @return None if the set mode, otherwise the is_dirty
+    """
+    if is_dirty is None:
+        return bool(view.settings().get("OUIB_is_dirty", True))
+
+    view.settings().set("OUIB_is_dirty", is_dirty)
+    return None
+
+
+@overload
 def region_shift(region: sublime.Region, shift: int) -> sublime.Region:
     ...
 
@@ -148,7 +204,6 @@ def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], subli
 
     @return the shifted region
     """
-
     if isinstance(region, int):
         return (region + shift, region + shift)
 
@@ -186,7 +241,6 @@ def region_expand(
 
     @return the expanded region
     """
-
     if isinstance(expansion, int):
         expansion = (expansion, expansion)
 
@@ -208,7 +262,6 @@ def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> Tuple[int
 
     @return the "region" in tuple form
     """
-
     seq: Sequence[int]
 
     if isinstance(region, sublime.Region):
@@ -233,7 +286,6 @@ def convert_to_st_region(region: RegionLike, sort: bool = False) -> sublime.Regi
 
     @return the "region" in ST's region form
     """
-
     return sublime.Region(*convert_to_region_tuple(region, sort))
 
 
@@ -246,7 +298,6 @@ def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = Fals
 
     @return Merged regions
     """
-
     merged_regions: List[sublime.Region] = []
     for region in sorted(regions):
         if not merged_regions:

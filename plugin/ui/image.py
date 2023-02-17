@@ -6,10 +6,22 @@ from typing import List, Sequence
 
 import sublime
 
-from .libs import png
-from .settings import get_image_color
-from .shared import global_get
-from .utils import simple_decorator
+from ..libs import png
+from ..settings import get_setting
+from ..shared import global_get
+from ..utils import simple_decorator
+
+
+def get_image_color(img_name: str, region: sublime.Region) -> str:
+    """
+    @brief Get the image color from plugin settings in the form of #RRGGBBAA.
+
+    @param img_name The image name
+    @param region   The region
+
+    @return The color code in the form of #RRGGBBAA
+    """
+    return color_code_to_rgba(get_setting("image_colors")[img_name], region)
 
 
 @lru_cache
@@ -22,7 +34,6 @@ def get_colored_image_base64_by_color(img_name: str, rgba_code: str) -> str:
 
     @return The image base64 string
     """
-
     if not rgba_code:
         return global_get(f"images.{img_name}.base64")
 
@@ -41,7 +52,6 @@ def get_colored_image_base64_by_region(img_name: str, region: sublime.Region) ->
 
     @return The image base64 string
     """
-
     return get_colored_image_base64_by_color(img_name, get_image_color(img_name, region))
 
 
@@ -55,7 +65,6 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
 
     @return Color-changed PNG image bytes.
     """
-
     if not rgba_code:
         return img_bytes
 
@@ -101,7 +110,6 @@ def calculate_gray(rgb: Sequence[int]) -> int:
 
     @return The gray scale.
     """
-
     return int(rgb[0] * 38 + rgb[1] * 75 + rgb[2] * 15) >> 7
 
 
@@ -113,7 +121,6 @@ def is_img_light(img_bytes: bytes) -> bool:
 
     @return True if image is light, False otherwise.
     """
-
     w, h, rows, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
     gray_sum = 0
@@ -132,7 +139,6 @@ def add_alpha_to_rgb(color_code: str) -> str:
 
     @return The color code in the form of #RRGGBBAA
     """
-
     if not color_code:
         return ""
 
@@ -155,7 +161,6 @@ def color_code_to_rgba(color_code: str, region: sublime.Region) -> str:
 
     @return The color code in the form of #RRGGBBAA
     """
-
     if not color_code:
         return ""
 

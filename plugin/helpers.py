@@ -1,13 +1,13 @@
 import re
 import urllib.parse as urllib_parse
 import webbrowser
-from typing import Any, Dict, Iterable, List, Optional, Pattern, Tuple, overload
+from typing import Any, Dict, Iterable, List, Optional, Pattern, Tuple
 
 import sublime
 
 from .libs import triegex
 from .logger import log
-from .settings import get_setting, get_timestamp
+from .settings import get_setting
 from .shared import global_get
 from .types import RegionLike
 from .utils import convert_to_st_region, is_regions_intersected, merge_regions, region_expand, region_shift
@@ -20,7 +20,6 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
     @param uri     The uri
     @param browser The browser
     """
-
     parsed_uri = urllib_parse.urlparse(uri)
 
     log("debug", f"Parsed URI: {parsed_uri}")
@@ -50,7 +49,6 @@ def compile_uri_regex() -> Tuple[Optional[Pattern[str]], Tuple[str, ...]]:
 
     @return (compiled regex object, activated schemes)
     """
-
     detect_schemes: Dict[str, Dict[str, Any]] = get_setting("detect_schemes")
     uri_path_regexes: Dict[str, str] = get_setting("uri_path_regexes")
 
@@ -109,7 +107,6 @@ def find_uri_regions_by_region(
 
     @return Found URI regions
     """
-
     return find_uri_regions_by_regions(view, (region,), search_radius)
 
 
@@ -126,7 +123,6 @@ def find_uri_regions_by_regions(
 
     @return Found URI regions
     """
-
     st_regions = sorted(convert_to_st_region(region, sort=True) for region in regions)
     search_regions = merge_regions(
         (
@@ -163,84 +159,3 @@ def find_uri_regions_by_regions(
                 break
 
     return uri_regions_intersected
-
-
-@overload
-def view_last_typing_timestamp_val(view: sublime.View) -> float:
-    ...
-
-
-@overload
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None:
-    ...
-
-
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[float] = None) -> Optional[float]:
-    """
-    @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
-
-    @param view        The view
-    @param timestamp_s The last timestamp (in sec)
-
-    @return None if the set mode, otherwise the value
-    """
-
-    if timestamp_s is None:
-        return float(view.settings().get("OUIB_last_update_timestamp", 0))
-
-    view.settings().set("OUIB_last_update_timestamp", timestamp_s)
-    return None
-
-
-@overload
-def view_is_dirty_val(view: sublime.View) -> bool:
-    ...
-
-
-@overload
-def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
-    ...
-
-
-def view_is_dirty_val(view: sublime.View, is_dirty: Optional[bool] = None) -> Optional[bool]:
-    """
-    @brief Set/Get the is_dirty of the current view
-
-    @param view     The view
-    @param is_dirty Indicates if dirty
-
-    @return None if the set mode, otherwise the is_dirty
-    """
-
-    if is_dirty is None:
-        return bool(view.settings().get("OUIB_is_dirty", True))
-
-    view.settings().set("OUIB_is_dirty", is_dirty)
-    return None
-
-
-def is_view_typing(view: sublime.View) -> bool:
-    """
-    @brief Determine if the view typing.
-
-    @param view The view
-
-    @return `True` if the view is typing, `False` otherwise.
-    """
-
-    now_s = get_timestamp()
-    last_typing_s = view_last_typing_timestamp_val(view) or 0
-
-    return (now_s - last_typing_s) * 1000 < get_setting("typing_period")
-
-
-def is_view_too_large(view: sublime.View) -> bool:
-    """
-    @brief Determine if the view is too large. Note that size will be `0` if the view is loading.
-
-    @param view The view
-
-    @return `True` if the view is too large, `False` otherwise.
-    """
-
-    return view.size() > get_setting("large_file_threshold")

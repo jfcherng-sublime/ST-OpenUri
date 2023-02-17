@@ -1,20 +1,21 @@
 import base64
-import os
 import tempfile
-import time
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 import sublime
 
-from .constant import PLUGIN_NAME, SETTINGS_FILE_NAME
+from .constants import PLUGIN_NAME, SETTINGS_FILE_NAME
 from .libs import imagesize
 from .logger import log
+from .shared import global_get
 from .types import ImageDict
+from .utils import get_timestamp, view_last_typing_timestamp_val
 
 
 def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:
     variables: Dict[str, Any] = {
-        "home": os.path.expanduser("~"),
+        "home": str(Path.home()),
         "package_name": PLUGIN_NAME,
         "package_path": f"Packages/{PLUGIN_NAME}",
         "temp_dir": tempfile.gettempdir(),
@@ -26,6 +27,27 @@ def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:
     return variables
 
 
+def get_settings_object() -> sublime.Settings:
+    """
+    @brief Get the plugin settings object. This function will call `sublime.load_settings()`.
+
+    @return The settings object.
+    """
+    return sublime.load_settings(SETTINGS_FILE_NAME)
+
+
+def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
+    """
+    @brief Get the plugin setting with the dotted key.
+
+    @param dotted  The dotted key
+    @param default The default value if the key doesn't exist
+
+    @return The setting's value.
+    """
+    return global_get(f"settings.{dotted}", default)
+
+
 def get_image_path(img_name: str) -> str:
     """
     @brief Get the image resource path from plugin settings.
@@ -34,7 +56,6 @@ def get_image_path(img_name: str) -> str:
 
     @return The image resource path.
     """
-
     return sublime.expand_variables(
         get_setting("image_files")[img_name],
         get_expanding_variables(sublime.active_window()),
@@ -50,7 +71,7 @@ def get_image_info(img_name: str) -> ImageDict:
     @return The image information.
     """
     img_path = get_image_path(img_name)
-    img_ext = os.path.splitext(img_path)[1]
+    img_ext = Path(img_path).suffix
     img_mime = "image/png"
 
     assert img_ext.lower() == ".png"
@@ -75,63 +96,12 @@ def get_image_info(img_name: str) -> ImageDict:
     }
 
 
-def get_image_color(img_name: str, region: sublime.Region) -> str:
-    """
-    @brief Get the image color from plugin settings in the form of #RRGGBBAA.
-
-    @param img_name The image name
-    @param region   The region
-
-    @return The color code in the form of #RRGGBBAA
-    """
-
-    from .image_processing import color_code_to_rgba
-
-    return color_code_to_rgba(get_setting("image_colors")[img_name], region)
-
-
-def get_settings_object() -> sublime.Settings:
-    """
-    @brief Get the plugin settings object. This function will call `sublime.load_settings()`.
-
-    @return The settings object.
-    """
-
-    return sublime.load_settings(SETTINGS_FILE_NAME)
-
-
-def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
-    """
-    @brief Get the plugin setting with the dotted key.
-
-    @param dotted  The dotted key
-    @param default The default value if the key doesn't exist
-
-    @return The setting's value.
-    """
-
-    from .shared import global_get
-
-    return global_get(f"settings.{dotted}", default)
-
-
-def get_timestamp() -> float:
-    """
-    @brief Get the current timestamp (in second).
-
-    @return The timestamp.
-    """
-
-    return time.time()
-
-
 def get_setting_renderer_interval() -> int:
     """
     @brief Get the renderer interval.
 
     @return The renderer interval.
     """
-
     if (interval := get_setting("renderer_interval", 250)) < 0:
         interval = float("inf")
 
@@ -140,11 +110,34 @@ def get_setting_renderer_interval() -> int:
 
 
 def get_setting_show_open_button(view: sublime.View) -> str:
-    from .functions import is_view_too_large
-
     return get_setting(
         # ...
         "show_open_button_fallback"
         if not view.is_loading() and is_view_too_large(view)
         else "show_open_button"
     )
+
+
+def is_view_too_large(view: sublime.View) -> bool:
+    """
+    @brief Determine if the view is too large. Note that size will be `0` if the view is loading.
+
+    @param view The view
+
+    @return `True` if the view is too large, `False` otherwise.
+    """
+    return view.size() > get_setting("large_file_threshold")
+
+
+def is_view_typing(view: sublime.View) -> bool:
+    """
+    @brief Determine if the view typing.
+
+    @param view The view
+
+    @return `True` if the view is typing, `False` otherwise.
+    """
+    now_s = get_timestamp()
+    last_typing_s = view_last_typing_timestamp_val(view) or 0
+
+    return (now_s - last_typing_s) * 1000 < get_setting("typing_period")

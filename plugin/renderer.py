@@ -1,22 +1,44 @@
-from typing import Generator
+import threading
+from typing import Any, Callable, Optional
 
 import sublime
 
-from .functions import is_view_too_large, is_view_typing, view_is_dirty_val
 from .logger import log
-from .phantom_set import erase_phantom_set, update_phantom_set
-from .region_drawing import draw_uri_regions, erase_uri_regions
-from .settings import get_setting, get_setting_show_open_button
+from .settings import get_setting, get_setting_show_open_button, is_view_too_large, is_view_typing
 from .shared import global_get
-from .timer import RepeatingTimer
-from .utils import is_processable_view, is_transient_view, view_find_all
+from .ui.phantom_set import erase_phantom_set, update_phantom_set
+from .ui.region_drawing import draw_uri_regions, erase_uri_regions
+from .utils import is_processable_view, is_transient_view, list_foreground_views, view_find_all, view_is_dirty_val
 
 
-def foreground_views() -> Generator[sublime.View, None, None]:
-    for window in sublime.windows():
-        for group_idx in range(window.num_groups()):
-            if view := window.active_view_in_group(group_idx):
-                yield view
+class RepeatingTimer:
+    def __init__(self, interval_ms: int, func: Callable, *args: Any, **kwargs: Any) -> None:
+        self.interval_s = interval_ms / 1000
+        self.timer: Optional[threading.Timer] = None
+        self.is_running = False
+        self.set_func(func, *args, **kwargs)
+
+    def set_func(self, func: Callable, *args: Any, **kwargs: Any) -> None:
+        self.func = func
+        self.args = args
+        self.kwargs = kwargs
+
+    def set_interval(self, interval_ms: int) -> None:
+        self.interval_s = interval_ms / 1000
+
+    def start(self) -> None:
+        self.timer = threading.Timer(self.interval_s, self._callback)
+        self.timer.start()
+        self.is_running = True
+
+    def cancel(self) -> None:
+        if self.timer:
+            self.timer.cancel()
+        self.is_running = False
+
+    def _callback(self) -> None:
+        self.func(*self.args, **self.kwargs)
+        self.start()
 
 
 class RendererThread(RepeatingTimer):
@@ -24,16 +46,16 @@ class RendererThread(RepeatingTimer):
         super().__init__(interval_ms, self._update_foreground_views)
 
         # to prevent from overlapped processes when using a low interval
-        self.is_rendering = False
+        self._is_rendering = False
 
     def _update_foreground_views(self) -> None:
-        if self.is_rendering:
+        if self._is_rendering:
             return
 
-        self.is_rendering = True
-        for view in foreground_views():
+        self._is_rendering = True
+        for view in list_foreground_views():
             self._update_view(view)
-        self.is_rendering = False
+        self._is_rendering = False
 
     def _update_view(self, view: sublime.View) -> None:
         if (

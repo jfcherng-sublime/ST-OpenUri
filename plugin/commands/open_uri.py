@@ -3,7 +3,7 @@ from typing import Optional
 
 import sublime
 
-from ..functions import open_uri_with_browser
+from ..helpers import open_uri_with_browser
 from ..types import EventDict
 from .abstract import AbstractUriCommand, UriSource
 

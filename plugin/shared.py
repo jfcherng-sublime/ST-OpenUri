@@ -4,36 +4,28 @@ from typing import Any, Dict, Optional, Pattern, Tuple
 
 import sublime
 
+from .types import ImageDict
 from .utils import dotted_get, dotted_set
 
 
 class G:
     """This class stores application-level global variables."""
 
-    # the plugin settings object
     settings: Optional[sublime.Settings] = None
+    """the plugin settings object"""
 
-    # the logger to log messages
     logger: Optional[logging.Logger] = None
+    """the logger to log messages"""
 
-    # the background thread for managing phantoms for views
     renderer_thread: Optional[threading.Thread] = None
+    """the background thread for managing phantoms for views"""
 
     activated_schemes: Tuple[str, ...] = tuple()
     uri_regex_obj: Optional[Pattern[str]] = None
 
-    images: Dict[str, Dict[str, Any]] = {
-        # image informations
-        # key/value structure is
-        #     - "base64": "",
-        #     - "bytes": b"",
-        #     - "ext": "",
-        #     - "mime": "",
-        #     - "path": "",
-        #     - "ratio_wh": 0,
-        #     - "size": (0, 0),
-        "phantom": {},
-        "popup": {},
+    images: Dict[str, ImageDict] = {
+        "phantom": {},  # type: ignore
+        "popup": {},  # type: ignore
     }
 
 

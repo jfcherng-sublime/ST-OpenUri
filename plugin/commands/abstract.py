@@ -5,7 +5,7 @@ from typing import Iterable, List, Optional
 import sublime
 import sublime_plugin
 
-from ..functions import find_uri_regions_by_regions
+from ..helpers import find_uri_regions_by_regions
 from ..shared import is_plugin_ready
 from ..types import EventDict, RegionLike
 

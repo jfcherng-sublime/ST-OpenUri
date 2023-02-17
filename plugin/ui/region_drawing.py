@@ -4,7 +4,7 @@ from typing import Iterable, Sequence, Union
 
 import sublime
 
-from .settings import get_setting
+from ..settings import get_setting
 
 
 def erase_uri_regions(view: sublime.View) -> None:
@@ -24,7 +24,6 @@ def draw_uri_regions(view: sublime.View, uri_regions: Iterable[sublime.Region]) 
 
 
 def parse_draw_region_flags(flags: Union[int, Sequence[str]]) -> int:
-    # deprecated because it's not self-explanatory
     if isinstance(flags, int):
         return flags
 

@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from typing import List, Tuple, TypedDict, Union
+from typing import Any, Callable, List, Tuple, TypedDict, TypeVar, Union
 
 import sublime
 
+T_AnyCallable = TypeVar("T_AnyCallable", bound=Callable[..., Any])
+
 RegionLike = Union[
     sublime.Region,
-    # point
-    int,
-    # region in list form
-    List[int],
-    # region in tuple form
-    Tuple[int, int],
+    int,  # point
+    List[int],  # region in list form
+    Tuple[int, int],  # region in tuple form
 ]
 
 

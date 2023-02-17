@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 7.2.2
+
+- refactor: tidy codes
+
 ## 7.2.1
 
 - fix: occasionally startup exception

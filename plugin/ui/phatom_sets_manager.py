@@ -1,16 +1,18 @@
-from typing import Dict, Iterable, Optional
+from __future__ import annotations
+
+from typing import Iterable
 
 import sublime
 
 
 class PhatomSetsManager:
     # class-level (shared across objects)
-    _phantom_sets: Dict[str, sublime.PhantomSet] = {
+    _phantom_sets: dict[str, sublime.PhantomSet] = {
         # phantom_set_id: PhantomSet object,
     }
 
     @classmethod
-    def get_phantom_set(cls, phantom_set_id: str) -> Optional[sublime.PhantomSet]:
+    def get_phantom_set(cls, phantom_set_id: str) -> sublime.PhantomSet | None:
         return cls._phantom_sets.get(phantom_set_id)
 
     @classmethod

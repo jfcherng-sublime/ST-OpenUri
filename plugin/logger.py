@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 
 from .shared import global_get

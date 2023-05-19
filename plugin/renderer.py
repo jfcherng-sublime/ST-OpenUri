@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import threading
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 import sublime
 
@@ -14,7 +16,7 @@ from .utils import is_processable_view, is_transient_view, list_foreground_views
 class RepeatingTimer:
     def __init__(self, interval_ms: int, func: Callable, *args: Any, **kwargs: Any) -> None:
         self.interval_s = interval_ms / 1000
-        self.timer: Optional[threading.Timer] = None
+        self.timer: threading.Timer | None = None
         self.is_running = False
         self.set_func(func, *args, **kwargs)
 

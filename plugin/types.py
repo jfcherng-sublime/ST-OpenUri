@@ -36,4 +36,4 @@ class ImageDict(TypedDict):
     mime: str
     path: str
     ratio_wh: float
-    size: Tuple[int, int]
+    size: tuple[int, int]

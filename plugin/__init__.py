@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 # import all listeners and commands
 from .commands.copy_uri import CopyUriFromContextMenuCommand, CopyUriFromCursorsCommand, CopyUriFromViewCommand
 from .commands.open_uri import OpenUriFromCursorsCommand, OpenUriFromViewCommand

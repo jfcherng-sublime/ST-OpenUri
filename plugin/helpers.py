@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import re
 import urllib.parse as urllib_parse
 import webbrowser
-from typing import Any, Dict, Iterable, List, Optional, Pattern, Tuple
+from typing import Any, Iterable, Pattern
 
 import sublime
 
@@ -13,7 +15,7 @@ from .types import RegionLike
 from .utils import convert_to_st_region, is_regions_intersected, merge_regions, region_expand, region_shift
 
 
-def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
+def open_uri_with_browser(uri: str, browser: str | None = "") -> None:
     """
     @brief Open the URI with the browser.
 
@@ -43,17 +45,17 @@ def open_uri_with_browser(uri: str, browser: Optional[str] = "") -> None:
         log("critical", f'Failed to open browser "{browser}" to "{uri}" because {e}')
 
 
-def compile_uri_regex() -> Tuple[Optional[Pattern[str]], Tuple[str, ...]]:
+def compile_uri_regex() -> tuple[Pattern[str] | None, tuple[str, ...]]:
     """
     @brief Get the compiled regex object for matching URIs.
 
     @return (compiled regex object, activated schemes)
     """
-    detect_schemes: Dict[str, Dict[str, Any]] = get_setting("detect_schemes")
-    uri_path_regexes: Dict[str, str] = get_setting("uri_path_regexes")
+    detect_schemes: dict[str, dict[str, Any]] = get_setting("detect_schemes")
+    uri_path_regexes: dict[str, str] = get_setting("uri_path_regexes")
 
-    activated_schemes: List[str] = []
-    uri_regexes: List[str] = []
+    activated_schemes: list[str] = []
+    uri_regexes: list[str] = []
     for scheme, scheme_settings in detect_schemes.items():
         if not scheme_settings.get("enabled", False):
             continue
@@ -97,8 +99,8 @@ def compile_uri_regex() -> Tuple[Optional[Pattern[str]], Tuple[str, ...]]:
 def find_uri_regions_by_region(
     view: sublime.View,
     region: RegionLike,
-    search_radius: Optional[int] = None,
-) -> List[sublime.Region]:
+    search_radius: int | None = None,
+) -> list[sublime.Region]:
     """
     @brief Found intersected URI regions from view by the region
 
@@ -113,8 +115,8 @@ def find_uri_regions_by_region(
 def find_uri_regions_by_regions(
     view: sublime.View,
     regions: Iterable[RegionLike],
-    search_radius: Optional[int] = None,
-) -> List[sublime.Region]:
+    search_radius: int | None = None,
+) -> list[sublime.Region]:
     """
     @brief Found intersected URI regions from view by regions
 
@@ -133,7 +135,7 @@ def find_uri_regions_by_regions(
         True,
     )
 
-    uri_regions: List[sublime.Region] = []
+    uri_regions: list[sublime.Region] = []
     for search_region in search_regions:
         uri_regions.extend(
             # convert "finditer()" coordinate into ST's coordinate
@@ -144,7 +146,7 @@ def find_uri_regions_by_regions(
     # only pick up "uri_region"s that are intersected with "st_regions"
     # note that both "st_regions" and "uri_regions" are guaranteed sorted here
     regions_idx = 0
-    uri_regions_intersected: List[sublime.Region] = []
+    uri_regions_intersected: list[sublime.Region] = []
 
     for uri_region in uri_regions:
         for idx in range(regions_idx, len(st_regions)):

@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 import base64
 import io
 import re
 from functools import lru_cache
-from typing import List, Sequence
+from typing import Sequence
 
 import sublime
 
@@ -71,7 +73,7 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     if not re.match(r"#[0-9a-fA-F]{8}$", rgba_code):
         raise ValueError("Invalid RGBA color code: " + rgba_code)
 
-    def render_pixel(rgba_src: Sequence[int], rgba_dst: Sequence[int], invert_gray: bool = False) -> List[int]:
+    def render_pixel(rgba_src: Sequence[int], rgba_dst: Sequence[int], invert_gray: bool = False) -> list[int]:
         gray = calculate_gray(rgba_src)
         if invert_gray:
             gray = 0xFF - gray
@@ -88,9 +90,9 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
     rgba_dst = [int(rgba_code[i : i + 2], 16) for i in range(1, 9, 2)]
     w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
-    rows_dst: List[List[int]] = []
+    rows_dst: list[list[int]] = []
     for row_src in rows_src:
-        row_dst: List[int] = []
+        row_dst: list[int] = []
         for i in range(0, len(row_src), 4):
             row_dst.extend(render_pixel(row_src[i : i + 4], rgba_dst, invert_gray))
         rows_dst.append(row_dst)

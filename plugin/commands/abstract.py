@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import enum
 from abc import ABC
-from typing import Iterable, List, Optional
+from typing import Iterable
 
 import sublime
 import sublime_plugin
@@ -26,7 +28,7 @@ class AbstractUriCommand(sublime_plugin.TextCommand, ABC):
     def is_visible(self) -> bool:
         return is_plugin_ready()
 
-    def get_uri_regions(self, event: Optional[EventDict] = None) -> List[sublime.Region]:
+    def get_uri_regions(self, event: EventDict | None = None) -> list[sublime.Region]:
         regions: Iterable[RegionLike] = tuple()
         if self.source == UriSource.NONE:
             pass

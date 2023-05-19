@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from abc import ABC
-from typing import Optional
 
 import sublime
 
@@ -8,7 +9,7 @@ from .abstract import AbstractUriCommand, UriSource
 
 
 class AbstractSelectUriCommand(AbstractUriCommand, ABC):
-    def run(self, _: sublime.Edit, event: Optional[EventDict] = None) -> None:
+    def run(self, _: sublime.Edit, event: EventDict | None = None) -> None:
         if uri_regions := self.get_uri_regions(event):
             sel = self.view.sel()
             sel.clear()

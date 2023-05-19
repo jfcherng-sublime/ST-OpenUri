@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 from functools import reduce
 from operator import xor
-from typing import Iterable, Sequence, Union
+from typing import Iterable, Sequence
 
 import sublime
 
@@ -23,7 +25,7 @@ def draw_uri_regions(view: sublime.View, uri_regions: Iterable[sublime.Region]) 
     )
 
 
-def parse_draw_region_flags(flags: Union[int, Sequence[str]]) -> int:
+def parse_draw_region_flags(flags: int | Sequence[str]) -> int:
     if isinstance(flags, int):
         return flags
 

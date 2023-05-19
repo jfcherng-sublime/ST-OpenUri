@@ -1,5 +1,6 @@
+from __future__ import annotations
+
 from abc import ABC
-from typing import Optional
 
 import sublime
 
@@ -9,7 +10,7 @@ from .abstract import AbstractUriCommand, UriSource
 
 
 class AbstractOpenUriCommand(AbstractUriCommand, ABC):
-    def run(self, _: sublime.Edit, event: Optional[EventDict] = None, browser: str = "") -> None:
+    def run(self, _: sublime.Edit, event: EventDict | None = None, browser: str = "") -> None:
         for uri in set(map(self.view.substr, self.get_uri_regions(event))):
             open_uri_with_browser(uri, browser)
 

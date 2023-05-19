@@ -1,4 +1,4 @@
-from typing import List
+from __future__ import annotations
 
 import sublime
 import sublime_plugin
@@ -30,7 +30,7 @@ class OpenUriViewEventListener(sublime_plugin.ViewEventListener):
 
     def on_hover(self, point: int, hover_zone: int) -> None:
         if hover_zone != sublime.HOVER_TEXT:
-            uri_regions: List[sublime.Region] = []
+            uri_regions: list[sublime.Region] = []
         else:
             uri_regions = find_uri_regions_by_region(self.view, point)
 

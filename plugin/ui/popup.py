@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sublime
 
 from ..helpers import open_uri_with_browser

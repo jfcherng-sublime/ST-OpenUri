@@ -1,4 +1,6 @@
-from typing import Iterable, Tuple
+from __future__ import annotations
+
+from typing import Iterable
 
 import sublime
 
@@ -69,5 +71,5 @@ def new_uri_phantom(view: sublime.View, uri_region: sublime.Region) -> sublime.P
     )
 
 
-def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> Tuple[sublime.Phantom, ...]:
+def new_uri_phantoms(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> tuple[sublime.Phantom, ...]:
     return tuple(new_uri_phantom(view, r) for r in uri_regions)

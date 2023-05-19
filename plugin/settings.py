@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import base64
 import tempfile
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 
 import sublime
 
@@ -13,8 +15,8 @@ from .types import ImageDict
 from .utils import get_timestamp, view_last_typing_timestamp_val
 
 
-def get_expanding_variables(window: Optional[sublime.Window]) -> Dict[str, str]:
-    variables: Dict[str, Any] = {
+def get_expanding_variables(window: sublime.Window | None) -> dict[str, str]:
+    variables: dict[str, Any] = {
         "home": str(Path.home()),
         "package_name": PLUGIN_NAME,
         "package_path": f"Packages/{PLUGIN_NAME}",
@@ -36,7 +38,7 @@ def get_settings_object() -> sublime.Settings:
     return sublime.load_settings(SETTINGS_FILE_NAME)
 
 
-def get_setting(dotted: str, default: Optional[Any] = None) -> Any:
+def get_setting(dotted: str, default: Any | None = None) -> Any:
     """
     @brief Get the plugin setting with the dotted key.
 
@@ -78,7 +80,7 @@ def get_image_info(img_name: str) -> ImageDict:
 
     try:
         img_bytes = sublime.load_binary_resource(img_path)
-    except IOError:
+    except OSError:
         img_bytes = b""
         log("error", f"Resource not found: {img_path}")
 

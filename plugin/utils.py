@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import itertools
 import time
-from typing import Any, Callable, Generator, Iterable, List, Optional, Pattern, Sequence, Tuple, Union, cast, overload
+from typing import Any, Callable, Generator, Iterable, Pattern, Sequence, cast, overload
 
 import sublime
 
@@ -43,7 +45,7 @@ def simple_decorator(decorator: Callable) -> Callable[[T_AnyCallable], T_AnyCall
     return wrapper
 
 
-def dotted_get(var: Any, dotted: str, default: Optional[Any] = None) -> Any:
+def dotted_get(var: Any, dotted: str, default: Any | None = None) -> Any:
     """
     @brief Get the value from the variable with dotted notation.
 
@@ -143,7 +145,7 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> No
     ...
 
 
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: Optional[float] = None) -> Optional[float]:
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float | None = None) -> float | None:
     """
     @brief Set/Get the last timestamp (in sec) when "OUIB_uri_regions" is updated
 
@@ -169,7 +171,7 @@ def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
     ...
 
 
-def view_is_dirty_val(view: sublime.View, is_dirty: Optional[bool] = None) -> Optional[bool]:
+def view_is_dirty_val(view: sublime.View, is_dirty: bool | None = None) -> bool | None:
     """
     @brief Set/Get the is_dirty of the current view
 
@@ -191,11 +193,11 @@ def region_shift(region: sublime.Region, shift: int) -> sublime.Region:
 
 
 @overload
-def region_shift(region: Union[int, List[int], Tuple[int, int]], shift: int) -> Tuple[int, int]:
+def region_shift(region: int | list[int] | tuple[int, int], shift: int) -> tuple[int, int]:
     ...
 
 
-def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], sublime.Region]:
+def region_shift(region: RegionLike, shift: int) -> tuple[int, int] | sublime.Region:
     """
     @brief Shift the region by given amount.
 
@@ -216,23 +218,23 @@ def region_shift(region: RegionLike, shift: int) -> Union[Tuple[int, int], subli
 @overload
 def region_expand(
     region: sublime.Region,
-    expansion: Union[int, List[int], Tuple[int, int]],
+    expansion: int | list[int] | tuple[int, int],
 ) -> sublime.Region:
     ...
 
 
 @overload
 def region_expand(
-    region: Union[int, List[int], Tuple[int, int]],
-    expansion: Union[int, List[int], Tuple[int, int]],
-) -> Tuple[int, int]:
+    region: int | list[int] | tuple[int, int],
+    expansion: int | list[int] | tuple[int, int],
+) -> tuple[int, int]:
     ...
 
 
 def region_expand(
     region: RegionLike,
-    expansion: Union[int, List[int], Tuple[int, int]],
-) -> Union[Tuple[int, int], sublime.Region]:
+    expansion: int | list[int] | tuple[int, int],
+) -> tuple[int, int] | sublime.Region:
     """
     @brief Expand the region by given amount.
 
@@ -253,7 +255,7 @@ def region_expand(
     return (region[0] - expansion[0], region[-1] + expansion[-1])
 
 
-def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> Tuple[int, int]:
+def convert_to_region_tuple(region: RegionLike, sort: bool = False) -> tuple[int, int]:
     """
     @brief Convert the "region" into its tuple form
 
@@ -289,7 +291,7 @@ def convert_to_st_region(region: RegionLike, sort: bool = False) -> sublime.Regi
     return sublime.Region(*convert_to_region_tuple(region, sort))
 
 
-def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = False) -> List[sublime.Region]:
+def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = False) -> list[sublime.Region]:
     """
     @brief Merge intersected regions to reduce numbers of regions.
 
@@ -298,7 +300,7 @@ def merge_regions(regions: Iterable[sublime.Region], allow_boundary: bool = Fals
 
     @return Merged regions
     """
-    merged_regions: List[sublime.Region] = []
+    merged_regions: list[sublime.Region] = []
     for region in sorted(regions):
         if not merged_regions:
             merged_regions.append(region)

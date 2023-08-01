@@ -56,13 +56,14 @@ def compile_uri_regex() -> tuple[Pattern[str] | None, tuple[str, ...]]:
 
     activated_schemes: list[str] = []
     uri_regexes: list[str] = []
-    for scheme, scheme_settings in detect_schemes.items():
-        if not scheme_settings.get("enabled", False):
+    # longest scheme first
+    for scheme in sorted(detect_schemes.keys(), key=len, reverse=True):
+        if not (scheme_settings := detect_schemes[scheme]).get("enabled", False):
             continue
 
         path_regex_name: str = scheme_settings.get("path_regex", "@default")
         if path_regex_name not in uri_path_regexes:
-            log("warning", f'Ignore scheme "{scheme}" due to invalid "path_regex": {path_regex_name}')
+            log("warning", f'Ignore scheme "{scheme}" due to invalid "path_regex" name: {path_regex_name}')
             continue
 
         activated_schemes.append(scheme)

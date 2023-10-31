@@ -6,7 +6,7 @@ from typing import Any, Callable, Generator, Iterable, Pattern, Sequence, cast, 
 
 import sublime
 
-from .constants import ST_SUPPORT_EXPAND_TO_SCOPE, VIEW_SETTING_TIMESTAMP_KEY
+from .constants import VIEW_SETTING_TIMESTAMP_KEY
 from .types import RegionLike, T_AnyCallable
 
 
@@ -114,19 +114,10 @@ def view_find_all(
     """
 
     def expand(region: sublime.Region) -> sublime.Region:
-        if ST_SUPPORT_EXPAND_TO_SCOPE:
-            return next(
-                filter(None, (view.expand_to_scope(region.a, selector) for selector in expand_selectors)),
-                region,
-            )
-
-        for selector in expand_selectors:
-            if not view.match_selector(region.a, selector):
-                continue
-            while view.match_selector(region.b, selector):
-                region.b += 1
-            break
-        return region
+        return next(
+            filter(None, (view.expand_to_scope(region.a, selector) for selector in expand_selectors)),
+            region,
+        )
 
     if isinstance(expand_selectors, str):
         expand_selectors = (expand_selectors,)

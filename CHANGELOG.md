@@ -1,5 +1,12 @@
 # OpenUri Changelog
 
+## 7.2.3
+
+- refactor: add `NO_UNDO` flag to `view.add_regions`
+- refactor: sort merged regex by scheme length DESC
+- refactor: use py38 syntax
+- chore: format `pyproject.toml` with taplo
+
 ## 7.2.2
 
 - refactor: tidy codes

@@ -21,7 +21,7 @@ def draw_uri_regions(view: sublime.View, uri_regions: Iterable[sublime.Region]) 
         tuple(uri_regions),
         scope=draw_uri_regions["scope"],
         icon=draw_uri_regions["icon"],
-        flags=parse_draw_region_flags(draw_uri_regions["flags"]),
+        flags=parse_draw_region_flags(draw_uri_regions["flags"]) | sublime.NO_UNDO,
     )
 
 

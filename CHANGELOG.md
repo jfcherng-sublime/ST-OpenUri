@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 8.0.0
+
+- refactor: tidy codes (ST>=4152)
+
 ## 7.2.3
 
 - refactor: add `NO_UNDO` flag to `view.add_regions`

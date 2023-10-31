@@ -6,18 +6,19 @@ from typing import Iterable, Sequence
 
 import sublime
 
+from ..constants import URI_REGION_KEY
 from ..settings import get_setting
 
 
 def erase_uri_regions(view: sublime.View) -> None:
-    view.erase_regions("OUIB_uri_regions")
+    view.erase_regions(URI_REGION_KEY)
 
 
 def draw_uri_regions(view: sublime.View, uri_regions: Iterable[sublime.Region]) -> None:
     draw_uri_regions = get_setting("draw_uri_regions")
 
     view.add_regions(
-        "OUIB_uri_regions",
+        URI_REGION_KEY,
         tuple(uri_regions),
         scope=draw_uri_regions["scope"],
         icon=draw_uri_regions["icon"],

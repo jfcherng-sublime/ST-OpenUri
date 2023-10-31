@@ -6,7 +6,7 @@ from typing import Any, Callable, Generator, Iterable, Pattern, Sequence, cast, 
 
 import sublime
 
-from .constants import ST_SUPPORT_EXPAND_TO_SCOPE
+from .constants import ST_SUPPORT_EXPAND_TO_SCOPE, VIEW_SETTING_TIMESTAMP_KEY
 from .types import RegionLike, T_AnyCallable
 
 
@@ -136,13 +136,11 @@ def view_find_all(
 
 
 @overload
-def view_last_typing_timestamp_val(view: sublime.View) -> float:
-    ...
+def view_last_typing_timestamp_val(view: sublime.View) -> float: ...
 
 
 @overload
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None:
-    ...
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None: ...
 
 
 def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float | None = None) -> float | None:
@@ -155,20 +153,18 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float | None
     @return None if the set mode, otherwise the value
     """
     if timestamp_s is None:
-        return float(view.settings().get("OUIB_last_update_timestamp", 0))
+        return float(view.settings().get(VIEW_SETTING_TIMESTAMP_KEY, 0))
 
-    view.settings().set("OUIB_last_update_timestamp", timestamp_s)
+    view.settings().set(VIEW_SETTING_TIMESTAMP_KEY, timestamp_s)
     return None
 
 
 @overload
-def view_is_dirty_val(view: sublime.View) -> bool:
-    ...
+def view_is_dirty_val(view: sublime.View) -> bool: ...
 
 
 @overload
-def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
-    ...
+def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None: ...
 
 
 def view_is_dirty_val(view: sublime.View, is_dirty: bool | None = None) -> bool | None:
@@ -188,13 +184,11 @@ def view_is_dirty_val(view: sublime.View, is_dirty: bool | None = None) -> bool 
 
 
 @overload
-def region_shift(region: sublime.Region, shift: int) -> sublime.Region:
-    ...
+def region_shift(region: sublime.Region, shift: int) -> sublime.Region: ...
 
 
 @overload
-def region_shift(region: int | list[int] | tuple[int, int], shift: int) -> tuple[int, int]:
-    ...
+def region_shift(region: int | list[int] | tuple[int, int], shift: int) -> tuple[int, int]: ...
 
 
 def region_shift(region: RegionLike, shift: int) -> tuple[int, int] | sublime.Region:
@@ -219,16 +213,14 @@ def region_shift(region: RegionLike, shift: int) -> tuple[int, int] | sublime.Re
 def region_expand(
     region: sublime.Region,
     expansion: int | list[int] | tuple[int, int],
-) -> sublime.Region:
-    ...
+) -> sublime.Region: ...
 
 
 @overload
 def region_expand(
     region: int | list[int] | tuple[int, int],
     expansion: int | list[int] | tuple[int, int],
-) -> tuple[int, int]:
-    ...
+) -> tuple[int, int]: ...
 
 
 def region_expand(

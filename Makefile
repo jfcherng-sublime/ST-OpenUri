@@ -5,11 +5,11 @@ all: fix
 check:
 	mypy -p plugin
 	flake8 .
-	black --check --diff .
+	black --preview --check --diff .
 	isort --check --diff .
 
 .PHONY: fix
 fix:
 	autoflake --in-place .
-	black .
+	black . --preview
 	isort .

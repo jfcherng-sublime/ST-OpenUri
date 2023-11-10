@@ -136,13 +136,11 @@ def view_find_all(
 
 
 @overload
-def view_last_typing_timestamp_val(view: sublime.View) -> float:
-    ...
+def view_last_typing_timestamp_val(view: sublime.View) -> float: ...
 
 
 @overload
-def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None:
-    ...
+def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float) -> None: ...
 
 
 def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float | None = None) -> float | None:
@@ -162,13 +160,11 @@ def view_last_typing_timestamp_val(view: sublime.View, timestamp_s: float | None
 
 
 @overload
-def view_is_dirty_val(view: sublime.View) -> bool:
-    ...
+def view_is_dirty_val(view: sublime.View) -> bool: ...
 
 
 @overload
-def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None:
-    ...
+def view_is_dirty_val(view: sublime.View, is_dirty: bool) -> None: ...
 
 
 def view_is_dirty_val(view: sublime.View, is_dirty: bool | None = None) -> bool | None:
@@ -188,13 +184,11 @@ def view_is_dirty_val(view: sublime.View, is_dirty: bool | None = None) -> bool 
 
 
 @overload
-def region_shift(region: sublime.Region, shift: int) -> sublime.Region:
-    ...
+def region_shift(region: sublime.Region, shift: int) -> sublime.Region: ...
 
 
 @overload
-def region_shift(region: int | list[int] | tuple[int, int], shift: int) -> tuple[int, int]:
-    ...
+def region_shift(region: int | list[int] | tuple[int, int], shift: int) -> tuple[int, int]: ...
 
 
 def region_shift(region: RegionLike, shift: int) -> tuple[int, int] | sublime.Region:
@@ -219,16 +213,14 @@ def region_shift(region: RegionLike, shift: int) -> tuple[int, int] | sublime.Re
 def region_expand(
     region: sublime.Region,
     expansion: int | list[int] | tuple[int, int],
-) -> sublime.Region:
-    ...
+) -> sublime.Region: ...
 
 
 @overload
 def region_expand(
     region: int | list[int] | tuple[int, int],
     expansion: int | list[int] | tuple[int, int],
-) -> tuple[int, int]:
-    ...
+) -> tuple[int, int]: ...
 
 
 def region_expand(

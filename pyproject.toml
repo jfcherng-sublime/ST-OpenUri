@@ -14,6 +14,7 @@ line_length = 120
 profile = 'black'
 py_version = 38
 skip_glob = [
+  ".venv-*/**",
   ".venv/**",
   "br-*/**",
   "branch-*/**",
@@ -29,15 +30,16 @@ skip_glob = [
 quiet = true
 recursive = true
 remove-all-unused-imports = true
-exclude = '\.git,\.?venv,\.mypy_cache,br-.*,branch-.*,libs,stubs,tests/files,typings'
+exclude = '\.git,\.?venv(-.*)?,\.mypy_cache,br-.*,branch-.*,libs,stubs,tests/files,typings'
 
 [tool.black]
+preview = true
 line-length = 120
 target-version = ['py38']
 exclude = '''
 /(
   \.git
-  | \.?venv
+  | \.?venv(-.*)?
   | \.mypy_cache
   | br-.*
   | branch-.*

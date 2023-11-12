@@ -3,8 +3,8 @@ from __future__ import annotations
 import base64
 import io
 import re
+from collections.abc import Sequence
 from functools import lru_cache
-from typing import Sequence
 
 import sublime
 
@@ -88,10 +88,9 @@ def change_png_bytes_color(img_bytes: bytes, rgba_code: str) -> bytes:
 
     invert_gray = not is_img_light(img_bytes)  # invert for dark image to get a solid looking
     rgba_dst = [int(rgba_code[i : i + 2], 16) for i in range(1, 9, 2)]
-    w, h, rows_src, img_info = png.Reader(bytes=img_bytes).asRGBA()
 
     rows_dst: list[list[int]] = []
-    for row_src in rows_src:
+    for row_src in png.Reader(bytes=img_bytes).asRGBA()[2]:
         row_dst: list[int] = []
         for i in range(0, len(row_src), 4):
             row_dst.extend(render_pixel(row_src[i : i + 4], rgba_dst, invert_gray))
@@ -123,7 +122,7 @@ def is_img_light(img_bytes: bytes) -> bool:
 
     @return True if image is light, False otherwise.
     """
-    w, h, rows, img_info = png.Reader(bytes=img_bytes).asRGBA()
+    w, h, rows, _ = png.Reader(bytes=img_bytes).asRGBA()
 
     gray_sum = 0
     for row in rows:

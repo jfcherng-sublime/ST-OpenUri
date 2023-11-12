@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import itertools
 import time
-from typing import Any, Callable, Generator, Iterable, Pattern, Sequence, cast, overload
+from collections.abc import Callable, Generator, Iterable, Sequence
+from typing import Any, Pattern, cast, overload
 
 import sublime
 

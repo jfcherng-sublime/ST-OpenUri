@@ -1,8 +1,8 @@
 from __future__ import annotations
 
+from collections.abc import Iterable, Sequence
 from functools import reduce
 from operator import xor
-from typing import Iterable, Sequence
 
 import sublime
 

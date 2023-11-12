@@ -3,7 +3,8 @@ from __future__ import annotations
 import re
 import urllib.parse as urllib_parse
 import webbrowser
-from typing import Any, Iterable, Pattern
+from collections.abc import Iterable
+from typing import Any, Pattern
 
 import sublime
 

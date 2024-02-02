@@ -113,10 +113,7 @@ def get_setting_renderer_interval() -> int:
 
 def get_setting_show_open_button(view: sublime.View) -> str:
     return get_setting(
-        # ...
-        "show_open_button_fallback"
-        if not view.is_loading() and is_view_too_large(view)
-        else "show_open_button"
+        "show_open_button_fallback" if not view.is_loading() and is_view_too_large(view) else "show_open_button"
     )
 
 

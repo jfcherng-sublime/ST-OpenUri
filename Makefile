@@ -8,11 +8,10 @@ install:
 .PHONY: ci-check
 ci-check:
 	mypy -p plugin
-	ruff check --diff --preview .
-	black --diff --preview --check .
+	ruff check --diff .
+	ruff format --diff .
 
 .PHONY: ci-fix
 ci-fix:
-	ruff check --preview --fix .
-	# ruff format --preview .
-	black --preview .
+	ruff check --fix .
+	ruff format .

@@ -9,24 +9,6 @@ module = ["plugin.libs.*"]
 ignore_errors = true
 ignore_missing_imports = true
 
-[tool.black]
-preview = true
-line-length = 120
-target-version = ['py38']
-exclude = '''
-/(
-  \.git
-  | \.?venv(-.*)?
-  | \.mypy_cache
-  | br-.*
-  | branch-.*
-  | libs
-  | stubs
-  | tests/files
-  | typings
-)/
-'''
-
 [tool.pyright]
 include = ['./']
 exclude = [
@@ -43,25 +25,26 @@ pythonVersion = '3.8'
 
 [tool.ruff]
 preview = true
-select = ["E", "F", "W", "I", "UP"]
-ignore = ["E203"]
 line-length = 120
 target-version = 'py38'
 exclude = [
-    ".git",
-    ".mypy_cache",
-    ".venv",
-    ".venv-*",
-    "branch-*",
-    "libs",
-    "plugin/libs",
-    "stubs",
-    "tests/files",
-    "typings",
-    "vendor",
-    "venv",
-    "venv-*",
+  "*/libs/*",
+  ".git",
+  ".mypy_cache",
+  ".venv",
+  ".venv-*",
+  "branch-*",
+  "stubs",
+  "tests/files",
+  "typings",
+  "vendor",
+  "venv",
+  "venv-*",
 ]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E203"]
+
+[tool.ruff.lint.per-file-ignores]
 "boot.py" = ["E402"]

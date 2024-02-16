@@ -6,30 +6,30 @@ name: Python
 on:
   push:
     branches:
-      - "**"
+      - '**'
     paths:
-      - ".github/workflows/python.yml"
-      - "**.py"
-      - "**.pyi"
-      - "Makefile"
+      - '.github/workflows/python.yml'
+      - '**.py'
+      - '**.pyi'
+      - 'Makefile'
   pull_request:
     branches:
-      - "**"
+      - '**'
     paths:
-      - ".github/workflows/python.yml"
-      - "**.py"
-      - "**.pyi"
-      - "Makefile"
+      - '.github/workflows/python.yml'
+      - '**.py'
+      - '**.pyi'
+      - 'Makefile'
 
 jobs:
   job_lint:
-    name: Linting (Python ${{ matrix.python-version }})
+    name: ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        os: ["ubuntu-latest"]
-        python-version: ["3.8"]
+        os: ['ubuntu-latest']
+        python-version: ['3.8']
 
     steps:
       - uses: actions/checkout@v4
@@ -37,15 +37,15 @@ jobs:
           submodules: recursive
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip wheel
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install -U uv
 
       - name: Do linting
         run: |
-          make ci-check
+          make UV_INSTALL_FLAGS="--system" \
+            install ci-check

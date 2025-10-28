@@ -31,23 +31,15 @@ jobs:
         os: ['ubuntu-latest']
         python-version: ['3.8']
 
-    env:
-      UV_SYSTEM_PYTHON: 1
-
     steps:
-      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - uses: actions/checkout@v5
         with:
           submodules: recursive
-
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install -U uv
-
       - name: Do linting
         run: |
-          make install-dev ci-check
+          make ci-check

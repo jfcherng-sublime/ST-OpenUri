@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 8.0.3
+
+- fix: compatibility with ST 4201 (py313)
+
 ## 8.0.2
 
 - fix: wrong results after `undo` command

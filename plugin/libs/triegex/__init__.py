@@ -1,5 +1,5 @@
 # @see https://github.com/ZhukovAlexander/triegex
-import collections
+import collections.abc
 
 __all__ = ("Triegex",)
 
@@ -11,7 +11,6 @@ OR = r"|"
 NOTHING = r"~^(?#match nothing)"
 GROUP = r"(?:{0})"
 WORD_BOUNDARY = r"\b"
-
 
 class TriegexNode:
     def __init__(self, char: str, end: bool, *children):
@@ -92,7 +91,7 @@ class TriegexNode:
         return sub_regexes[0]
 
 
-class Triegex(collections.MutableSet):
+class Triegex(collections.abc.MutableSet):
     def __init__(self, *words):
         """
         Trigex constructor.

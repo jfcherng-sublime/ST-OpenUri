@@ -1,5 +1,9 @@
 # OpenUri Changelog
 
+## 9.0.0
+
+- chore: bump py313 (ST >=4201)
+
 ## 8.0.3
 
 - fix: compatibility with ST 4201 (py313)

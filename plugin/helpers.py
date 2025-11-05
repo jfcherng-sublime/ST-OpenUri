@@ -4,7 +4,8 @@ import re
 import urllib.parse as urllib_parse
 import webbrowser
 from collections.abc import Iterable
-from typing import Any, Pattern
+from re import Pattern
+from typing import Any
 
 import sublime
 

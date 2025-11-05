@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import threading
-from typing import Any, Pattern
+from re import Pattern
+from typing import Any
 
 import sublime
 

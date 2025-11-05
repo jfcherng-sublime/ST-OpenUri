@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, Callable, List, Tuple, TypedDict, TypeVar, Union
+from typing import TypedDict
 
 import sublime
 
-T_AnyCallable = TypeVar("T_AnyCallable", bound=Callable[..., Any])
-
-RegionLike = Union[
-    sublime.Region,
-    int,  # point
-    List[int],  # region in list form
-    Tuple[int, int],  # region in tuple form
-]
+type RegionLike = (
+    sublime.Region
+    | int  # point
+    | list[int]  # region in list form
+    | tuple[int, int]  # region in tuple form
+)
 
 
 class EventDict(TypedDict):

@@ -3,46 +3,44 @@ from __future__ import annotations
 import itertools
 import time
 from collections.abc import Callable, Generator, Iterable, Sequence
-from typing import Any, Pattern, cast, overload
+from re import Pattern
+from typing import Any, cast, overload
 
 import sublime
 from more_itertools import first_true
 
 from .constants import VIEW_SETTING_TIMESTAMP_KEY
-from .types import RegionLike, T_AnyCallable
+from .types import RegionLike
 
 
 def get_timestamp() -> float:
     return time.time()
 
 
-def list_all_views(*, include_transient: bool = False) -> Generator[sublime.View, None, None]:
+def list_all_views(*, include_transient: bool = False) -> Generator[sublime.View]:
     for window in sublime.windows():
         yield from window.views(include_transient=include_transient)
 
 
-def list_background_views() -> Generator[sublime.View, None, None]:
-    foreground_views = set(list_foreground_views())
-    for view in list_all_views(include_transient=True):
-        if view not in foreground_views:
-            yield view
+def list_background_views() -> Generator[sublime.View]:
+    yield from (set(list_all_views(include_transient=True)) - set(list_foreground_views()))
 
 
-def list_foreground_views() -> Generator[sublime.View, None, None]:
+def list_foreground_views() -> Generator[sublime.View]:
     for window in sublime.windows():
         for group_idx in range(window.num_groups()):
             if view := window.active_view_in_group(group_idx):
                 yield view
 
 
-def simple_decorator(decorator: Callable) -> Callable[[T_AnyCallable], T_AnyCallable]:
+def simple_decorator[T: Callable](decorator: Callable) -> Callable[[T], T]:
     """A decorator that turns a function into a decorator."""
 
-    def wrapper(decoratee: T_AnyCallable) -> T_AnyCallable:
+    def wrapper(decoratee: T) -> T:
         def wrapped(*args, **kwargs) -> Any:
             return decorator(decoratee(*args, **kwargs))
 
-        return cast(T_AnyCallable, wrapped)
+        return cast(T, wrapped)
 
     return wrapper
 
@@ -104,7 +102,7 @@ def view_find_all(
     view: sublime.View,
     regex_obj: Pattern[str],
     expand_selectors: Iterable[str] = tuple(),
-) -> Generator[sublime.Region, None, None]:
+) -> Generator[sublime.Region]:
     """
     @brief Find all content matching the regex and expand found regions with selectors.
 
